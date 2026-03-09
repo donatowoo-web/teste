@@ -549,7 +549,7 @@ export default function BackofficePage() {
         *[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
           _id, title, slug, excerpt, publishedAt,
           mainImage { "ref": asset._ref, "url": asset->url },
-          "content": coalesce(content, body)
+          "content": coalesce(body, content)
         }
       `);
       setPosts(data || []);
@@ -689,7 +689,6 @@ export default function BackofficePage() {
           _type: "image",
           asset: { _type: "reference", _ref: imageRef },
         },
-        content,
         body: content,
       };
 
