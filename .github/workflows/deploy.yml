@@ -20,6 +20,8 @@ jobs:
           NEXT_PUBLIC_SANITY_WRITE_TOKEN=${{ secrets.SANITY_WRITE_TOKEN }}
           NEXT_PUBLIC_BACKOFFICE_PASSWORD=${{ secrets.BACKOFFICE_PASSWORD }}
           NEXT_PUBLIC_DEPLOY_SECRET=${{ secrets.DEPLOY_SECRET }}
+          NEXT_PUBLIC_GH_DEPLOY_TOKEN=${{ secrets.GH_DEPLOY_TOKEN }}
+          NEXT_PUBLIC_GH_REPO=${{ secrets.GH_REPO }}
           EOF
 
       - name: Install dependencies
