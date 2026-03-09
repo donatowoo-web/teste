@@ -16,13 +16,11 @@ jobs:
 
       - name: Create .env.local
         run: |
-          cat > .env.local << EOF
-          NEXT_PUBLIC_SANITY_WRITE_TOKEN=${{ secrets.SANITY_WRITE_TOKEN }}
-          NEXT_PUBLIC_BACKOFFICE_PASSWORD=${{ secrets.BACKOFFICE_PASSWORD }}
-          NEXT_PUBLIC_DEPLOY_SECRET=${{ secrets.DEPLOY_SECRET }}
-          NEXT_PUBLIC_GH_DEPLOY_TOKEN=${{ secrets.GH_DEPLOY_TOKEN }}
-          NEXT_PUBLIC_GH_REPO=${{ secrets.GH_REPO }}
-          EOF
+          echo "NEXT_PUBLIC_SANITY_WRITE_TOKEN=${{ secrets.SANITY_WRITE_TOKEN }}" >> .env.local
+          echo "NEXT_PUBLIC_BACKOFFICE_PASSWORD=${{ secrets.BACKOFFICE_PASSWORD }}" >> .env.local
+          echo "NEXT_PUBLIC_DEPLOY_SECRET=${{ secrets.DEPLOY_SECRET }}" >> .env.local
+          echo "NEXT_PUBLIC_GH_DEPLOY_TOKEN=${{ secrets.GH_DEPLOY_TOKEN }}" >> .env.local
+          echo "NEXT_PUBLIC_GH_REPO=${{ secrets.GH_REPO }}" >> .env.local
 
       - name: Install dependencies
         run: npm ci
