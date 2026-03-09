@@ -538,6 +538,103 @@ const SECTION_WIDGETS: { type: SectionType; label: string; icon: string; desc: s
   { type: "button", label: "Botão", icon: "⬛", desc: "Botão com link" },
 ];
 
+// ─── Pre-made Section Templates ───
+type PreMadeTemplate = {
+  id: string;
+  label: string;
+  desc: string;
+  preview: string; // HTML preview thumbnail
+  sections: () => PageSection[];
+};
+
+const PREMADE_TEMPLATES: PreMadeTemplate[] = [
+  {
+    id: "intro-split",
+    label: "Intro (Split)",
+    desc: "Título + imagem + texto em 2 colunas",
+    preview: `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;background:#111;border-radius:4px;color:#fff;font-size:7px;line-height:1.3">
+      <div><div style="font-size:10px;font-weight:300;margin-bottom:4px;font-family:serif">Elevamos a<br>construção a um<br>novo padrão.</div><div style="color:#88B14B;font-size:6px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #88B14B;display:inline-block;padding-bottom:2px">Sobre nós</div></div>
+      <div><div style="background:#333;height:28px;border-radius:2px;margin-bottom:4px"></div><div style="color:rgba(255,255,255,0.6);font-size:6px">Texto descritivo sobre a empresa com dois parágrafos.</div></div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "two-columns" as SectionType,
+        leftContent: `<h2 style="font-size:2.5rem;font-weight:300;line-height:1.1;font-family:serif">Elevamos a construção a um novo padrão.</h2><p><a href="/sobre-nos/" style="color:#88B14B;text-transform:uppercase;letter-spacing:0.35em;font-size:1rem;text-decoration:none;border-bottom:1px solid rgba(136,177,75,0.7);padding-bottom:0.75rem;display:inline-block">Sobre nós</a></p>`,
+        rightContent: `<p>Na Evaplace, criamos projetos que se distinguem pela estética contemporânea e pela funcionalidade inteligente, com a exigência e o saber-fazer que nos definem, verdadeiramente distintos em todo o Portugal.</p><p>Trabalhamos com os sistemas construtivos mais avançados (aço leve) ou madeira, garantindo soluções práticas, inovação, no conforto e na durabilidade.</p>`,
+      },
+    ],
+  },
+  {
+    id: "features-4",
+    label: "4 Destaques",
+    desc: "Lista de 4 características com títulos e descrições",
+    preview: `<div style="padding:8px;background:#111;border-radius:4px;color:#fff;font-size:6px;display:grid;grid-template-columns:1fr 1fr;gap:4px">
+      <div style="border-bottom:1px solid #333;padding-bottom:3px"><div style="font-size:7px;font-weight:600">Construção rápida</div><div style="color:rgba(255,255,255,0.5)">Métodos inovadores</div></div>
+      <div style="border-bottom:1px solid #333;padding-bottom:3px"><div style="font-size:7px;font-weight:600">Design Inovador</div><div style="color:rgba(255,255,255,0.5)">Estilo exclusivo</div></div>
+      <div style="border-bottom:1px solid #333;padding-bottom:3px"><div style="font-size:7px;font-weight:600">Sustentável</div><div style="color:rgba(255,255,255,0.5)">Materiais ecológicos</div></div>
+      <div style="border-bottom:1px solid #333;padding-bottom:3px"><div style="font-size:7px;font-weight:600">Qualidade garantida</div><div style="color:rgba(255,255,255,0.5)">Durabilidade e segurança</div></div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "heading" as SectionType, heading: "Os nossos pontos fortes", headingLevel: "h2" as const, textAlign: "left" as const },
+      { _key: rand(), type: "spacer" as SectionType, height: 30 },
+      { _key: rand(), type: "two-columns" as SectionType,
+        leftContent: `<h3 style="font-size:1.25rem;font-weight:600;margin:0 0 8px">Construção rápida</h3><hr style="border:none;border-top:1px solid #444;margin:8px 0"><p style="color:rgba(255,255,255,0.7)">Construção rápida e eficiente é nossa prioridade, utilizamos métodos inovadores para garantir projetos ágeis e eficazes.</p><br><h3 style="font-size:1.25rem;font-weight:600;margin:0 0 8px">Sustentável</h3><hr style="border:none;border-top:1px solid #444;margin:8px 0"><p style="color:rgba(255,255,255,0.7)">Abraçamos a sustentabilidade em cada construção, adotando práticas e materiais ecológicos.</p>`,
+        rightContent: `<h3 style="font-size:1.25rem;font-weight:600;margin:0 0 8px">Design Inovador</h3><hr style="border:none;border-top:1px solid #444;margin:8px 0"><p style="color:rgba(255,255,255,0.7)">Destacamo-nos por oferecer um design exclusivo e inovador. Cada projeto é meticulosamente criado para refletir o estilo distinto.</p><br><h3 style="font-size:1.25rem;font-weight:600;margin:0 0 8px">Qualidade garantida</h3><hr style="border:none;border-top:1px solid #444;margin:8px 0"><p style="color:rgba(255,255,255,0.7)">Asseguramos qualidade inabalável em cada construção, garantindo durabilidade, segurança e satisfação.</p>`,
+      },
+    ],
+  },
+  {
+    id: "faq",
+    label: "FAQ",
+    desc: "Perguntas frequentes com respostas",
+    preview: `<div style="padding:8px;background:#111;border-radius:4px;color:#fff;font-size:6px">
+      <div style="font-size:9px;font-weight:600;margin-bottom:6px;font-family:serif">Dúvidas Frequentes</div>
+      <div style="border-top:1px solid #333;padding:3px 0;display:flex;justify-content:space-between"><span>Pergunta frequente 1?</span><span>+</span></div>
+      <div style="border-top:1px solid #333;padding:3px 0;display:flex;justify-content:space-between"><span>Pergunta frequente 2?</span><span>+</span></div>
+      <div style="border-top:1px solid #333;padding:3px 0;display:flex;justify-content:space-between"><span>Pergunta frequente 3?</span><span>+</span></div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "heading" as SectionType, heading: "Dúvidas Frequentes!", headingLevel: "h2" as const, textAlign: "left" as const },
+      { _key: rand(), type: "text" as SectionType, textAlign: "left" as const,
+        content: `<div style="border-top:1px solid #444;padding:16px 0"><h3 style="font-size:1.1rem;font-weight:500;margin:0 0 12px">O método de alvenaria tradicional não é melhor?</h3><p style="color:rgba(255,255,255,0.7)">Os métodos adotados pela Evaplace, como woodframe, aço leve e viga macheda, apresentam benefícios substanciais relativamente à alvenaria tradicional.</p></div>
+<div style="border-top:1px solid #444;padding:16px 0"><h3 style="font-size:1.1rem;font-weight:500;margin:0 0 12px">As casas construídas com estes métodos são duráveis?</h3><p style="color:rgba(255,255,255,0.7)">Sim, as construções em aço leve e madeira possuem alta durabilidade. Seguem normas técnicas rigorosas e passam pelo mesmo processo de licenciamento.</p></div>
+<div style="border-top:1px solid #444;padding:16px 0"><h3 style="font-size:1.1rem;font-weight:500;margin:0 0 12px">Qual é o tempo estimado para construção?</h3><p style="color:rgba(255,255,255,0.7)">O tempo estimado varia entre 4 a 8 meses, dependendo do tipo de habitação, dimensões e método construtivo escolhido.</p></div>`,
+      },
+    ],
+  },
+  {
+    id: "cta-banner",
+    label: "CTA Banner",
+    desc: "Faixa com título e botão de ação",
+    preview: `<div style="padding:10px 8px;background:#111;border-radius:4px;border-top:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:space-between">
+      <div style="color:#fff;font-size:8px;font-weight:500">Conheça os nossos serviços</div>
+      <div style="background:rgba(136,177,75,0.2);border:1px solid rgba(136,177,75,0.5);color:#fff;font-size:6px;padding:3px 8px;border-radius:2px">Ver mais</div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "two-columns" as SectionType,
+        leftContent: `<h2 style="font-size:clamp(1.5rem,3vw,2.25rem);font-weight:500;margin:0;font-family:serif">Conheça os nossos serviços</h2>`,
+        rightContent: `<div style="text-align:right;padding-top:8px"><a href="/servicos/" style="display:inline-block;padding:14px 36px;background:rgba(0,0,0,0.15);color:#fff;border:1px solid rgba(136,177,75,0.6);box-shadow:0 0 12px rgba(136,177,75,0.3);border-radius:4px;font-size:1rem;font-weight:500;text-decoration:none;backdrop-filter:blur(12px);text-transform:uppercase;letter-spacing:0.1em">Ver mais</a></div>`,
+      },
+    ],
+  },
+  {
+    id: "hero-text",
+    label: "Hero Texto",
+    desc: "Título grande centrado com subtítulo",
+    preview: `<div style="padding:16px 8px;background:#111;border-radius:4px;text-align:center">
+      <div style="color:#fff;font-size:11px;font-weight:300;font-family:serif;line-height:1.1;margin-bottom:4px">Título Principal</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:6px">Subtítulo descritivo da secção</div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "spacer" as SectionType, height: 40 },
+      { _key: rand(), type: "heading" as SectionType, heading: "Título Principal da Página", headingLevel: "h1" as const, textAlign: "center" as const },
+      { _key: rand(), type: "text" as SectionType, textAlign: "center" as const,
+        content: `<p style="font-size:1.1rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto">Subtítulo descritivo que complementa o título principal da página.</p>`,
+      },
+      { _key: rand(), type: "spacer" as SectionType, height: 40 },
+    ],
+  },
+];
+
 function createSection(type: SectionType): PageSection {
   const base = { _key: rand(), type };
   switch (type) {
@@ -1424,6 +1521,26 @@ export default function BackofficePage() {
                 </div>
               </button>
             ))}
+
+            <div style={{ borderTop: "1px solid #e0e0e0", marginTop: 16, paddingTop: 16 }}>
+              <h3 className={styles.pbSidebarTitle}>Secções pré-feitas</h3>
+              {PREMADE_TEMPLATES.map((tpl) => (
+                <button
+                  key={tpl.id}
+                  className={styles.pbTemplate}
+                  onClick={() => {
+                    const newSections = tpl.sections();
+                    setPageSections((prev) => [...prev, ...newSections]);
+                  }}
+                >
+                  <div className={styles.pbTemplatePreview} dangerouslySetInnerHTML={{ __html: tpl.preview }} />
+                  <div className={styles.pbTemplateInfo}>
+                    <div className={styles.pbWidgetLabel}>{tpl.label}</div>
+                    <div className={styles.pbWidgetDesc}>{tpl.desc}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
 
             <div style={{ borderTop: "1px solid #e0e0e0", marginTop: 16, paddingTop: 16 }}>
               <div className={styles.field} style={{ marginBottom: 12 }}>
