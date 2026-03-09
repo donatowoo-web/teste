@@ -30,7 +30,39 @@ type Post = {
   content?: any[];
 };
 
-type View = "login" | "list" | "editor";
+type View = "login" | "list" | "editor" | "pages" | "page-builder";
+
+// ─── Page Builder Types ───
+type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button";
+
+type PageSection = {
+  _key: string;
+  type: SectionType;
+  content?: string;
+  heading?: string;
+  headingLevel?: "h1" | "h2" | "h3";
+  imageUrl?: string;
+  imageRef?: string;
+  imageAlt?: string;
+  height?: number;
+  leftContent?: string;
+  rightContent?: string;
+  videoUrl?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  buttonStyle?: "primary" | "secondary" | "outline";
+  backgroundColor?: string;
+  textAlign?: "left" | "center" | "right";
+  fullWidth?: boolean;
+};
+
+type PageDoc = {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  published?: boolean;
+  sectionsData?: string;
+};
 
 // ─── Sanity Helpers ───
 async function sanityFetch(query: string) {
@@ -495,6 +527,347 @@ function ContentEditor({
   );
 }
 
+// ─── Section Widget Definitions ───
+const SECTION_WIDGETS: { type: SectionType; label: string; icon: string; desc: string }[] = [
+  { type: "heading", label: "Título", icon: "T", desc: "Título de secção" },
+  { type: "text", label: "Texto", icon: "¶", desc: "Bloco de texto rico" },
+  { type: "image", label: "Imagem", icon: "🖼", desc: "Imagem com legenda" },
+  { type: "spacer", label: "Espaçador", icon: "↕", desc: "Espaço vertical" },
+  { type: "two-columns", label: "2 Colunas", icon: "▥", desc: "Texto em duas colunas" },
+  { type: "video", label: "Vídeo", icon: "▶", desc: "Vídeo do YouTube" },
+  { type: "button", label: "Botão", icon: "⬛", desc: "Botão com link" },
+];
+
+function createSection(type: SectionType): PageSection {
+  const base = { _key: rand(), type };
+  switch (type) {
+    case "heading": return { ...base, heading: "Novo Título", headingLevel: "h2", textAlign: "left" };
+    case "text": return { ...base, content: "<p>Escreva aqui o seu texto...</p>", textAlign: "left" };
+    case "image": return { ...base, imageUrl: "", imageRef: "", imageAlt: "", fullWidth: false };
+    case "spacer": return { ...base, height: 60 };
+    case "two-columns": return { ...base, leftContent: "<p>Coluna esquerda</p>", rightContent: "<p>Coluna direita</p>" };
+    case "video": return { ...base, videoUrl: "" };
+    case "button": return { ...base, buttonText: "Clique aqui", buttonUrl: "#", buttonStyle: "primary" };
+    default: return base;
+  }
+}
+
+// ─── Section Editor ───
+function SectionEditor({
+  section,
+  onChange,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+  isFirst,
+  isLast,
+}: {
+  section: PageSection;
+  onChange: (s: PageSection) => void;
+  onDelete: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+}) {
+  const [editing, setEditing] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  const widget = SECTION_WIDGETS.find((w) => w.type === section.type);
+
+  function renderPreview() {
+    switch (section.type) {
+      case "heading":
+        return (
+          <div style={{ textAlign: section.textAlign || "left" }}>
+            {section.headingLevel === "h1" && <h1 style={{ margin: 0, fontSize: 28 }}>{section.heading}</h1>}
+            {section.headingLevel === "h2" && <h2 style={{ margin: 0, fontSize: 24 }}>{section.heading}</h2>}
+            {section.headingLevel === "h3" && <h3 style={{ margin: 0, fontSize: 20 }}>{section.heading}</h3>}
+          </div>
+        );
+      case "text":
+        return <div dangerouslySetInnerHTML={{ __html: section.content || "" }} style={{ textAlign: section.textAlign || "left", lineHeight: 1.7 }} />;
+      case "image":
+        return section.imageUrl ? (
+          <div style={{ textAlign: "center" }}>
+            <img src={section.imageUrl} alt={section.imageAlt || ""} style={{ maxWidth: section.fullWidth ? "100%" : "80%", height: "auto", borderRadius: 4 }} />
+            {section.imageAlt && <p style={{ fontSize: 13, color: "#999", marginTop: 8 }}>{section.imageAlt}</p>}
+          </div>
+        ) : (
+          <div style={{ padding: 40, textAlign: "center", background: "#f0f0f0", borderRadius: 4, color: "#999" }}>Clique para adicionar imagem</div>
+        );
+      case "spacer":
+        return <div style={{ height: section.height || 60, background: "repeating-linear-gradient(45deg, transparent, transparent 5px, #f0f0f0 5px, #f0f0f0 10px)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#ccc", fontSize: 12 }}>{section.height || 60}px</div>;
+      case "two-columns":
+        return (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div dangerouslySetInnerHTML={{ __html: section.leftContent || "" }} style={{ lineHeight: 1.7 }} />
+            <div dangerouslySetInnerHTML={{ __html: section.rightContent || "" }} style={{ lineHeight: 1.7 }} />
+          </div>
+        );
+      case "video":
+        if (section.videoUrl) {
+          const id = section.videoUrl.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
+          return id ? (
+            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+              <iframe src={`https://www.youtube.com/embed/${id}`} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none", borderRadius: 4 }} allowFullScreen />
+            </div>
+          ) : <p style={{ color: "#999" }}>URL de vídeo inválido</p>;
+        }
+        return <div style={{ padding: 40, textAlign: "center", background: "#f0f0f0", borderRadius: 4, color: "#999" }}>Adicionar URL do YouTube</div>;
+      case "button":
+        return (
+          <div style={{ textAlign: section.textAlign || "center" }}>
+            <span style={{
+              display: "inline-block",
+              padding: "12px 32px",
+              background: section.buttonStyle === "outline" ? "transparent" : section.buttonStyle === "secondary" ? "#f0f0f0" : "#111",
+              color: section.buttonStyle === "outline" ? "#111" : section.buttonStyle === "secondary" ? "#333" : "#fff",
+              border: section.buttonStyle === "outline" ? "2px solid #111" : "none",
+              borderRadius: 4,
+              fontSize: 15,
+              fontWeight: 500,
+            }}>{section.buttonText || "Botão"}</span>
+          </div>
+        );
+      default:
+        return <p>Secção desconhecida</p>;
+    }
+  }
+
+  function renderEditor() {
+    switch (section.type) {
+      case "heading":
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <input
+              type="text"
+              value={section.heading || ""}
+              onChange={(e) => onChange({ ...section, heading: e.target.value })}
+              style={{ padding: "10px 14px", border: "1px solid #ddd", borderRadius: 4, fontSize: 16, fontWeight: 600 }}
+              placeholder="Texto do título"
+            />
+            <div style={{ display: "flex", gap: 8 }}>
+              {(["h1", "h2", "h3"] as const).map((h) => (
+                <button
+                  key={h}
+                  onClick={() => onChange({ ...section, headingLevel: h })}
+                  style={{ padding: "6px 14px", background: section.headingLevel === h ? "#111" : "#f0f0f0", color: section.headingLevel === h ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 13 }}
+                >
+                  {h.toUpperCase()}
+                </button>
+              ))}
+              <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+                {(["left", "center", "right"] as const).map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => onChange({ ...section, textAlign: a })}
+                    style={{ padding: "6px 10px", background: section.textAlign === a ? "#111" : "#f0f0f0", color: section.textAlign === a ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
+                  >
+                    {a === "left" ? "⬅" : a === "center" ? "⬌" : "➡"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      case "text":
+        return (
+          <div>
+            <div style={{ display: "flex", gap: 4, marginBottom: 8 }}>
+              {(["left", "center", "right"] as const).map((a) => (
+                <button
+                  key={a}
+                  onClick={() => onChange({ ...section, textAlign: a })}
+                  style={{ padding: "4px 10px", background: section.textAlign === a ? "#111" : "#f0f0f0", color: section.textAlign === a ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
+                >
+                  {a === "left" ? "⬅" : a === "center" ? "⬌" : "➡"}
+                </button>
+              ))}
+            </div>
+            <div
+              ref={textRef}
+              contentEditable
+              suppressContentEditableWarning
+              dangerouslySetInnerHTML={{ __html: section.content || "" }}
+              onBlur={() => {
+                if (textRef.current) onChange({ ...section, content: textRef.current.innerHTML });
+              }}
+              style={{ minHeight: 120, padding: 16, border: "1px solid #ddd", borderRadius: 4, outline: "none", lineHeight: 1.7, fontSize: 15 }}
+            />
+          </div>
+        );
+      case "image":
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {section.imageUrl && (
+              <img src={section.imageUrl} alt="" style={{ maxWidth: "100%", maxHeight: 300, objectFit: "contain", borderRadius: 4 }} />
+            )}
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                onClick={async () => {
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.accept = "image/*";
+                  input.onchange = async () => {
+                    const file = input.files?.[0];
+                    if (!file) return;
+                    try {
+                      const assetId = await uploadImage(file);
+                      const url = URL.createObjectURL(file);
+                      onChange({ ...section, imageUrl: url, imageRef: assetId });
+                    } catch {
+                      alert("Erro ao enviar imagem");
+                    }
+                  };
+                  input.click();
+                }}
+                style={{ padding: "8px 16px", background: "#111", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 13 }}
+              >
+                {section.imageUrl ? "Trocar imagem" : "Escolher imagem"}
+              </button>
+              <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#666" }}>
+                <input
+                  type="checkbox"
+                  checked={section.fullWidth || false}
+                  onChange={(e) => onChange({ ...section, fullWidth: e.target.checked })}
+                />
+                Largura total
+              </label>
+            </div>
+            <input
+              type="text"
+              value={section.imageAlt || ""}
+              onChange={(e) => onChange({ ...section, imageAlt: e.target.value })}
+              placeholder="Texto alternativo (alt)"
+              style={{ padding: "8px 12px", border: "1px solid #ddd", borderRadius: 4, fontSize: 13 }}
+            />
+          </div>
+        );
+      case "spacer":
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <label style={{ fontSize: 13, color: "#666" }}>Altura:</label>
+            <input
+              type="range"
+              min={20}
+              max={200}
+              value={section.height || 60}
+              onChange={(e) => onChange({ ...section, height: parseInt(e.target.value) })}
+              style={{ flex: 1 }}
+            />
+            <span style={{ fontSize: 13, color: "#666", minWidth: 40 }}>{section.height || 60}px</span>
+          </div>
+        );
+      case "two-columns": {
+        const leftRef = useRef<HTMLDivElement>(null);
+        const rightRef = useRef<HTMLDivElement>(null);
+        return (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div>
+              <label style={{ fontSize: 12, color: "#999", marginBottom: 4, display: "block" }}>Coluna esquerda</label>
+              <div
+                ref={leftRef}
+                contentEditable
+                suppressContentEditableWarning
+                dangerouslySetInnerHTML={{ __html: section.leftContent || "" }}
+                onBlur={() => { if (leftRef.current) onChange({ ...section, leftContent: leftRef.current.innerHTML }); }}
+                style={{ minHeight: 100, padding: 12, border: "1px solid #ddd", borderRadius: 4, outline: "none", lineHeight: 1.6, fontSize: 14 }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 12, color: "#999", marginBottom: 4, display: "block" }}>Coluna direita</label>
+              <div
+                ref={rightRef}
+                contentEditable
+                suppressContentEditableWarning
+                dangerouslySetInnerHTML={{ __html: section.rightContent || "" }}
+                onBlur={() => { if (rightRef.current) onChange({ ...section, rightContent: rightRef.current.innerHTML }); }}
+                style={{ minHeight: 100, padding: 12, border: "1px solid #ddd", borderRadius: 4, outline: "none", lineHeight: 1.6, fontSize: 14 }}
+              />
+            </div>
+          </div>
+        );
+      }
+      case "video":
+        return (
+          <div>
+            <input
+              type="text"
+              value={section.videoUrl || ""}
+              onChange={(e) => onChange({ ...section, videoUrl: e.target.value })}
+              placeholder="URL do YouTube (ex: https://youtube.com/watch?v=...)"
+              style={{ width: "100%", padding: "10px 14px", border: "1px solid #ddd", borderRadius: 4, fontSize: 14, boxSizing: "border-box" }}
+            />
+          </div>
+        );
+      case "button":
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <input
+              type="text"
+              value={section.buttonText || ""}
+              onChange={(e) => onChange({ ...section, buttonText: e.target.value })}
+              placeholder="Texto do botão"
+              style={{ padding: "8px 12px", border: "1px solid #ddd", borderRadius: 4, fontSize: 14 }}
+            />
+            <input
+              type="text"
+              value={section.buttonUrl || ""}
+              onChange={(e) => onChange({ ...section, buttonUrl: e.target.value })}
+              placeholder="URL de destino"
+              style={{ padding: "8px 12px", border: "1px solid #ddd", borderRadius: 4, fontSize: 14 }}
+            />
+            <div style={{ display: "flex", gap: 8 }}>
+              {(["primary", "secondary", "outline"] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => onChange({ ...section, buttonStyle: s })}
+                  style={{ padding: "6px 14px", background: section.buttonStyle === s ? "#111" : "#f0f0f0", color: section.buttonStyle === s ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, textTransform: "capitalize" }}
+                >
+                  {s}
+                </button>
+              ))}
+              <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+                {(["left", "center", "right"] as const).map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => onChange({ ...section, textAlign: a })}
+                    style={{ padding: "6px 10px", background: section.textAlign === a ? "#111" : "#f0f0f0", color: section.textAlign === a ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
+                  >
+                    {a === "left" ? "⬅" : a === "center" ? "⬌" : "➡"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  }
+
+  return (
+    <div className={styles.pbSection}>
+      <div className={styles.pbSectionHeader}>
+        <span className={styles.pbSectionIcon}>{widget?.icon}</span>
+        <span className={styles.pbSectionLabel}>{widget?.label}</span>
+        <div className={styles.pbSectionActions}>
+          <button onClick={() => setEditing(!editing)} className={styles.pbSectionBtn} title={editing ? "Fechar" : "Editar"}>
+            {editing ? "✓" : "✎"}
+          </button>
+          <button onClick={onMoveUp} className={styles.pbSectionBtn} disabled={isFirst} title="Mover para cima">↑</button>
+          <button onClick={onMoveDown} className={styles.pbSectionBtn} disabled={isLast} title="Mover para baixo">↓</button>
+          <button onClick={onDelete} className={`${styles.pbSectionBtn} ${styles.pbSectionBtnDanger}`} title="Eliminar">✕</button>
+        </div>
+      </div>
+      <div className={styles.pbSectionContent}>
+        {editing ? renderEditor() : renderPreview()}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Backoffice ───
 export default function BackofficePage() {
   const [view, setView] = useState<View>("login");
@@ -520,6 +893,15 @@ export default function BackofficePage() {
   const [htmlCode, setHtmlCode] = useState("<p><br></p>");
   const [editorKey, setEditorKey] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
+
+  // Page builder state
+  const [pages, setPages] = useState<PageDoc[]>([]);
+  const [editingPage, setEditingPage] = useState<PageDoc | null>(null);
+  const [pageTitle, setPageTitle] = useState("");
+  const [pageSlug, setPageSlug] = useState("");
+  const [pagePublished, setPagePublished] = useState(false);
+  const [pageSections, setPageSections] = useState<PageSection[]>([]);
+  const [confirmDeletePage, setConfirmDeletePage] = useState<PageDoc | null>(null);
 
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
@@ -737,6 +1119,117 @@ export default function BackofficePage() {
     setLoading(false);
   }
 
+  // ─── Page Builder Functions ───
+  async function loadPages() {
+    setLoading(true);
+    try {
+      const data = await sanityFetch(`
+        *[_type == "page" && !(_id in path("drafts.**"))] | order(title asc) {
+          _id, title, slug, published, sectionsData
+        }
+      `);
+      setPages(data || []);
+    } catch {
+      showStatus("Erro ao carregar páginas", true);
+    }
+    setLoading(false);
+  }
+
+  function openNewPage() {
+    setEditingPage(null);
+    setPageTitle("");
+    setPageSlug("");
+    setPagePublished(false);
+    setPageSections([]);
+    setView("page-builder");
+  }
+
+  function openEditPage(page: PageDoc) {
+    setEditingPage(page);
+    setPageTitle(page.title);
+    setPageSlug(page.slug.current);
+    setPagePublished(page.published || false);
+    try {
+      setPageSections(page.sectionsData ? JSON.parse(page.sectionsData) : []);
+    } catch {
+      setPageSections([]);
+    }
+    setView("page-builder");
+  }
+
+  function addSection(type: SectionType) {
+    setPageSections((prev) => [...prev, createSection(type)]);
+  }
+
+  function updateSection(key: string, updated: PageSection) {
+    setPageSections((prev) => prev.map((s) => (s._key === key ? updated : s)));
+  }
+
+  function deleteSection(key: string) {
+    setPageSections((prev) => prev.filter((s) => s._key !== key));
+  }
+
+  function moveSection(key: string, dir: -1 | 1) {
+    setPageSections((prev) => {
+      const idx = prev.findIndex((s) => s._key === key);
+      if (idx < 0) return prev;
+      const newIdx = idx + dir;
+      if (newIdx < 0 || newIdx >= prev.length) return prev;
+      const arr = [...prev];
+      [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+      return arr;
+    });
+  }
+
+  async function handleSavePage() {
+    if (!pageTitle.trim()) {
+      showStatus("O título é obrigatório", true);
+      return;
+    }
+    const finalSlug = pageSlug || slugify(pageTitle);
+    setSaving(true);
+    try {
+      const doc: any = {
+        _type: "page",
+        title: pageTitle.trim(),
+        slug: { _type: "slug", current: finalSlug },
+        published: pagePublished,
+        sectionsData: JSON.stringify(pageSections),
+      };
+
+      if (editingPage) {
+        await sanityMutate([{ patch: { id: editingPage._id, set: doc } }]);
+        showStatus("Página atualizada!");
+      } else {
+        await sanityMutate([{ create: { ...doc, _id: `page-${rand()}` } }]);
+        showStatus("Página criada!");
+      }
+      setView("pages");
+      loadPages();
+    } catch (e: any) {
+      showStatus(e.message || "Erro ao guardar", true);
+    }
+    setSaving(false);
+  }
+
+  async function handleDeletePage(page: PageDoc) {
+    setConfirmDeletePage(null);
+    setLoading(true);
+    try {
+      await sanityMutate([{ delete: { id: page._id } }]);
+      showStatus("Página eliminada");
+      loadPages();
+    } catch (e: any) {
+      showStatus(e.message || "Erro ao eliminar", true);
+    }
+    setLoading(false);
+  }
+
+  // Load pages when switching to pages view
+  useEffect(() => {
+    if (view === "pages") loadPages();
+  }, [view]);
+
   // ─── Render ───
 
   if (view === "login") {
@@ -894,12 +1387,192 @@ export default function BackofficePage() {
     );
   }
 
-  // LIST VIEW
+  // PAGE BUILDER VIEW
+  if (view === "page-builder") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <button className={`${styles.btn} ${styles.btnBack}`} onClick={() => setView("pages")} title="Voltar">
+            &#8592; Voltar
+          </button>
+          <h1>{editingPage ? "Editar Página" : "Nova Página"}</h1>
+          <div className={styles.headerActions}>
+            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#666" }}>
+              <input type="checkbox" checked={pagePublished} onChange={(e) => setPagePublished(e.target.checked)} />
+              Publicada
+            </label>
+            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleSavePage} disabled={saving}>
+              {saving ? "A guardar..." : "Guardar"}
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.pbLayout}>
+          {/* Left sidebar */}
+          <div className={styles.pbSidebar}>
+            <h3 className={styles.pbSidebarTitle}>Adicionar secção</h3>
+            {SECTION_WIDGETS.map((w) => (
+              <button key={w.type} className={styles.pbWidget} onClick={() => addSection(w.type)}>
+                <span className={styles.pbWidgetIcon}>{w.icon}</span>
+                <div>
+                  <div className={styles.pbWidgetLabel}>{w.label}</div>
+                  <div className={styles.pbWidgetDesc}>{w.desc}</div>
+                </div>
+              </button>
+            ))}
+
+            <div style={{ borderTop: "1px solid #e0e0e0", marginTop: 16, paddingTop: 16 }}>
+              <div className={styles.field} style={{ marginBottom: 12 }}>
+                <label style={{ fontSize: 11 }}>Título da página</label>
+                <input
+                  type="text"
+                  value={pageTitle}
+                  onChange={(e) => {
+                    setPageTitle(e.target.value);
+                    if (!editingPage) setPageSlug(slugify(e.target.value));
+                  }}
+                  placeholder="Título"
+                  style={{ padding: "8px 10px", fontSize: 13 }}
+                />
+              </div>
+              <div className={styles.field} style={{ marginBottom: 0 }}>
+                <label style={{ fontSize: 11 }}>Slug (URL)</label>
+                <input
+                  type="text"
+                  value={pageSlug}
+                  onChange={(e) => setPageSlug(e.target.value)}
+                  placeholder="url-da-pagina"
+                  style={{ padding: "8px 10px", fontSize: 13 }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Main canvas */}
+          <div className={styles.pbCanvas}>
+            {pageSections.length === 0 ? (
+              <div className={styles.pbEmpty}>
+                <p>Comece por adicionar secções a partir da barra lateral</p>
+              </div>
+            ) : (
+              pageSections.map((section, idx) => (
+                <SectionEditor
+                  key={section._key}
+                  section={section}
+                  onChange={(s) => updateSection(section._key, s)}
+                  onDelete={() => deleteSection(section._key)}
+                  onMoveUp={() => moveSection(section._key, -1)}
+                  onMoveDown={() => moveSection(section._key, 1)}
+                  isFirst={idx === 0}
+                  isLast={idx === pageSections.length - 1}
+                />
+              ))
+            )}
+          </div>
+        </div>
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
+  // PAGES LIST VIEW
+  if (view === "pages") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>Backoffice EVAPLACE</h1>
+          <div className={styles.headerActions}>
+            <div className={styles.navTabs}>
+              <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
+              <button className={`${styles.navTab} ${styles.navTabActive}`}>Páginas</button>
+            </div>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
+              onClick={handleDeploy}
+              disabled={deploying}
+            >
+              {deploying ? "A publicar..." : "Publicar Site"}
+            </button>
+            <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`} onClick={handleLogout}>
+              Sair
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          <div className={styles.listHeader}>
+            <h2>Páginas ({pages.length})</h2>
+            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewPage}>
+              Nova Página
+            </button>
+          </div>
+
+          {loading ? (
+            <div className={styles.loading}>
+              <span className={styles.spinner} /> A carregar...
+            </div>
+          ) : pages.length === 0 ? (
+            <div className={styles.emptyState}>
+              <p>Ainda não existem páginas.</p>
+              <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewPage}>
+                Criar primeira página
+              </button>
+            </div>
+          ) : (
+            <div className={styles.postList}>
+              {pages.map((page) => (
+                <div key={page._id} className={styles.postItem} onClick={() => openEditPage(page)}>
+                  <div className={styles.postInfo}>
+                    <h3>{page.title}</h3>
+                    <span style={{ color: page.published ? "#2e7d32" : "#999" }}>
+                      {page.published ? "Publicada" : "Rascunho"} · /paginas/{page.slug.current}
+                    </span>
+                  </div>
+                  <div className={styles.postActions}>
+                    <button
+                      className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
+                      onClick={(e) => { e.stopPropagation(); openEditPage(page); }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className={`${styles.btn} ${styles.btnDanger} ${styles.btnSmall}`}
+                      onClick={(e) => { e.stopPropagation(); setConfirmDeletePage(page); }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {confirmDeletePage && (
+          <ConfirmModal
+            title="Eliminar página"
+            message={`Tem a certeza que quer eliminar "${confirmDeletePage.title}"? Esta ação não pode ser revertida.`}
+            onConfirm={() => handleDeletePage(confirmDeletePage)}
+            onCancel={() => setConfirmDeletePage(null)}
+          />
+        )}
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
+  // LIST VIEW (Articles)
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Backoffice EVAPLACE</h1>
         <div className={styles.headerActions}>
+          <div className={styles.navTabs}>
+            <button className={`${styles.navTab} ${styles.navTabActive}`}>Blog</button>
+            <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+          </div>
           <button
             className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
             onClick={handleDeploy}
