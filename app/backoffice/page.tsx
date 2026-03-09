@@ -481,6 +481,7 @@ export default function BackofficePage() {
   const [saving, setSaving] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const [editorHtml, setEditorHtml] = useState("<p><br></p>");
+  const [editorKey, setEditorKey] = useState(0);
 
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
@@ -509,7 +510,7 @@ export default function BackofficePage() {
       const data = await sanityFetch(`
         *[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
           _id, title, slug, excerpt, publishedAt,
-          mainImage { asset->{ _ref, url } },
+          mainImage { "ref": asset._ref, "url": asset->url },
           content
         }
       `);
@@ -578,6 +579,7 @@ export default function BackofficePage() {
     setImagePreview("");
     setExistingImageRef("");
     setEditorHtml("<p><br></p>");
+    setEditorKey((k) => k + 1);
     setView("editor");
   }
 
@@ -587,9 +589,12 @@ export default function BackofficePage() {
     setSlug(post.slug.current);
     setExcerpt(post.excerpt || "");
     setImageFile(null);
-    setImagePreview(post.mainImage?.asset?.url || "");
-    setExistingImageRef(post.mainImage?.asset?._ref || "");
+    const imgUrl = (post.mainImage as any)?.url || post.mainImage?.asset?.url || "";
+    const imgRef = (post.mainImage as any)?.ref || post.mainImage?.asset?._ref || "";
+    setImagePreview(imgUrl);
+    setExistingImageRef(imgRef);
     setEditorHtml(portableTextToHtml(post.content || []));
+    setEditorKey((k) => k + 1);
     setView("editor");
   }
 
@@ -733,14 +738,15 @@ export default function BackofficePage() {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
+          <button
+            className={`${styles.btn} ${styles.btnBack}`}
+            onClick={() => setView("list")}
+            title="Voltar"
+          >
+            &#8592; Voltar
+          </button>
           <h1>{editingPost ? "Editar Artigo" : "Novo Artigo"}</h1>
           <div className={styles.headerActions}>
-            <button
-              className={`${styles.btn} ${styles.btnSecondary}`}
-              onClick={() => setView("list")}
-            >
-              Cancelar
-            </button>
             <button
               className={`${styles.btn} ${styles.btnPrimary}`}
               onClick={handleSave}
@@ -811,7 +817,7 @@ export default function BackofficePage() {
 
           <div className={styles.field}>
             <label>Conteudo</label>
-            <RichEditor initialHtml={editorHtml} editorRef={editorRef} />
+            <RichEditor key={editorKey} initialHtml={editorHtml} editorRef={editorRef} />
           </div>
         </div>
 

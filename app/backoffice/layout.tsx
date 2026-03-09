@@ -17,7 +17,8 @@ export default function BackofficeLayout({
         inset: 0,
         zIndex: 9999,
         background: "#0a0a0a",
-        overflow: "auto",
+        overflowY: "scroll",
+        WebkitOverflowScrolling: "touch",
       }}
     >
       {children}
