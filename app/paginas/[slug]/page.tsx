@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import styles from "./pagina.module.css";
 
 type PageSection = {
   _key: string;
@@ -48,7 +49,7 @@ export async function generateMetadata({
     `*[_type == "page" && slug.current == $slug && published == true && !(_id in path("drafts.**"))][0]{ title }`,
     { slug }
   );
-  return { title: page?.title || "Página" };
+  return { title: page ? `${page.title} | EVAPLACE` : "Página" };
 }
 
 export default async function CustomPage({
@@ -73,84 +74,77 @@ export default async function CustomPage({
   }
 
   return (
-    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px" }}>
-      {sections.map((section) => {
-        switch (section.type) {
-          case "heading": {
-            const Tag = section.headingLevel || "h2";
-            return (
-              <Tag key={section._key} style={{ textAlign: section.textAlign || "left", marginBottom: 16 }}>
-                {section.heading}
-              </Tag>
-            );
-          }
-          case "text":
-            return (
-              <div
-                key={section._key}
-                dangerouslySetInnerHTML={{ __html: section.content || "" }}
-                style={{ textAlign: section.textAlign || "left", lineHeight: 1.8, marginBottom: 24, fontSize: 16 }}
-              />
-            );
-          case "image":
-            return section.imageUrl ? (
-              <div key={section._key} style={{ textAlign: "center", marginBottom: 24 }}>
-                <img
-                  src={section.imageUrl}
-                  alt={section.imageAlt || ""}
-                  style={{ maxWidth: section.fullWidth ? "100%" : "80%", height: "auto", borderRadius: 4 }}
+    <main className={styles.pageMain}>
+      <div className={styles.pageContent}>
+        {sections.map((section) => {
+          switch (section.type) {
+            case "heading": {
+              const Tag = section.headingLevel || "h2";
+              return (
+                <Tag key={section._key} className={styles[`heading${(section.headingLevel || "h2").toUpperCase()}`]} style={{ textAlign: section.textAlign || "left" }}>
+                  {section.heading}
+                </Tag>
+              );
+            }
+            case "text":
+              return (
+                <div
+                  key={section._key}
+                  className={styles.textBlock}
+                  dangerouslySetInnerHTML={{ __html: section.content || "" }}
+                  style={{ textAlign: section.textAlign || "left" }}
                 />
-                {section.imageAlt && (
-                  <p style={{ fontSize: 14, color: "#888", marginTop: 8 }}>{section.imageAlt}</p>
-                )}
-              </div>
-            ) : null;
-          case "spacer":
-            return <div key={section._key} style={{ height: section.height || 60 }} />;
-          case "two-columns":
-            return (
-              <div key={section._key} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, marginBottom: 24 }}>
-                <div dangerouslySetInnerHTML={{ __html: section.leftContent || "" }} style={{ lineHeight: 1.8 }} />
-                <div dangerouslySetInnerHTML={{ __html: section.rightContent || "" }} style={{ lineHeight: 1.8 }} />
-              </div>
-            );
-          case "video": {
-            const id = section.videoUrl?.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
-            return id ? (
-              <div key={section._key} style={{ position: "relative", paddingBottom: "56.25%", height: 0, marginBottom: 24 }}>
-                <iframe
-                  src={`https://www.youtube.com/embed/${id}`}
-                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none", borderRadius: 4 }}
-                  allowFullScreen
-                />
-              </div>
-            ) : null;
+              );
+            case "image":
+              return section.imageUrl ? (
+                <div key={section._key} className={styles.imageBlock}>
+                  <img
+                    src={section.imageUrl}
+                    alt={section.imageAlt || ""}
+                    className={section.fullWidth ? styles.imageFull : styles.imageContained}
+                  />
+                  {section.imageAlt && (
+                    <p className={styles.imageCaption}>{section.imageAlt}</p>
+                  )}
+                </div>
+              ) : null;
+            case "spacer":
+              return <div key={section._key} style={{ height: section.height || 60 }} />;
+            case "two-columns":
+              return (
+                <div key={section._key} className={styles.twoColumns}>
+                  <div className={styles.textBlock} dangerouslySetInnerHTML={{ __html: section.leftContent || "" }} />
+                  <div className={styles.textBlock} dangerouslySetInnerHTML={{ __html: section.rightContent || "" }} />
+                </div>
+              );
+            case "video": {
+              const id = section.videoUrl?.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
+              return id ? (
+                <div key={section._key} className={styles.videoBlock}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${id}`}
+                    className={styles.videoIframe}
+                    allowFullScreen
+                  />
+                </div>
+              ) : null;
+            }
+            case "button":
+              return (
+                <div key={section._key} className={styles.buttonBlock} style={{ textAlign: section.textAlign || "center" }}>
+                  <a
+                    href={section.buttonUrl || "#"}
+                    className={`${styles.pageButton} ${styles[`btn${(section.buttonStyle || "primary").charAt(0).toUpperCase() + (section.buttonStyle || "primary").slice(1)}`]}`}
+                  >
+                    {section.buttonText || "Botão"}
+                  </a>
+                </div>
+              );
+            default:
+              return null;
           }
-          case "button":
-            return (
-              <div key={section._key} style={{ textAlign: section.textAlign || "center", marginBottom: 24 }}>
-                <a
-                  href={section.buttonUrl || "#"}
-                  style={{
-                    display: "inline-block",
-                    padding: "14px 36px",
-                    background: section.buttonStyle === "outline" ? "transparent" : section.buttonStyle === "secondary" ? "#f0f0f0" : "#111",
-                    color: section.buttonStyle === "outline" ? "#111" : section.buttonStyle === "secondary" ? "#333" : "#fff",
-                    border: section.buttonStyle === "outline" ? "2px solid #111" : "none",
-                    borderRadius: 4,
-                    fontSize: 16,
-                    fontWeight: 500,
-                    textDecoration: "none",
-                  }}
-                >
-                  {section.buttonText || "Botão"}
-                </a>
-              </div>
-            );
-          default:
-            return null;
-        }
-      })}
+        })}
+      </div>
     </main>
   );
 }

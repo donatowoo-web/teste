@@ -905,6 +905,92 @@
   padding: 16px;
 }
 
+/* PAGE PREVIEW MODAL */
+.pagePreviewModal {
+  background: #000;
+  color: #fff;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+.pagePreviewModal .previewHeader {
+  background: #111;
+  border-bottom: 1px solid #222;
+}
+
+.pagePreviewModal .previewHeader h2 {
+  color: #fff;
+}
+
+.pagePreviewContent {
+  padding: 40px 32px;
+  font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.75;
+}
+
+.ppHeading {
+  font-family: "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1.ppHeading {
+  font-size: 42px;
+  line-height: 1.15;
+  margin: 0 0 10px;
+}
+
+h2.ppHeading {
+  font-size: 26px;
+  line-height: 1.25;
+  margin: 44px 0 14px;
+}
+
+h3.ppHeading {
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 36px 0 12px;
+}
+
+.ppText {
+  font-family: Poppins, system-ui, sans-serif;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.ppText p {
+  margin: 0 0 18px;
+}
+
+.ppText a {
+  color: #88f;
+  text-decoration: underline;
+}
+
+.ppText ul,
+.ppText ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.ppText li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.ppText blockquote {
+  border-left: 4px solid #444;
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  opacity: 0.9;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .header {

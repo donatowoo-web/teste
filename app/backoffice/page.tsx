@@ -902,6 +902,7 @@ export default function BackofficePage() {
   const [pagePublished, setPagePublished] = useState(false);
   const [pageSections, setPageSections] = useState<PageSection[]>([]);
   const [confirmDeletePage, setConfirmDeletePage] = useState<PageDoc | null>(null);
+  const [showPagePreview, setShowPagePreview] = useState(false);
 
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
@@ -1401,6 +1402,9 @@ export default function BackofficePage() {
               <input type="checkbox" checked={pagePublished} onChange={(e) => setPagePublished(e.target.checked)} />
               Publicada
             </label>
+            <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => setShowPagePreview(true)}>
+              Pre-visualizar
+            </button>
             <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleSavePage} disabled={saving}>
               {saving ? "A guardar..." : "Guardar"}
             </button>
@@ -1470,6 +1474,87 @@ export default function BackofficePage() {
             )}
           </div>
         </div>
+
+        {showPagePreview && (
+          <div className={styles.overlay} onClick={() => setShowPagePreview(false)}>
+            <div className={styles.pagePreviewModal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.previewHeader}>
+                <h2>Pre-visualização da página</h2>
+                <button
+                  className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
+                  onClick={() => setShowPagePreview(false)}
+                >
+                  Fechar
+                </button>
+              </div>
+              <div className={styles.pagePreviewContent}>
+                {pageSections.map((section) => {
+                  switch (section.type) {
+                    case "heading": {
+                      const Tag = section.headingLevel || "h2";
+                      return (
+                        <Tag key={section._key} className={styles.ppHeading} style={{ textAlign: section.textAlign || "left" }}>
+                          {section.heading}
+                        </Tag>
+                      );
+                    }
+                    case "text":
+                      return (
+                        <div
+                          key={section._key}
+                          className={styles.ppText}
+                          dangerouslySetInnerHTML={{ __html: section.content || "" }}
+                          style={{ textAlign: section.textAlign || "left" }}
+                        />
+                      );
+                    case "image":
+                      return section.imageUrl ? (
+                        <div key={section._key} style={{ textAlign: "center", margin: "32px 0" }}>
+                          <img src={section.imageUrl} alt={section.imageAlt || ""} style={{ maxWidth: section.fullWidth ? "100%" : "80%", height: "auto", borderRadius: 8 }} />
+                          {section.imageAlt && <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", marginTop: 10 }}>{section.imageAlt}</p>}
+                        </div>
+                      ) : null;
+                    case "spacer":
+                      return <div key={section._key} style={{ height: section.height || 60 }} />;
+                    case "two-columns":
+                      return (
+                        <div key={section._key} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, marginBottom: 32 }}>
+                          <div className={styles.ppText} dangerouslySetInnerHTML={{ __html: section.leftContent || "" }} />
+                          <div className={styles.ppText} dangerouslySetInnerHTML={{ __html: section.rightContent || "" }} />
+                        </div>
+                      );
+                    case "video": {
+                      const id = section.videoUrl?.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
+                      return id ? (
+                        <div key={section._key} style={{ position: "relative", paddingBottom: "56.25%", height: 0, margin: "32px 0", borderRadius: 8, overflow: "hidden" }}>
+                          <iframe src={`https://www.youtube.com/embed/${id}`} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }} allowFullScreen />
+                        </div>
+                      ) : null;
+                    }
+                    case "button":
+                      return (
+                        <div key={section._key} style={{ textAlign: section.textAlign || "center", margin: "32px 0" }}>
+                          <span style={{
+                            display: "inline-block",
+                            padding: "14px 36px",
+                            background: section.buttonStyle === "outline" ? "transparent" : "rgba(0,0,0,0.15)",
+                            color: "#fff",
+                            border: section.buttonStyle === "outline" ? "2px solid #fff" : "1px solid rgba(136,177,75,0.6)",
+                            boxShadow: section.buttonStyle === "outline" ? "none" : "0 0 12px rgba(136,177,75,0.3)",
+                            borderRadius: 4,
+                            fontSize: 16,
+                            fontWeight: 500,
+                          }}>{section.buttonText || "Botão"}</span>
+                        </div>
+                      );
+                    default:
+                      return null;
+                  }
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         <StatusMessage msg={status} isError={statusError} />
       </div>

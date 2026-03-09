@@ -1,0 +1,210 @@
+.pageMain {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  padding: 140px 16px 120px;
+}
+
+.pageContent {
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.75;
+}
+
+/* HEADINGS - match site NewYork font */
+.pageContent h1,
+.pageContent h2,
+.pageContent h3 {
+  font-family: var(--font-title), "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.headingH1 {
+  font-size: 42px;
+  line-height: 1.15;
+  margin: 0 0 10px;
+}
+
+.headingH2 {
+  font-size: 26px;
+  line-height: 1.25;
+  margin: 44px 0 14px;
+}
+
+.headingH3 {
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 36px 0 12px;
+}
+
+/* TEXT */
+.textBlock {
+  font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.textBlock p {
+  margin: 0 0 18px;
+}
+
+.textBlock a {
+  color: #88f;
+  text-decoration: underline;
+}
+
+.textBlock ul,
+.textBlock ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.textBlock li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.textBlock blockquote {
+  border-left: 4px solid #444;
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.textBlock strong {
+  font-weight: 600;
+}
+
+/* IMAGE */
+.imageBlock {
+  margin: 32px 0;
+  text-align: center;
+}
+
+.imageFull {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.imageContained {
+  max-width: 80%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.imageCaption {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 10px;
+}
+
+/* TWO COLUMNS */
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 32px;
+}
+
+/* VIDEO */
+.videoBlock {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin: 32px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.videoIframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* BUTTON */
+.buttonBlock {
+  margin: 32px 0;
+}
+
+.pageButton {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  font-family: Poppins, system-ui, sans-serif;
+  transition: all 0.3s;
+}
+
+.btnPrimary {
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff;
+  border: 1px solid rgba(136, 177, 75, 0.6);
+  box-shadow: 0 0 12px rgba(136, 177, 75, 0.3);
+  backdrop-filter: blur(12px);
+}
+
+.btnPrimary:hover {
+  border-color: rgba(136, 177, 75, 0.9);
+  box-shadow: 0 0 20px rgba(136, 177, 75, 0.5);
+}
+
+.btnSecondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btnSecondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btnOutline {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+.btnOutline:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .pageMain {
+    padding: 100px 16px 80px;
+  }
+
+  .headingH1 {
+    font-size: 32px;
+  }
+
+  .headingH2 {
+    font-size: 22px;
+  }
+
+  .headingH3 {
+    font-size: 18px;
+  }
+
+  .twoColumns {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .imageContained {
+    max-width: 100%;
+  }
+}
