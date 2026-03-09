@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import BackofficeShell from "./BackofficeShell";
 
 export const metadata: Metadata = {
   title: "Backoffice | EVAPLACE",
@@ -10,18 +11,5 @@ export default function BackofficeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999,
-        background: "#0a0a0a",
-        overflowY: "scroll",
-        WebkitOverflowScrolling: "touch",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <BackofficeShell>{children}</BackofficeShell>;
 }
