@@ -679,29 +679,29 @@ function SectionEditor({
       case "heading":
         return (
           <div style={{ textAlign: section.textAlign || "left" }}>
-            {section.headingLevel === "h1" && <h1 style={{ margin: 0, fontSize: 28 }}>{section.heading}</h1>}
-            {section.headingLevel === "h2" && <h2 style={{ margin: 0, fontSize: 24 }}>{section.heading}</h2>}
-            {section.headingLevel === "h3" && <h3 style={{ margin: 0, fontSize: 20 }}>{section.heading}</h3>}
+            {section.headingLevel === "h1" && <h1 style={{ margin: 0, fontSize: 28, color: "#fff" }}>{section.heading}</h1>}
+            {section.headingLevel === "h2" && <h2 style={{ margin: 0, fontSize: 24, color: "#fff" }}>{section.heading}</h2>}
+            {section.headingLevel === "h3" && <h3 style={{ margin: 0, fontSize: 20, color: "#fff" }}>{section.heading}</h3>}
           </div>
         );
       case "text":
-        return <div dangerouslySetInnerHTML={{ __html: section.content || "" }} style={{ textAlign: section.textAlign || "left", lineHeight: 1.7 }} />;
+        return <div dangerouslySetInnerHTML={{ __html: section.content || "" }} style={{ textAlign: section.textAlign || "left", lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }} />;
       case "image":
         return section.imageUrl ? (
           <div style={{ textAlign: "center" }}>
             <img src={section.imageUrl} alt={section.imageAlt || ""} style={{ maxWidth: section.fullWidth ? "100%" : "80%", height: "auto", borderRadius: 4 }} />
-            {section.imageAlt && <p style={{ fontSize: 13, color: "#999", marginTop: 8 }}>{section.imageAlt}</p>}
+            {section.imageAlt && <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 8 }}>{section.imageAlt}</p>}
           </div>
         ) : (
-          <div style={{ padding: 40, textAlign: "center", background: "#f0f0f0", borderRadius: 4, color: "#999" }}>Clique para adicionar imagem</div>
+          <div style={{ padding: 40, textAlign: "center", background: "#111", borderRadius: 4, color: "#666" }}>Clique para adicionar imagem</div>
         );
       case "spacer":
-        return <div style={{ height: section.height || 60, background: "repeating-linear-gradient(45deg, transparent, transparent 5px, #f0f0f0 5px, #f0f0f0 10px)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#ccc", fontSize: 12 }}>{section.height || 60}px</div>;
+        return <div style={{ height: section.height || 60, background: "repeating-linear-gradient(45deg, transparent, transparent 5px, #111 5px, #111 10px)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "#444", fontSize: 12 }}>{section.height || 60}px</div>;
       case "two-columns":
         return (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            <div dangerouslySetInnerHTML={{ __html: section.leftContent || "" }} style={{ lineHeight: 1.7 }} />
-            <div dangerouslySetInnerHTML={{ __html: section.rightContent || "" }} style={{ lineHeight: 1.7 }} />
+            <div dangerouslySetInnerHTML={{ __html: section.leftContent || "" }} style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }} />
+            <div dangerouslySetInnerHTML={{ __html: section.rightContent || "" }} style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }} />
           </div>
         );
       case "video":
@@ -711,18 +711,19 @@ function SectionEditor({
             <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
               <iframe src={`https://www.youtube.com/embed/${id}`} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none", borderRadius: 4 }} allowFullScreen />
             </div>
-          ) : <p style={{ color: "#999" }}>URL de vídeo inválido</p>;
+          ) : <p style={{ color: "#666" }}>URL de vídeo inválido</p>;
         }
-        return <div style={{ padding: 40, textAlign: "center", background: "#f0f0f0", borderRadius: 4, color: "#999" }}>Adicionar URL do YouTube</div>;
+        return <div style={{ padding: 40, textAlign: "center", background: "#111", borderRadius: 4, color: "#666" }}>Adicionar URL do YouTube</div>;
       case "button":
         return (
           <div style={{ textAlign: section.textAlign || "center" }}>
             <span style={{
               display: "inline-block",
               padding: "12px 32px",
-              background: section.buttonStyle === "outline" ? "transparent" : section.buttonStyle === "secondary" ? "#f0f0f0" : "#111",
-              color: section.buttonStyle === "outline" ? "#111" : section.buttonStyle === "secondary" ? "#333" : "#fff",
-              border: section.buttonStyle === "outline" ? "2px solid #111" : "none",
+              background: section.buttonStyle === "outline" ? "transparent" : "rgba(0,0,0,0.15)",
+              color: "#fff",
+              border: section.buttonStyle === "outline" ? "2px solid #fff" : "1px solid rgba(136,177,75,0.6)",
+              boxShadow: section.buttonStyle === "outline" ? "none" : "0 0 12px rgba(136,177,75,0.3)",
               borderRadius: 4,
               fontSize: 15,
               fontWeight: 500,
