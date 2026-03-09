@@ -338,123 +338,65 @@ function ConfirmModal({
   );
 }
 
-// ─── Rich Text Editor ───
-function RichEditor({
+// ─── HTML Editor ───
+function HtmlEditor({
   initialHtml,
   editorRef,
+  htmlCode,
+  setHtmlCode,
 }: {
   initialHtml: string;
   editorRef: React.RefObject<HTMLDivElement | null>;
+  htmlCode: string;
+  setHtmlCode: (v: string) => void;
 }) {
-  const exec = (cmd: string, value?: string) => {
-    document.execCommand(cmd, false, value);
-    editorRef.current?.focus();
-  };
+  const [mode, setMode] = useState<"html" | "preview">("html");
 
-  const insertLink = () => {
-    const url = prompt("URL do link:");
-    if (url) exec("createLink", url);
-  };
+  useEffect(() => {
+    setHtmlCode(initialHtml);
+  }, [initialHtml]);
 
-  const insertImage = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      try {
-        const assetId = await uploadImage(file);
-        // Inserte a placeholder - will be handled on save
-        const img = document.createElement("img");
-        img.src = URL.createObjectURL(file);
-        img.dataset.sanityAsset = assetId;
-        img.style.maxWidth = "100%";
-        const sel = window.getSelection();
-        if (sel && sel.rangeCount > 0) {
-          const range = sel.getRangeAt(0);
-          range.deleteContents();
-          range.insertNode(img);
-          range.collapse(false);
-        }
-      } catch {
-        alert("Erro ao enviar imagem");
-      }
-    };
-    input.click();
-  };
+  useEffect(() => {
+    if (mode === "preview" && editorRef.current) {
+      editorRef.current.innerHTML = htmlCode;
+    }
+  }, [mode, htmlCode]);
 
   return (
     <div>
       <div className={styles.toolbar}>
-        <button className={styles.toolbarBtn} onClick={() => exec("bold")} title="Negrito">
-          <strong>B</strong>
-        </button>
-        <button className={styles.toolbarBtn} onClick={() => exec("italic")} title="Italico">
-          <em>I</em>
-        </button>
-        <button className={styles.toolbarBtn} onClick={() => exec("underline")} title="Sublinhado">
-          <u>U</u>
-        </button>
-        <div className={styles.toolbarSep} />
         <button
-          className={styles.toolbarBtn}
-          onClick={() => exec("formatBlock", "h2")}
-          title="Titulo H2"
+          className={`${styles.toolbarBtn} ${mode === "html" ? styles.toolbarBtnActive : ""}`}
+          onClick={() => {
+            if (mode === "preview" && editorRef.current) {
+              setHtmlCode(editorRef.current.innerHTML);
+            }
+            setMode("html");
+          }}
         >
-          H2
+          &lt;/&gt; HTML
         </button>
         <button
-          className={styles.toolbarBtn}
-          onClick={() => exec("formatBlock", "h3")}
-          title="Titulo H3"
+          className={`${styles.toolbarBtn} ${mode === "preview" ? styles.toolbarBtnActive : ""}`}
+          onClick={() => setMode("preview")}
         >
-          H3
-        </button>
-        <button
-          className={styles.toolbarBtn}
-          onClick={() => exec("formatBlock", "p")}
-          title="Paragrafo"
-        >
-          P
-        </button>
-        <div className={styles.toolbarSep} />
-        <button
-          className={styles.toolbarBtn}
-          onClick={() => exec("insertUnorderedList")}
-          title="Lista"
-        >
-          &bull; Lista
-        </button>
-        <button
-          className={styles.toolbarBtn}
-          onClick={() => exec("insertOrderedList")}
-          title="Lista numerada"
-        >
-          1. Lista
-        </button>
-        <div className={styles.toolbarSep} />
-        <button
-          className={styles.toolbarBtn}
-          onClick={() => exec("formatBlock", "blockquote")}
-          title="Citacao"
-        >
-          &ldquo; Citacao
-        </button>
-        <button className={styles.toolbarBtn} onClick={insertLink} title="Link">
-          Link
-        </button>
-        <button className={styles.toolbarBtn} onClick={insertImage} title="Imagem no texto">
-          Imagem
+          Pre-visualizar
         </button>
       </div>
-      <div
-        ref={editorRef}
-        className={styles.editorArea}
-        contentEditable
-        suppressContentEditableWarning
-        dangerouslySetInnerHTML={{ __html: initialHtml }}
-      />
+      {mode === "html" ? (
+        <textarea
+          className={styles.htmlArea}
+          value={htmlCode}
+          onChange={(e) => setHtmlCode(e.target.value)}
+          spellCheck={false}
+        />
+      ) : (
+        <div
+          ref={editorRef}
+          className={styles.editorArea}
+          dangerouslySetInnerHTML={{ __html: htmlCode }}
+        />
+      )}
     </div>
   );
 }
@@ -481,6 +423,7 @@ export default function BackofficePage() {
   const [saving, setSaving] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const [editorHtml, setEditorHtml] = useState("<p><br></p>");
+  const [htmlCode, setHtmlCode] = useState("<p><br></p>");
   const [editorKey, setEditorKey] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -579,7 +522,9 @@ export default function BackofficePage() {
     setImageFile(null);
     setImagePreview("");
     setExistingImageRef("");
-    setEditorHtml("<p><br></p>");
+    const empty = "<p></p>";
+    setEditorHtml(empty);
+    setHtmlCode(empty);
     setEditorKey((k) => k + 1);
     setView("editor");
   }
@@ -594,7 +539,9 @@ export default function BackofficePage() {
     const imgRef = (post.mainImage as any)?.ref || post.mainImage?.asset?._ref || "";
     setImagePreview(imgUrl);
     setExistingImageRef(imgRef);
-    setEditorHtml(portableTextToHtml(post.content || []));
+    const html = portableTextToHtml(post.content || []);
+    setEditorHtml(html);
+    setHtmlCode(html);
     setEditorKey((k) => k + 1);
     setView("editor");
   }
@@ -630,24 +577,8 @@ export default function BackofficePage() {
         return;
       }
 
-      // Parse content from editor
-      const html = editorRef.current?.innerHTML || "";
-      const content = htmlToPortableText(html);
-
-      // Also extract inline images from content
-      const inlineImages = editorRef.current?.querySelectorAll("img[data-sanity-asset]");
-      if (inlineImages) {
-        inlineImages.forEach((img) => {
-          const assetId = (img as HTMLImageElement).dataset.sanityAsset;
-          if (assetId) {
-            content.push({
-              _type: "image",
-              _key: rand(),
-              asset: { _type: "reference", _ref: assetId },
-            });
-          }
-        });
-      }
+      // Parse content from HTML code
+      const content = htmlToPortableText(htmlCode);
 
       const doc: any = {
         _type: "post",
@@ -823,8 +754,14 @@ export default function BackofficePage() {
           </div>
 
           <div className={styles.field}>
-            <label>Conteudo</label>
-            <RichEditor key={editorKey} initialHtml={editorHtml} editorRef={editorRef} />
+            <label>Conteudo (HTML)</label>
+            <HtmlEditor
+              key={editorKey}
+              initialHtml={editorHtml}
+              editorRef={editorRef}
+              htmlCode={htmlCode}
+              setHtmlCode={setHtmlCode}
+            />
           </div>
         </div>
 
@@ -848,9 +785,7 @@ export default function BackofficePage() {
                 {excerpt && <p className={styles.previewExcerpt}>{excerpt}</p>}
                 <div
                   className={styles.previewBody}
-                  dangerouslySetInnerHTML={{
-                    __html: editorRef.current?.innerHTML || "",
-                  }}
+                  dangerouslySetInnerHTML={{ __html: htmlCode }}
                 />
               </div>
             </div>
