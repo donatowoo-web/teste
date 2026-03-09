@@ -98,7 +98,7 @@ async function sanityMutate(mutations: any[]) {
   return res.json();
 }
 
-async function uploadImage(file: File): Promise<string> {
+async function uploadImage(file: File): Promise<{ id: string; url: string }> {
   const res = await fetch(
     `${SANITY_API}/assets/images/${DATASET}?filename=${encodeURIComponent(file.name)}`,
     {
@@ -112,7 +112,7 @@ async function uploadImage(file: File): Promise<string> {
   );
   if (!res.ok) throw new Error("Erro ao enviar imagem");
   const data = await res.json();
-  return data.document._id;
+  return { id: data.document._id, url: data.document.url };
 }
 
 // ─── Portable Text ↔ HTML ───
@@ -417,10 +417,10 @@ function ContentEditor({
       const file = input.files?.[0];
       if (!file) return;
       try {
-        const assetId = await uploadImage(file);
+        const asset = await uploadImage(file);
         const img = document.createElement("img");
-        img.src = URL.createObjectURL(file);
-        img.dataset.sanityAsset = assetId;
+        img.src = asset.url;
+        img.dataset.sanityAsset = asset.id;
         img.style.maxWidth = "100%";
         const sel = window.getSelection();
         if (sel && sel.rangeCount > 0) {
@@ -892,9 +892,8 @@ function SectionEditor({
                     const file = input.files?.[0];
                     if (!file) return;
                     try {
-                      const assetId = await uploadImage(file);
-                      const url = URL.createObjectURL(file);
-                      onChange({ ...section, imageUrl: url, imageRef: assetId });
+                      const asset = await uploadImage(file);
+                      onChange({ ...section, imageUrl: asset.url, imageRef: asset.id });
                     } catch {
                       alert("Erro ao enviar imagem");
                     }
@@ -1037,9 +1036,8 @@ function SectionEditor({
                     const file = input.files?.[0];
                     if (!file) return;
                     try {
-                      const assetId = await uploadImage(file);
-                      const url = URL.createObjectURL(file);
-                      onChange({ ...section, imageUrl: url, imageRef: assetId });
+                      const asset = await uploadImage(file);
+                      onChange({ ...section, imageUrl: asset.url, imageRef: asset.id });
                     } catch {
                       alert("Erro ao enviar imagem");
                     }
@@ -1298,7 +1296,7 @@ export default function BackofficePage() {
       // Upload image if new
       let imageRef = existingImageRef;
       if (imageFile) {
-        imageRef = await uploadImage(imageFile);
+        imageRef = (await uploadImage(imageFile)).id;
       }
 
       if (!imageRef) {
