@@ -482,6 +482,7 @@ export default function BackofficePage() {
   const editorRef = useRef<HTMLDivElement>(null);
   const [editorHtml, setEditorHtml] = useState("<p><br></p>");
   const [editorKey, setEditorKey] = useState(0);
+  const [showPreview, setShowPreview] = useState(false);
 
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
@@ -748,6 +749,12 @@ export default function BackofficePage() {
           <h1>{editingPost ? "Editar Artigo" : "Novo Artigo"}</h1>
           <div className={styles.headerActions}>
             <button
+              className={`${styles.btn} ${styles.btnSecondary}`}
+              onClick={() => setShowPreview(true)}
+            >
+              Pre-visualizar
+            </button>
+            <button
               className={`${styles.btn} ${styles.btnPrimary}`}
               onClick={handleSave}
               disabled={saving}
@@ -820,6 +827,35 @@ export default function BackofficePage() {
             <RichEditor key={editorKey} initialHtml={editorHtml} editorRef={editorRef} />
           </div>
         </div>
+
+        {showPreview && (
+          <div className={styles.overlay} onClick={() => setShowPreview(false)}>
+            <div className={styles.previewModal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.previewHeader}>
+                <h2>Pre-visualizacao</h2>
+                <button
+                  className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
+                  onClick={() => setShowPreview(false)}
+                >
+                  Fechar
+                </button>
+              </div>
+              <div className={styles.previewContent}>
+                {imagePreview && (
+                  <img src={imagePreview} alt="" className={styles.previewCover} />
+                )}
+                <h1 className={styles.previewTitle}>{title || "Sem titulo"}</h1>
+                {excerpt && <p className={styles.previewExcerpt}>{excerpt}</p>}
+                <div
+                  className={styles.previewBody}
+                  dangerouslySetInnerHTML={{
+                    __html: editorRef.current?.innerHTML || "",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <StatusMessage msg={status} isError={statusError} />
       </div>
