@@ -2,12 +2,19 @@
   background: #000;
   color: #fff;
   min-height: 100vh;
-  padding: 140px 16px 120px;
+  padding: 140px 0 120px;
+  overflow-x: hidden;
+}
+
+/* Negate top padding when hero is first child */
+.pageMain > .heroImage:first-child {
+  margin-top: -140px;
 }
 
 .pageContent {
   max-width: 1300px;
   margin: 0 auto;
+  padding: 0 16px;
   font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   line-height: 1.75;
 }
@@ -54,7 +61,7 @@
 }
 
 .textBlock a {
-  color: #88f;
+  color: #88B14B;
   text-decoration: underline;
 }
 
@@ -138,7 +145,7 @@
   display: flex;
   align-items: flex-end;
   overflow: hidden;
-  margin: 0 -20px;
+  width: 100%;
 }
 
 .heroImageBg {
@@ -257,7 +264,11 @@
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .pageMain {
-    padding: 100px 16px 80px;
+    padding: 100px 0 80px;
+  }
+
+  .pageMain > .heroImage:first-child {
+    margin-top: -100px;
   }
 
   .headingH1 {
