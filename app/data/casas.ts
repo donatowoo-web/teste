@@ -1,0 +1,541 @@
+// app/data/casas.ts
+
+export type Casa = {
+  slug: string;
+
+  // LISTAGEM
+  nomeProjeto: string;
+  thumbnail: string;
+
+  // DETALHE
+  tipologia: string;
+  areaTotal: number;
+  wc: number;
+  descricao: string;
+
+  // IMAGENS
+  galeria: string[];
+  planta: string;
+};
+
+export const casas: Casa[] = [
+  {
+    slug: "oakland-v2-lsf",
+    nomeProjeto: "Oakland",
+    thumbnail: "/Casas/Oakland/1-6-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 100,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Oakland/1-6-scaled.jpg",
+      "/Casas/Oakland/2-12-scaled.jpg",
+      "/Casas/Oakland/3-12-scaled.jpg",
+      "/Casas/Oakland/4-8.jpg",
+      "/Casas/Oakland/5-6.jpg",
+      "/plantas/Oakland.png",
+    ],
+    planta: "/plantas/Oakland.png",
+  },
+
+  {
+    slug: "san-diego-v3",
+    nomeProjeto: "San diego",
+    thumbnail: "/Casas/San diego/capa_san diego.webp",
+    tipologia: "V3",
+    areaTotal: 161,
+    wc: 2,
+    descricao: "",
+    galeria: ["/Casas/San diego/capa_san diego.webp", "/Casas/San diego/sandiego_sala.webp", "/Casas/San diego/2-3-scaled.jpg", "/Casas/San diego/3-1.jpg", "/plantas/San-Diego.png"],
+    planta: "/plantas/San-Diego.png",
+  },
+
+  {
+    slug: "toronto",
+    nomeProjeto: "Toronto",
+    thumbnail: "/Casas/Toronto/1-7-scaled.jpg",
+    tipologia: "V3",
+    areaTotal: 123,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Toronto/1-7-scaled.jpg",
+      "/Casas/Toronto/salatoronto.webp",
+      "/Casas/Toronto/3-8-scaled.jpg",
+      "/Casas/Toronto/4-4.jpg",
+      "/Casas/Toronto/5-2-scaled.jpg",
+      "/plantas/Toronto.jpg",
+    ],
+    planta: "/plantas/Toronto.jpg",
+  },
+
+  {
+    slug: "vermount-v1",
+    nomeProjeto: "Vermont",
+    thumbnail: "/Casas/Vermont/ver1.jpg",
+    tipologia: "V1",
+    areaTotal: 93,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Vermont/ver1.jpg",
+      "/Casas/Vermont/ver2.jpg",
+      "/Casas/Vermont/ver3.jpg",
+      "/Casas/Vermont/ver4.jpg",
+      "/Casas/Vermont/ver5.jpg",
+      "/Casas/Vermont/ver6.jpg",
+      "/Casas/Vermont/ver7.jpg",
+      "/Casas/Vermont/ver8.jpg",
+      "/Casas/Vermont/ver9.jpg",
+      "/Casas/Vermont/ver10.jpg",
+      "/plantas/Vermont.jpg",
+    ],
+    planta: "/plantas/Vermont.jpg",
+  },
+
+  {
+    slug: "miami-v3-lsf",
+    nomeProjeto: "Miami",
+    thumbnail: "/Casas/Miami/1-2-scaled.jpg",
+    tipologia: "V3",
+    areaTotal: 185,
+    wc: 3,
+    descricao: "",
+    galeria: [
+      "/Casas/Miami/1-2-scaled.jpg",
+      "/Casas/Miami/salamiami.webp",
+      "/Casas/Miami/3-11-scaled.jpg",
+      "/Casas/Miami/4-7.jpg",
+      "/plantas/Miami.png",
+    ],
+    planta: "/plantas/Miami.png",
+  },
+
+  {
+    slug: "aspen-v2",
+    nomeProjeto: "Aspen",
+    thumbnail: "/Casas/Aspen/aspen-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 171,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Aspen/aspen-scaled.jpg",
+      "/Casas/Aspen/aspen1.jpg",
+      "/Casas/Aspen/aspen2.jpg",
+      "/Casas/Aspen/aspen3.jpg",
+      "/Casas/Aspen/aspen4.jpg",
+      "/Casas/Aspen/aspen5.jpg",
+      "/Casas/Aspen/aspen6.jpg",
+      "/Casas/Aspen/aspen7.jpg",
+      "/plantas/Aspen.jpg",
+    ],
+    planta: "/plantas/Aspen.jpg",
+  },
+
+  {
+    slug: "portland-v3",
+    nomeProjeto: "Portland",
+    thumbnail: "/Casas/Portland/pt_1.jpg",
+    tipologia: "V3",
+    areaTotal: 228,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Portland/pt_1.jpg",
+      "/Casas/Portland/pt_2.jpg",
+      "/Casas/Portland/pt_3.jpg",
+      "/Casas/Portland/pt_5.jpg",
+      "/Casas/Portland/pt_6.jpg",
+      "/plantas/Portland-V3.jpg",
+    ],
+    planta: "/plantas/Portland-V3.jpg",
+  },
+
+  {
+    slug: "phoenix",
+    nomeProjeto: "Phoenix",
+    thumbnail: "/Casas/Phoenix/phoenix1.jpg",
+    tipologia: "V2",
+    areaTotal: 177,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Phoenix/phoenix_4.jpg",
+      "/Casas/Phoenix/phoenix_5.jpg",
+      "/Casas/Phoenix/phoenix1.jpg",
+      "/Casas/Phoenix/phoenix2.jpg",
+      "/Casas/Phoenix/phoenix3.jpg",
+      "/Casas/Phoenix/phoenix6.jpg",
+      "/Casas/Phoenix/phoenix7.jpg",
+      "/Casas/Phoenix/phoenix8.jpg",
+      "/Casas/Phoenix/phoenix9.jpg",
+      "/plantas/Phoenix.jpg",
+    ],
+    planta: "/plantas/Phoenix.jpg",
+  },
+
+  {
+    slug: "long-beach",
+    nomeProjeto: "Long Beach",
+    thumbnail: "/Casas/Long Beach/lb1.jpg",
+    tipologia: "V3",
+    areaTotal: 403,
+    wc: 4,
+    descricao: "",
+    galeria: [
+      "/Casas/Long Beach/lb1.jpg",
+      "/Casas/Long Beach/lb2.jpg",
+      "/Casas/Long Beach/lb3.jpg",
+      "/Casas/Long Beach/lb4.jpg",
+      "/Casas/Long Beach/lb5.jpg",
+      "/Casas/Long Beach/lb6.jpg",
+      "/Casas/Long Beach/lb7.jpg",
+      "/Casas/Long Beach/lb8.jpg",
+      "/plantas/Long-Beach.jpg",
+    ],
+    planta: "/plantas/Long-Beach.jpg",
+  },
+
+  {
+    slug: "riverside-v1",
+    nomeProjeto: "Riverside",
+    thumbnail: "/Casas/Riverside/rvcapa-scaled.jpg",
+    tipologia: "V1",
+    areaTotal: 75,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Riverside/rvcapa-scaled.jpg",
+      "/Casas/Riverside/1-13.jpg",
+      "/Casas/Riverside/3-13-scaled.jpg",
+      "/plantas/Riverside.png",
+    ],
+    planta: "/plantas/Riverside.png",
+  },
+
+  {
+    slug: "casa-de-madeira-atenas",
+    nomeProjeto: "Atenas",
+    thumbnail: "/Casas/Atenas/1-15-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 98,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Atenas/1-15-scaled.jpg",
+      "/Casas/Atenas/2-5-scaled.jpg",
+      "/Casas/Atenas/3-4-scaled.jpg",
+      "/plantas/Atenas.png",
+    ],
+    planta: "/plantas/Atenas.png",
+  },
+
+  {
+    slug: "casa-de-madeira-baiona-v3",
+    nomeProjeto: "Baiona",
+    thumbnail: "/Casas/Baiona/1-6-scaled.jpg",
+    tipologia: "V3",
+    areaTotal: 133,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Baiona/1-6-scaled.jpg",
+      "/Casas/Baiona/baiona_sala.webp",
+      "/Casas/Baiona/3-5-scaled.jpg",
+      "/plantas/Baiona.png",
+    ],
+    planta: "/plantas/Baiona.png",
+  },
+
+  {
+    slug: "casa-de-madeira-berlim",
+    nomeProjeto: "Berlim",
+    thumbnail: "/Casas/Berlim/1-1.jpg",
+    tipologia: "V2",
+    areaTotal: 71,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Berlim/1-1.jpg",
+      "/Casas/Berlim/2-1-scaled.jpg",
+      "/Casas/Berlim/3-1-scaled.jpg",
+      "/Casas/Berlim/4-scaled.jpg",
+      "/plantas/Berlim.png",
+    ],
+    planta: "/plantas/Berlim.png",
+  },
+
+  {
+    slug: "casa-de-madeira-budapeste",
+    nomeProjeto: "Budapeste",
+    thumbnail: "/Casas/Budapeste/budapestecapa-scaled.jpg",
+    tipologia: "V3",
+    areaTotal: 102,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Budapeste/budapestecapa-scaled.jpg",
+      "/Casas/Budapeste/budapeste_sala.webp",
+      "/Casas/Budapeste/2-6-scaled.jpg",
+      "/plantas/Budapeste.jpg",
+    ],
+    planta: "/plantas/Budapeste.jpg",
+  },
+
+  {
+    slug: "chale-arrabida",
+    nomeProjeto: "Chalé Arrábida",
+    thumbnail: "/Casas/Chale-Arrabida/1-9.jpg",
+    tipologia: "V3",
+    areaTotal: 108,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Chale-Arrabida/1-9.jpg",
+      "/Casas/Chale-Arrabida/2-9-scaled.jpg",
+      "/Casas/Chale-Arrabida/3-9.jpg",
+      "/Casas/Chale-Arrabida/4-6-scaled.jpg",
+      "/Casas/Chale-Arrabida/5.jpg",
+      "/plantas/Chale-Arrabida.png",
+    ],
+    planta: "/plantas/Chale-Arrabida.png",
+  },
+
+  {
+    slug: "chale-geres",
+    nomeProjeto: "Chalé Gerês",
+    thumbnail: "/Casas/Chale-Geres/ge1-scaled.jpg",
+    tipologia: "V1",
+    areaTotal: 58,
+    wc: 1,
+    descricao: "",
+    galeria: ["/Casas/Chale-Geres/ge1-scaled.jpg", "/Casas/Chale-Geres/2-10.jpg", "/Casas/Chale-Geres/quartogeres.webp", "/plantas/Chale-Geres.png"],
+    planta: "/plantas/Chale-Geres.png",
+  },
+
+  {
+    slug: "chale-serra-da-estrela",
+    nomeProjeto: "Chalé Serra da Estrela",
+    thumbnail: "/Casas/Chale-Serra-da-Estrela/1-3-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 75,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Chale-Serra-da-Estrela/1-3-scaled.jpg",
+      "/Casas/Chale-Serra-da-Estrela/2-8.jpg",
+      "/Casas/Chale-Serra-da-Estrela/3-2-scaled.jpg",
+      "/Casas/Chale-Serra-da-Estrela/4-5.jpg",
+      "/plantas/Chale-Serra-Estrela.png",
+    ],
+    planta: "/plantas/Chale-Serra-Estrela.png",
+  },
+
+  {
+    slug: "glasgow",
+    nomeProjeto: "Glasgow",
+    thumbnail: "/Casas/Glasgow/1-2.jpg",
+    tipologia: "V0",
+    areaTotal: 27,
+    wc: 1,
+    descricao: "",
+    galeria: ["/Casas/Glasgow/1-2.jpg", "/Casas/Glasgow/salaglasgow.webp", "/plantas/Glasgow.png"],
+    planta: "/plantas/Glasgow.png",
+  },
+
+  {
+    slug: "lagos",
+    nomeProjeto: "Lagos",
+    thumbnail: "/Casas/Lagos/1-1-scaled.jpg",
+    tipologia: "V1",
+    areaTotal: 45,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Lagos/1-1-scaled.jpg",
+      "/Casas/Lagos/2-1-scaled.jpg",
+      "/Casas/Lagos/3-scaled.jpg",
+      "/plantas/Lagos.jpg",
+    ],
+    planta: "/plantas/Lagos.jpg",
+  },
+
+  {
+    slug: "casa-de-madeira-lisboa",
+    nomeProjeto: "Lisboa",
+    thumbnail: "/Casas/Lisboa/1_-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 88,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Lisboa/1_-scaled.jpg",
+      "/Casas/Lisboa/2-11-scaled.jpg",
+      "/plantas/Lisboa.png",
+    ],
+    planta: "/plantas/Lisboa.png",
+  },
+
+  {
+    slug: "casa-de-madeira-londres",
+    nomeProjeto: "Londres",
+    thumbnail: "/Casas/Londres/1-9-scaled.jpg",
+    tipologia: "V1",
+    areaTotal: 45,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Londres/1-9-scaled.jpg",
+      "/Casas/Londres/salalondres.webp",
+      "/Casas/Londres/2-10-scaled.jpg",
+      "/plantas/Londres.png",
+    ],
+    planta: "/plantas/Londres.png",
+  },
+
+  {
+    slug: "casa-de-madeira-madrid",
+    nomeProjeto: "Madrid",
+    thumbnail: "/Casas/Madrid/1-14-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 95,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Madrid/1-14-scaled.jpg",
+      "/Casas/Madrid/3-3-scaled.jpg",
+      "/Casas/Madrid/2-4-scaled.jpg",
+      "/plantas/Madrid.png",
+    ],
+    planta: "/plantas/Madrid.png",
+  },
+
+  {
+    slug: "mimosa",
+    nomeProjeto: "Mimosa",
+    thumbnail: "/Casas/Mimosa/1-1-scaled.jpg",
+    tipologia: "V0",
+    areaTotal: 56,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Mimosa/1-1-scaled.jpg",
+      "/Casas/Mimosa/2-scaled.jpg",
+      "/plantas/Mimosa.png",
+    ],
+    planta: "/plantas/Mimosa.png",
+  },
+
+  {
+    slug: "casa-de-madeira-monaco",
+    nomeProjeto: "Mónaco",
+    thumbnail: "/Casas/Monaco/1-7-scaled.jpg",
+    tipologia: "V0",
+    areaTotal: 28,
+    wc: 1,
+    descricao: "",
+    galeria: ["/Casas/Monaco/1-7-scaled.jpg", "/Casas/Monaco/22.jpg", "/plantas/Monaco.png"],
+    planta: "/plantas/Monaco.png",
+  },
+
+  {
+    slug: "casa-de-madeira-oslo",
+    nomeProjeto: "Oslo",
+    thumbnail: "/Casas/Oslo/1ma-1-scaled.jpg",
+    tipologia: "V1",
+    areaTotal: 47,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Oslo/1ma-1-scaled.jpg",
+      "/Casas/Oslo/2-8-scaled.jpg",
+      "/Casas/Oslo/3-6-scaled.jpg",
+      "/plantas/Oslo.png",
+    ],
+    planta: "/plantas/Oslo.png",
+  },
+
+  {
+    slug: "casa-madeira-paris",
+    nomeProjeto: "Paris",
+    thumbnail: "/Casas/Paris/1-13-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 65,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Paris/1-13-scaled.jpg",
+      "/Casas/Paris/3-scaled.jpg",
+      "/Casas/Paris/2-13-scaled_2.jpg",
+      "/plantas/Paris.png",
+    ],
+    planta: "/plantas/Paris.png",
+  },
+
+  {
+    slug: "casa-praga",
+    nomeProjeto: "Praga",
+    thumbnail: "/Casas/Praga/1-14-scaled.jpg",
+    tipologia: "V4",
+    areaTotal: 224,
+    wc: 3,
+    descricao: "",
+    galeria: [
+      "/Casas/Praga/1-14-scaled.jpg",
+      "/Casas/Praga/2-14-scaled.jpg",
+      "/Casas/Praga/qt_3-scaled.jpg",
+      "/plantas/Praga.png",
+    ],
+    planta: "/plantas/Praga.png",
+  },
+
+  {
+    slug: "ribeira-brava",
+    nomeProjeto: "Ribeira Brava",
+    thumbnail: "/Casas/Ribeira Brava/ext-scaled.jpg",
+    tipologia: "V1",
+    areaTotal: 50,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Ribeira Brava/ext-scaled.jpg",
+      "/Casas/Ribeira Brava/int_rb-scaled.jpg",
+      "/plantas/Ribeira-Brava.png",
+    ],
+    planta: "/plantas/Ribeira-Brava.png",
+  },
+
+  {
+    slug: "vail",
+    nomeProjeto: "Vail",
+    thumbnail: "/Casas/Vail/v1_-scaled.jpg",
+    tipologia: "V2",
+    areaTotal: 90,
+    wc: 1,
+    descricao: "",
+    galeria: [
+      "/Casas/Vail/v1_-scaled.jpg",
+      "/Casas/Vail/v1_2-scaled.jpg",
+      "/Casas/Vail/v1_3-scaled.jpg",
+      "/plantas/Vail.jpeg",
+    ],
+    planta: "/plantas/Vail.jpeg",
+  },
+
+  {
+    slug: "casa-de-madeira-viena",
+    nomeProjeto: "Viena",
+    thumbnail: "/Casas/Viena/1-2.jpg",
+    tipologia: "V3",
+    areaTotal: 117,
+    wc: 2,
+    descricao: "",
+    galeria: [
+      "/Casas/Viena/1-2.jpg",
+      "/Casas/Viena/2-2-scaled.jpg",
+      "/plantas/Viena.png",
+    ],
+    planta: "/plantas/Viena.png",
+  },
+];

@@ -1,0 +1,43 @@
+name: Deploy to Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Create .env.local
+        run: |
+          cat > .env.local << EOF
+          NEXT_PUBLIC_SANITY_WRITE_TOKEN=${{ secrets.SANITY_WRITE_TOKEN }}
+          NEXT_PUBLIC_BACKOFFICE_PASSWORD=${{ secrets.BACKOFFICE_PASSWORD }}
+          NEXT_PUBLIC_DEPLOY_SECRET=${{ secrets.DEPLOY_SECRET }}
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: |
+          tar -czf /tmp/out.tar.gz -C out .
+          scp -i ~/.ssh/id_ed25519 /tmp/out.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/www/out.tar.gz
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /www && rm -rf out_old && mv out out_old && mkdir out && tar -xzf out.tar.gz -C out && rm out.tar.gz"
+          echo "Deploy complete!"

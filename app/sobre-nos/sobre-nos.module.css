@@ -1,0 +1,64 @@
+.hero {
+    max-width: 1300px;
+
+  position: relative;
+  min-height: 60vh;                 /* ✅ como pediu (parecido ao screenshot) */
+  display: flex;
+  align-items: flex-end;            /* empurra conteúdo um pouco para baixo */
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;      /* pode trocar para: center top */
+  background-repeat: no-repeat;
+}
+
+/* overlay geral (mais leve, para não “matar” a imagem) */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* gradiente no fundo, para dar leitura e aquele “peso” premium */
+.overlayBottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.10) 55%,
+    rgba(0, 0, 0, 0.00) 100%
+  );
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* IMPORTANTE: padding-top para o texto não colidir com o header absoluto */
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 4.5rem;      /* topo / lados / fundo */
+}
+
+.title {
+  margin: 0;
+  max-width: 18ch;                  /* controla o “bloco” do título */
+  color: #fff;
+
+  font-family: var(--font-serif, serif);
+  font-weight: 500;
+  line-height: 1.02;
+
+  /* tamanho grande como no screenshot */
+  font-size: clamp(3rem, 5.2vw, 6.2rem);
+}
+
+/* mobile: um pouco menos padding para caber melhor */
+@media (max-width: 640px) {
+  .container {
+    padding: 7rem 1.25rem 3.5rem;
+  }
+}

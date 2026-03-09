@@ -1,0 +1,51 @@
+.blogMain {
+  background: #fff;
+  color: #000;
+  min-height: 100vh;
+  padding: 140px 16px 120px;
+}
+
+.blogArticle {
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+  line-height: 1.75;
+}
+
+/* Forçar Poppins também nos headings do PortableText */
+.blogArticle :global(h1),
+.blogArticle :global(h2),
+.blogArticle :global(h3),
+.blogArticle :global(p),
+.blogArticle :global(li),
+.blogArticle :global(a),
+.blogArticle :global(blockquote) {
+  font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif !important;
+}
+
+.blogArticle :global(h1) {
+  font-size: 42px;
+  line-height: 1.15;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+.blogArticle :global(h2) {
+  font-size: 26px;
+  line-height: 1.25;
+  margin: 44px 0 14px;
+  font-weight: 600;
+}
+
+.blogArticle :global(h3) {
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 36px 0 12px;
+  font-weight: 600;
+}
+
+.blogArticle :global(p) {
+  margin: 0 0 18px;
+}

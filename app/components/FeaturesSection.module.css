@@ -1,0 +1,128 @@
+.section {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 6rem 0;
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+.section.light {
+  background: #fff;
+  color: #000;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.left {
+  order: 2;
+}
+
+.right {
+  order: 1;
+}
+
+@media (min-width: 1024px) {
+  .left {
+    order: 1;
+  }
+  .right {
+    order: 2;
+  }
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.imageWrap {
+  position: relative;
+  overflow: hidden;
+  height: 60vh;
+}
+
+@media (min-width: 1024px) {
+  .imageWrap {
+    height: 80vh;
+  }
+}
+
+.image {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  object-fit: contain;
+  object-position: center;
+  will-change: transform;
+}
+
+.item {
+  max-width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 28px;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 42px;
+  }
+}
+
+.line {
+  margin-top: 1.5rem;
+  height: 1px;
+  width: 100%;
+  background: rgba(136, 177, 75, 0.5);
+}
+
+.text {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.6s ease;
+}
+
+.section.light .text {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 768px) {
+  .text {
+    font-size: 1rem;
+  }
+}

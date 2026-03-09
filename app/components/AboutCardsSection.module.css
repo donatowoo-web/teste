@@ -1,0 +1,73 @@
+.section {
+  background: #000;
+  color: #fff;
+  padding: 5.5rem 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 5rem;
+    row-gap: 5rem;
+    align-items: start; /* ✅ para não “nivelar” automaticamente */
+  }
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+/* ✅ DESNÍVEL EDITORIAL (só desktop) */
+@media (min-width: 1024px) {
+  .offsetDown {
+    margin-top: 3.5rem; /* desce */
+  }
+
+  .offsetUp {
+    margin-top: -2.5rem; /* sobe */
+  }
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.content {
+  max-width: 42rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 500; /* ✅ menos “gordo” (mude para 600 se quiser) */
+  font-size: 2.5rem;
+  line-height: 1.15;
+}
+
+.text {
+  margin-top: 0.85rem;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+}

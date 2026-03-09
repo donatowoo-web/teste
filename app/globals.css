@@ -1,0 +1,302 @@
+/* ===========================
+   FONTES LOCAIS
+=========================== */
+
+@font-face {
+  font-family: "NewYork";
+  src: url("/fonts/NewYork.woff2") format("woff2"),
+       url("/fonts/NewYork.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===========================
+   VARIÁVEIS
+=========================== */
+
+:root {
+  --font-title: "NewYork",
+    "New York Display",
+    "New York Text",
+    ui-serif,
+    "Iowan Old Style",
+    "Palatino Linotype",
+    Palatino,
+    Garamond,
+    "Times New Roman",
+    Times,
+    serif;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --bg: #000;
+  --fg: #fff;
+
+  --menu-width: 120px;
+  --menu-overlay-bg: #1a1a1ade;
+  --menu-overlay-bg-2: #000000f2;
+
+  /* cor da linha no hover */
+  --menu-hover-line: rgb(255, 255, 255);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===========================
+   BASE
+=========================== */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+/* ===========================
+   TIPOGRAFIA GLOBAL
+=========================== */
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-title) !important;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+p,
+li,
+a,
+button,
+label,
+input,
+textarea {
+  font-family: var(--font-sans);
+}
+
+h1 span,
+h2 span,
+h3 span {
+  font-family: inherit;
+}
+
+/* ===========================
+   LENIS SMOOTH SCROLL
+=========================== */
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ===========================
+   MENU OVERLAY (Mobile)
+=========================== */
+
+/* OVERLAY */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--menu-overlay-bg), var(--menu-overlay-bg-2));
+  z-index: 999999;
+  transform: translateX(-100%);
+  transition: transform 0.8s var(--ease-out-expo);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
+
+  pointer-events: none;
+}
+
+.menu-overlay.open {
+  transform: translateX(0%);
+  pointer-events: auto;
+}
+
+/* BOTÃO FECHAR (X) */
+.overlay-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  z-index: 1000001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.overlay-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.overlay-close span {
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+}
+
+.overlay-close span:first-child {
+  transform: rotate(45deg);
+}
+
+.overlay-close span:last-child {
+  transform: rotate(-45deg);
+}
+
+/* CONTEÚDO DO OVERLAY (centro vertical, esquerda) */
+.overlay-content {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-left: 8%;
+  padding-right: 5%;
+
+  position: relative;
+  z-index: 100000;
+}
+
+.overlay-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.overlay-content li {
+  line-height: 1;
+  overflow: visible;
+}
+
+/* LINKS (fechado) */
+.overlay-content a {
+  position: relative;
+  display: block;
+
+  color: #fff;
+  text-decoration: none;
+  font-size: clamp(32px, 7vw, 90px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  font-family: var(--font-title);
+  padding: 0.15em 0;
+
+  opacity: 0;
+  transform: translateY(120%);
+  transition: transform 0.7s var(--ease-out-expo),
+              opacity 0.7s var(--ease-out-expo),
+              color 0.3s ease;
+}
+
+/* LINKS (aberto) */
+.menu-overlay.open .overlay-content a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* DELAYS */
+.menu-overlay.open .overlay-content li:nth-child(1) a { transition-delay: 0.08s; }
+.menu-overlay.open .overlay-content li:nth-child(2) a { transition-delay: 0.14s; }
+.menu-overlay.open .overlay-content li:nth-child(3) a { transition-delay: 0.20s; }
+.menu-overlay.open .overlay-content li:nth-child(4) a { transition-delay: 0.26s; }
+.menu-overlay.open .overlay-content li:nth-child(5) a { transition-delay: 0.32s; }
+.menu-overlay.open .overlay-content li:nth-child(6) a { transition-delay: 0.38s; }
+
+/* LINHA NO MEIO (hover) — anima esquerda -> direita */
+.overlay-content a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 6px;
+  width: 100%;
+  background: var(--menu-hover-line);
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out-expo);
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.overlay-content a:hover::after {
+  transform: translateY(-50%) scaleX(1);
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .overlay-content {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .overlay-content a {
+    font-size: clamp(28px, 8vw, 50px);
+  }
+}
+/* LOCK real no viewport (desktop + mobile) */
+.menu-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+
+  height: 100dvh !important; /* melhor que 100vh em mobile */
+  width: 100vw !important;
+}
+
+/* ===========================
+   TINY HOUSES CTA (Mobile center)
+=========================== */
+@media (max-width: 768px) {
+  .tinyHousesCta {
+    flex-direction: column !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* ===========================
+   HIDE SHELL (landing pages privadas)
+=========================== */
+body.hide-shell > header,
+body.hide-shell footer {
+  display: none !important;
+}
+

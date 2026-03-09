@@ -1,0 +1,349 @@
+/* Botão "Candidatar-me" */
+.applyButton {
+  display: inline-block;
+  padding: 14px 32px;
+  background: #88B14B;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.applyButton:hover {
+  background: #9EC35E;
+  transform: translateY(-2px);
+}
+
+/* OVERLAY - Fullscreen */
+.overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: linear-gradient(135deg, #1a1a1ade, #000000f2);
+  z-index: 9999999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* MODAL */
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  max-height: calc(100dvh - 80px);
+  margin: 40px 20px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* CONTENT - scrollable */
+.content {
+  padding: 40px 50px;
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* CLOSE BUTTON (X) */
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.closeBtn span {
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+}
+
+.closeBtn span:first-child {
+  transform: rotate(45deg);
+}
+
+.closeBtn span:last-child {
+  transform: rotate(-45deg);
+}
+
+/* Título e subtítulo */
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #fff;
+  padding-right: 50px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 28px;
+}
+
+/* Form grid */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form .field:nth-child(4),
+.form .field:nth-child(5),
+.form .checkbox,
+.form .error,
+.form .submitBtn {
+  grid-column: 1 / -1;
+}
+
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.field input,
+.field textarea {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #88B14B;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+/* Checkbox */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+/* Error */
+.error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Submit button */
+.submitBtn {
+  padding: 14px 24px;
+  background: #88B14B;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #9EC35E;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Success state */
+.success {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.successIcon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: #88B14B;
+  color: #fff;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success h2 {
+  font-size: 1.8rem;
+  margin: 0 0 12px;
+  color: #fff;
+}
+
+.success p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 28px;
+}
+
+.closeButton {
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* File upload */
+.fileInput {
+  display: none;
+}
+
+.fileLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.fileLabel:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.fileName {
+  font-size: 0.85rem;
+  color: #88B14B;
+  margin-top: 8px;
+}
+
+/* ========================================
+   MOBILE - Fullscreen with scroll
+======================================== */
+@media (max-width: 700px) {
+  .overlay {
+    align-items: flex-start;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .modal {
+    max-width: none;
+    max-height: none;
+    min-height: auto;
+    height: auto;
+    width: calc(100% - 24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    margin: 80px 12px 24px;
+  }
+
+  .content {
+    padding: 40px 20px;
+    max-height: none;
+    height: auto;
+    overflow: visible;
+  }
+
+  .closeBtn {
+    position: fixed;
+    top: 90px;
+    right: 2.5rem;
+    z-index: 99999999;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .title {
+    font-size: 1.4rem;
+    padding-right: 0;
+  }
+
+  .subtitle {
+    margin-bottom: 20px;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .form .field:nth-child(4),
+  .form .field:nth-child(5),
+  .form .checkbox,
+  .form .error,
+  .form .submitBtn {
+    grid-column: 1;
+  }
+
+  .field input,
+  .field textarea {
+    padding: 10px 12px;
+    font-size: 16px; /* Previne zoom no iOS */
+  }
+
+  .submitBtn {
+    margin-top: 10px;
+    padding: 16px 24px;
+  }
+}

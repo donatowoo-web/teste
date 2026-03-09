@@ -1,0 +1,109 @@
+.section {
+  background: #000;
+  color: #fff;
+  padding: 5rem 1.5rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-synthesis: none;
+
+  font-size: clamp(2.6rem, 4.5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+.list {
+  margin-top: 3.5rem;
+}
+
+.item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.button {
+  width: 100%;
+  padding: 1.75rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  text-align: left;
+
+  background: transparent;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.caret {
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 200ms ease;
+  display: inline-block;
+}
+
+.caretOpen {
+  transform: rotate(90deg);
+}
+
+.question {
+  font-size: 1.125rem;
+  line-height: 1.35;
+}
+
+@media (min-width: 768px) {
+  .question {
+    font-size: 1.25rem;
+  }
+}
+
+.symbol {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.25rem;
+}
+
+.panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 280ms ease, padding-bottom 280ms ease;
+  padding-bottom: 0;
+}
+
+.panelOpen {
+  max-height: 240px; /* suficiente para este texto; se quiseres dinâmico, eu ajusto */
+  padding-bottom: 1.75rem;
+}
+
+.answer {
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.65;
+  max-width: 64rem;
+  padding-left: 2rem;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .answer {
+    padding-left: 2.5rem;
+  }
+}

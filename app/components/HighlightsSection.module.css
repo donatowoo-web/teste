@@ -1,0 +1,51 @@
+.section {
+  background: #000;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3.5rem 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    text-align: left;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .item {
+    justify-content: flex-start;
+  }
+}
+
+.icon {
+  font-size: 1.75rem;
+  color: #88B14B; /* verde Evaplace */
+  line-height: 1;
+}
+
+.item p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+}

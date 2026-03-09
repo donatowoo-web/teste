@@ -1,0 +1,36 @@
+export const casasInfo: Record<string, {
+  tipologia: string;
+  area: number;
+  wc: number;
+}> = {
+  "londres": { tipologia: "V1", area: 45, wc: 1 },
+  "oslo": { tipologia: "V1", area: 47, wc: 1 },
+  "monaco": { tipologia: "V0", area: 28, wc: 1 },
+  "budapeste": { tipologia: "V3", area: 102, wc: 2 },
+  "atenas": { tipologia: "V2", area: 98, wc: 1 },
+  "madrid": { tipologia: "V2", area: 95, wc: 1 },
+  "viena": { tipologia: "V3", area: 117, wc: 2 },
+  "berlim": { tipologia: "V2", area: 71, wc: 1 },
+  "lisboa": { tipologia: "V2", area: 88, wc: 2 },
+  "paris": { tipologia: "V2", area: 65, wc: 1 },
+  "praga": { tipologia: "V4", area: 224, wc: 3 },
+  "riverside": { tipologia: "V1", area: 75, wc: 1 },
+  "oakland": { tipologia: "V2", area: 100, wc: 1 },
+  "miami": { tipologia: "V3", area: 185, wc: 3 },
+  "chale-geres": { tipologia: "V1", area: 58, wc: 1 },
+  "chale-arrabida": { tipologia: "V3", area: 108, wc: 1 },
+  "chale-serra-da-estrela": { tipologia: "V2", area: 75, wc: 1 },
+  "vermont": { tipologia: "V1", area: 93, wc: 1 },
+  "aspen": { tipologia: "V2", area: 171, wc: 2 },
+  "toronto": { tipologia: "V3", area: 123, wc: 2 },
+  "long-beach": { tipologia: "V3", area: 403, wc: 4 },
+  "baiona": { tipologia: "V3", area: 133, wc: 2 },
+  "mimosa": { tipologia: "V0", area: 56, wc: 1 },
+  "lagos": { tipologia: "V1", area: 45, wc: 1 },
+  "ribeira-brava": { tipologia: "V1", area: 50, wc: 1 },
+  "vail": { tipologia: "V2", area: 90, wc: 1 },
+  "glasgow": { tipologia: "V0", area: 27, wc: 1 },
+  "san-diego": { tipologia: "V3", area: 161, wc: 2 },
+  "phoenix": { tipologia: "V2", area: 177, wc: 2 },
+  "portland": { tipologia: "V3", area: 228, wc: 2 },
+};

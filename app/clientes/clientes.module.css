@@ -1,0 +1,302 @@
+/* ── Slider ── */
+.slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  z-index: 9999;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1),
+              opacity 1s cubic-bezier(0.76, 0, 0.24, 1),
+              filter 1s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform, opacity, filter;
+}
+
+.slideActive {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  filter: blur(0);
+  z-index: 100 !important;
+}
+
+.slidePast {
+  transform: translateY(-30vh) scale(0.85);
+  opacity: 0;
+  filter: blur(6px);
+  z-index: 50 !important;
+}
+
+.slideNext {
+  transform: translateY(100vh);
+  opacity: 1;
+  filter: blur(0);
+  z-index: 10 !important;
+}
+
+/* ── Base section ── */
+.section {
+  background: #000;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.sectionBg {
+  position: absolute;
+  inset: -15%;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.45;
+  transition: filter 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+  filter: blur(6px);
+}
+
+.sectionBgActive {
+  filter: blur(0px) !important;
+}
+
+.sectionBgPast {
+  filter: blur(10px) !important;
+}
+
+.sectionBg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.sectionInner {
+  max-width: 1300px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Typewriter title ── */
+.twTitleBlock {
+  margin-bottom: 2rem;
+}
+
+.twTitle {
+  font-family: "NewYork", serif;
+  font-size: 3.5rem;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin: 0;
+  min-height: 1em;
+}
+
+/* ── Fade-in body ── */
+.twBody {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.twBodyVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Cursor ── */
+.cursor {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+  animation: blink 0.6s steps(2) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Sub text (Poppins) ── */
+.subText {
+  font-family: var(--font-sans);
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #fff;
+  margin: 0;
+}
+
+/* ── Hero section ── */
+.heroSection {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(40, 35, 30, 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse at 0% 100%, rgba(25, 20, 15, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(20, 18, 15, 0.3) 0%, transparent 50%),
+    #000;
+}
+
+/* ── Scroll hint ── */
+.scrollHintInline {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.mouse {
+  width: 26px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.wheel {
+  width: 3px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+  animation: scroll 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll {
+  0% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0.3; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Name (PAÇOS GAIOLO) ── */
+.nameStyle .twTitle {
+  font-size: 12rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ── Details (datas, áreas, etc.) ── */
+.details {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 1rem;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.detailLabel {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.detailValue {
+  font-family: "NewYork", serif;
+  font-size: 2.4rem;
+  color: #fff;
+}
+
+/* ── Welcome text ── */
+.welcomeText {
+  font-family: "NewYork", serif;
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #fff;
+  margin: 0 0 3rem;
+}
+
+/* ── Signature ── */
+.signature {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.signature p {
+  margin: 0;
+}
+
+/* ── Share Instagram ── */
+.shareLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 3rem;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.shareLink:hover {
+  opacity: 1;
+}
+
+.shareIcon {
+  width: 24px;
+  height: 24px;
+  filter: invert(1);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .twTitle {
+    font-size: 2rem;
+  }
+
+  .subText {
+    font-size: 1.1rem;
+  }
+
+  .nameStyle .twTitle {
+    font-size: 3.5rem;
+  }
+
+  .details {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .detailLabel {
+    font-size: 1rem;
+  }
+
+  .detailValue {
+    font-size: 1.8rem;
+  }
+
+  .welcomeText {
+    font-size: 2rem;
+  }
+
+  .signature {
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,274 @@
+.main {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  padding: 140px 16px 80px;
+}
+
+.container {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.empty p {
+  margin: 0 0 12px;
+  opacity: 0.8;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  display: block;
+  padding: 28px 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.cardTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .cardTitle {
+    font-size: 2.5rem;
+  }
+}
+
+.arrow {
+  font-size: 1.5rem;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.card:hover .arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.cardDescription {
+  margin: 16px 0 0;
+  font-size: 0.95rem;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+.date {
+  margin: 16px 0 0;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+/* Página de detalhe */
+.detailMain {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  padding: 140px 16px 80px;
+}
+
+.detailContainer {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  margin-bottom: 32px;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.backLink:hover {
+  color: #fff;
+}
+
+.detailHeader {
+  margin-bottom: 40px;
+}
+
+.detailTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(40px, 7vw, 64px);
+  font-weight: 600;
+  margin: 0 0 20px;
+  color: #fff;
+}
+
+.detailMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 24px;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .sectionTitle {
+    font-size: 2.5rem;
+  }
+}
+
+.descriptionText {
+  font-size: 1rem;
+  line-height: 1.8;
+  opacity: 0.9;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #88B14B;
+}
+
+.applySection {
+  margin-top: 50px;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0;
+  border: none;
+  text-align: center;
+}
+
+.applyTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .applyTitle {
+    font-size: 2.5rem;
+  }
+}
+
+.applyText {
+  margin: 0 0 20px;
+  opacity: 0.8;
+}
+
+.applyButton {
+  display: inline-block;
+  padding: 14px 32px;
+  background: #88B14B;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  transition: all 0.2s;
+}
+
+.applyButton:hover {
+  background: #9EC35E;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px 24px;
+  }
+
+  .cardTitle {
+    font-size: 1.6rem;
+  }
+
+  .detailContainer {
+    padding: 0 8px;
+  }
+}

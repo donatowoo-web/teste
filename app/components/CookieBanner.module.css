@@ -1,0 +1,171 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #fff;
+  padding: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #111;
+}
+
+.description {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.link {
+  color: #111;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.link:hover {
+  color: #333;
+}
+
+.options {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.optionInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.optionLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.optionNote {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: #111;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* RGPD: Todos os botões com o mesmo destaque visual */
+.buttons {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.buttonsDetail {
+  margin-top: 16px;
+}
+
+.btn {
+  font-family: var(--font-sans);
+  padding: 14px 12px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+/* RGPD: Todos os botões com estilo igual para não influenciar a escolha */
+.btnOutline {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.btnOutline:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.btnPrimary {
+  background: #111;
+  border: 1px solid #111;
+  color: #fff;
+}
+
+.btnPrimary:hover {
+  background: #333;
+}
+
+.legal {
+  margin-top: 16px;
+  font-size: 0.75rem;
+  color: #888;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .modal {
+    padding: 20px;
+  }
+
+  .buttons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+}

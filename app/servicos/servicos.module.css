@@ -1,0 +1,62 @@
+.page {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  padding: 140px 16px 120px;
+}
+
+/* mantém alinhado com o resto do site */
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 110px;
+  row-gap: 90px;
+  align-items: start;
+}
+
+/* cada bloco de serviço */
+.card {
+  max-width: 520px;
+}
+
+.title {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+/* linha verde fina */
+.line {
+  height: 1px;
+  background: rgba(142, 234, 87, 0.65);
+  margin: 18px 0 22px;
+}
+
+/* texto */
+.desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.8;
+  opacity: 0.9;
+  max-width: 520px;
+}
+
+/* responsivo */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    row-gap: 60px;
+    column-gap: 0;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}
