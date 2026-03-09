@@ -404,6 +404,10 @@
   font-weight: 500;
   transition: all 0.15s;
   border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .toolbarBtn:hover {
