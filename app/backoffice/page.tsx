@@ -572,6 +572,8 @@ function SectionEditor({
 }) {
   const [editing, setEditing] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
 
   const widget = SECTION_WIDGETS.find((w) => w.type === section.type);
 
@@ -760,8 +762,6 @@ function SectionEditor({
           </div>
         );
       case "two-columns": {
-        const leftRef = useRef<HTMLDivElement>(null);
-        const rightRef = useRef<HTMLDivElement>(null);
         return (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
