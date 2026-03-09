@@ -6,6 +6,19 @@
   padding: 0;
 }
 
+.container h1,
+.container h2,
+.container h3,
+.container h4,
+.container p,
+.container span,
+.container label,
+.container input,
+.container textarea,
+.container button {
+  font-family: "Poppins", system-ui, sans-serif;
+}
+
 /* LOGIN */
 .loginWrapper {
   display: flex;
