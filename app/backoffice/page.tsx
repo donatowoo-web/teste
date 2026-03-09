@@ -938,8 +938,8 @@ export default function BackofficePage() {
             {posts.map((post) => (
               <div key={post._id} className={styles.postItem} onClick={() => openEditPost(post)}>
                 <div className={styles.postThumb}>
-                  {post.mainImage?.asset?.url && (
-                    <img src={post.mainImage.asset.url} alt="" />
+                  {((post.mainImage as any)?.url || post.mainImage?.asset?.url) && (
+                    <img src={(post.mainImage as any)?.url || post.mainImage?.asset?.url} alt="" />
                   )}
                 </div>
                 <div className={styles.postInfo}>
