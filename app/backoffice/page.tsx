@@ -338,8 +338,8 @@ function ConfirmModal({
   );
 }
 
-// ─── HTML Editor ───
-function HtmlEditor({
+// ─── Content Editor (Visual + HTML + Preview) ───
+function ContentEditor({
   initialHtml,
   editorRef,
   htmlCode,
@@ -350,49 +350,143 @@ function HtmlEditor({
   htmlCode: string;
   setHtmlCode: (v: string) => void;
 }) {
-  const [mode, setMode] = useState<"html" | "preview">("html");
+  const [mode, setMode] = useState<"visual" | "html" | "preview">("visual");
 
   useEffect(() => {
     setHtmlCode(initialHtml);
   }, [initialHtml]);
 
-  useEffect(() => {
-    if (mode === "preview" && editorRef.current) {
-      editorRef.current.innerHTML = htmlCode;
+  // Sync between modes
+  function switchMode(newMode: "visual" | "html" | "preview") {
+    if (mode === "visual" && editorRef.current) {
+      setHtmlCode(editorRef.current.innerHTML);
     }
-  }, [mode, htmlCode]);
+    if (mode === "html" && newMode === "visual" && editorRef.current) {
+      // will be set via dangerouslySetInnerHTML on re-render
+    }
+    setMode(newMode);
+  }
+
+  const exec = (cmd: string, value?: string) => {
+    document.execCommand(cmd, false, value);
+    editorRef.current?.focus();
+  };
+
+  const insertLink = () => {
+    const url = prompt("URL do link:");
+    if (url) exec("createLink", url);
+  };
+
+  const insertImage = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      try {
+        const assetId = await uploadImage(file);
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.dataset.sanityAsset = assetId;
+        img.style.maxWidth = "100%";
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount > 0) {
+          const range = sel.getRangeAt(0);
+          range.deleteContents();
+          range.insertNode(img);
+          range.collapse(false);
+        }
+      } catch {
+        alert("Erro ao enviar imagem");
+      }
+    };
+    input.click();
+  };
 
   return (
     <div>
       <div className={styles.toolbar}>
+        {/* Mode tabs */}
+        <button
+          className={`${styles.toolbarBtn} ${mode === "visual" ? styles.toolbarBtnActive : ""}`}
+          onClick={() => switchMode("visual")}
+        >
+          Visual
+        </button>
         <button
           className={`${styles.toolbarBtn} ${mode === "html" ? styles.toolbarBtnActive : ""}`}
-          onClick={() => {
-            if (mode === "preview" && editorRef.current) {
-              setHtmlCode(editorRef.current.innerHTML);
-            }
-            setMode("html");
-          }}
+          onClick={() => switchMode("html")}
         >
           &lt;/&gt; HTML
         </button>
         <button
           className={`${styles.toolbarBtn} ${mode === "preview" ? styles.toolbarBtnActive : ""}`}
-          onClick={() => setMode("preview")}
+          onClick={() => switchMode("preview")}
         >
-          Pre-visualizar
+          Preview
         </button>
+        {mode === "visual" && (
+          <>
+            <div className={styles.toolbarSep} />
+            <button className={styles.toolbarBtn} onClick={() => exec("bold")} title="Negrito">
+              <strong>B</strong>
+            </button>
+            <button className={styles.toolbarBtn} onClick={() => exec("italic")} title="Italico">
+              <em>I</em>
+            </button>
+            <button className={styles.toolbarBtn} onClick={() => exec("underline")} title="Sublinhado">
+              <u>U</u>
+            </button>
+            <div className={styles.toolbarSep} />
+            <button className={styles.toolbarBtn} onClick={() => exec("formatBlock", "h2")} title="Titulo H2">
+              H2
+            </button>
+            <button className={styles.toolbarBtn} onClick={() => exec("formatBlock", "h3")} title="Titulo H3">
+              H3
+            </button>
+            <button className={styles.toolbarBtn} onClick={() => exec("formatBlock", "p")} title="Paragrafo">
+              P
+            </button>
+            <div className={styles.toolbarSep} />
+            <button className={styles.toolbarBtn} onClick={() => exec("insertUnorderedList")} title="Lista">
+              &bull; Lista
+            </button>
+            <button className={styles.toolbarBtn} onClick={() => exec("insertOrderedList")} title="Lista numerada">
+              1. Lista
+            </button>
+            <div className={styles.toolbarSep} />
+            <button className={styles.toolbarBtn} onClick={() => exec("formatBlock", "blockquote")} title="Citacao">
+              &ldquo; Citacao
+            </button>
+            <button className={styles.toolbarBtn} onClick={insertLink} title="Link">
+              Link
+            </button>
+            <button className={styles.toolbarBtn} onClick={insertImage} title="Imagem">
+              Imagem
+            </button>
+          </>
+        )}
       </div>
-      {mode === "html" ? (
+      {mode === "visual" && (
+        <div
+          ref={editorRef}
+          className={styles.editorArea}
+          contentEditable
+          suppressContentEditableWarning
+          dangerouslySetInnerHTML={{ __html: htmlCode }}
+        />
+      )}
+      {mode === "html" && (
         <textarea
           className={styles.htmlArea}
           value={htmlCode}
           onChange={(e) => setHtmlCode(e.target.value)}
           spellCheck={false}
         />
-      ) : (
+      )}
+      {mode === "preview" && (
         <div
-          ref={editorRef}
           className={styles.editorArea}
           dangerouslySetInnerHTML={{ __html: htmlCode }}
         />
@@ -577,8 +671,11 @@ export default function BackofficePage() {
         return;
       }
 
-      // Parse content from HTML code
-      const content = htmlToPortableText(htmlCode);
+      // Sync from visual editor if active
+      const finalHtml = editorRef.current?.isContentEditable
+        ? editorRef.current.innerHTML
+        : htmlCode;
+      const content = htmlToPortableText(finalHtml);
 
       const doc: any = {
         _type: "post",
@@ -754,8 +851,8 @@ export default function BackofficePage() {
           </div>
 
           <div className={styles.field}>
-            <label>Conteudo (HTML)</label>
-            <HtmlEditor
+            <label>Conteudo</label>
+            <ContentEditor
               key={editorKey}
               initialHtml={editorHtml}
               editorRef={editorRef}
