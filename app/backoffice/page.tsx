@@ -33,7 +33,7 @@ type Post = {
 type View = "login" | "list" | "editor" | "pages" | "page-builder";
 
 // ─── Page Builder Types ───
-type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button";
+type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button" | "hero-image" | "html";
 
 type PageSection = {
   _key: string;
@@ -536,6 +536,8 @@ const SECTION_WIDGETS: { type: SectionType; label: string; icon: string; desc: s
   { type: "two-columns", label: "2 Colunas", icon: "▥", desc: "Texto em duas colunas" },
   { type: "video", label: "Vídeo", icon: "▶", desc: "Vídeo do YouTube" },
   { type: "button", label: "Botão", icon: "⬛", desc: "Botão com link" },
+  { type: "hero-image", label: "Hero", icon: "▣", desc: "Banner com imagem de fundo" },
+  { type: "html", label: "HTML", icon: "</>", desc: "Bloco de HTML personalizado" },
 ];
 
 // ─── Pre-made Section Templates ───
@@ -548,6 +550,17 @@ type PreMadeTemplate = {
 };
 
 const PREMADE_TEMPLATES: PreMadeTemplate[] = [
+  {
+    id: "hero-sobre-nos",
+    label: "Hero (Sobre Nós)",
+    desc: "Banner grande com imagem de fundo e título",
+    preview: `<div style="position:relative;height:60px;background:linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.7)),url('/sobre-nos/sobre_nos_header.webp') center/cover;border-radius:4px;display:flex;align-items:flex-end;padding:6px 8px;overflow:hidden">
+      <div style="color:#fff;font-size:10px;font-family:serif;font-weight:400;line-height:1.05;letter-spacing:-0.5px">Histórias que<br>nasceram na Maia.</div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "hero-image" as SectionType, heading: "Histórias que\nnasceram na Maia.", headingLevel: "h1" as const, imageUrl: "/sobre-nos/sobre_nos_header.webp", imageRef: "", textAlign: "left" as const, height: 70 },
+    ],
+  },
   {
     id: "intro-split",
     label: "Intro (Split)",
@@ -633,6 +646,39 @@ const PREMADE_TEMPLATES: PreMadeTemplate[] = [
       { _key: rand(), type: "spacer" as SectionType, height: 40 },
     ],
   },
+  {
+    id: "multistep-form",
+    label: "Formulário Multi-Step",
+    desc: "Formulário de contacto com 3 passos (componente existente)",
+    preview: `<div style="padding:8px;background:#111;border-radius:4px;color:#fff;font-size:6px">
+      <div style="font-size:9px;font-weight:600;margin-bottom:6px;font-family:serif;text-align:center">Vamos Falar!</div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;justify-content:center">
+        <div style="width:16px;height:3px;background:#88B14B;border-radius:2px"></div>
+        <div style="width:16px;height:3px;background:#333;border-radius:2px"></div>
+        <div style="width:16px;height:3px;background:#333;border-radius:2px"></div>
+      </div>
+      <div style="background:#1a1a1a;border:1px solid #333;border-radius:3px;padding:4px 6px;font-size:6px;color:#888">Possui Terreno? Sim / Não</div>
+      <div style="margin-top:4px;background:#88B14B;border-radius:2px;padding:2px;text-align:center;font-size:6px;color:#fff">Seguinte</div>
+    </div>`,
+    sections: () => [
+      { _key: rand(), type: "html" as SectionType, content: `<div id="multistep-form-wrapper">
+  <!-- O componente MultiStepForm é inserido automaticamente pelo Next.js -->
+  <!-- Para funcionar, esta página precisa importar o componente MultiStepForm -->
+  <style>
+    #multistep-form-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+  </style>
+  <div style="text-align:center;padding:60px 20px;background:rgba(136,177,75,0.05);border:1px solid rgba(136,177,75,0.2);border-radius:8px">
+    <h2 style="font-family:serif;font-weight:400;font-size:2rem;margin:0 0 12px;color:#fff">Vamos Falar!</h2>
+    <p style="color:rgba(255,255,255,0.6);margin:0 0 24px;font-size:0.95rem">Formulário de contacto multi-step</p>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.85rem">⚠ Este bloco será substituído pelo componente MultiStepForm interativo no site publicado.</p>
+  </div>
+</div>` },
+    ],
+  },
 ];
 
 function createSection(type: SectionType): PageSection {
@@ -645,6 +691,8 @@ function createSection(type: SectionType): PageSection {
     case "two-columns": return { ...base, leftContent: "<p>Coluna esquerda</p>", rightContent: "<p>Coluna direita</p>" };
     case "video": return { ...base, videoUrl: "" };
     case "button": return { ...base, buttonText: "Clique aqui", buttonUrl: "#", buttonStyle: "primary" };
+    case "hero-image": return { ...base, heading: "Título do Hero", headingLevel: "h1" as const, imageUrl: "", imageRef: "", textAlign: "left" as const, height: 70 };
+    case "html": return { ...base, content: "<!-- Escreva o seu HTML aqui -->\n<div>\n  \n</div>" };
     default: return base;
   }
 }
@@ -728,6 +776,37 @@ function SectionEditor({
               fontSize: 15,
               fontWeight: 500,
             }}>{section.buttonText || "Botão"}</span>
+          </div>
+        );
+      case "hero-image":
+        return (
+          <div style={{
+            position: "relative",
+            minHeight: `${section.height || 70}vh`,
+            display: "flex",
+            alignItems: "flex-end",
+            overflow: "hidden",
+            borderRadius: 4,
+            background: section.imageUrl ? `url(${section.imageUrl}) center/cover no-repeat` : "#111",
+          }}>
+            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.35)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)" }} />
+            <div style={{ position: "relative", zIndex: 2, padding: "4rem 1.5rem 2.5rem", width: "100%", maxWidth: 1400, textAlign: section.textAlign || "left" }}>
+              <h1 style={{ margin: 0, color: "#fff", fontFamily: "'NewYork', ui-serif, Garamond, serif", fontWeight: 400, fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.05, letterSpacing: "-0.01em", maxWidth: "18ch" }}>
+                {section.heading || "Título do Hero"}
+              </h1>
+            </div>
+            {!section.imageUrl && (
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 3, color: "#666", fontSize: 14 }}>
+                Clique em editar para adicionar imagem
+              </div>
+            )}
+          </div>
+        );
+      case "html":
+        return (
+          <div style={{ background: "#0d1117", borderRadius: 4, padding: 16, fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace", fontSize: 13, color: "#c9d1d9", whiteSpace: "pre-wrap", overflowX: "auto", maxHeight: 300, overflow: "auto" }}>
+            {section.content || "<!-- HTML vazio -->"}
           </div>
         );
       default:
@@ -938,6 +1017,82 @@ function SectionEditor({
                 ))}
               </div>
             </div>
+          </div>
+        );
+      case "hero-image":
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {section.imageUrl && (
+              <div style={{ position: "relative", height: 160, borderRadius: 4, overflow: "hidden", background: `url(${section.imageUrl}) center/cover` }}>
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)" }} />
+              </div>
+            )}
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                onClick={() => {
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.accept = "image/*";
+                  input.onchange = async () => {
+                    const file = input.files?.[0];
+                    if (!file) return;
+                    try {
+                      const assetId = await uploadImage(file);
+                      const url = URL.createObjectURL(file);
+                      onChange({ ...section, imageUrl: url, imageRef: assetId });
+                    } catch {
+                      alert("Erro ao enviar imagem");
+                    }
+                  };
+                  input.click();
+                }}
+                style={{ padding: "8px 16px", background: "#111", color: "#fff", border: "1px solid #333", borderRadius: 4, cursor: "pointer", fontSize: 13 }}
+              >
+                {section.imageUrl ? "Trocar imagem" : "Escolher imagem de fundo"}
+              </button>
+            </div>
+            <input
+              type="text"
+              value={section.heading || ""}
+              onChange={(e) => onChange({ ...section, heading: e.target.value })}
+              placeholder="Título do hero"
+              style={{ padding: "10px 14px", border: "1px solid #ddd", borderRadius: 4, fontSize: 16, fontWeight: 600 }}
+            />
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <label style={{ fontSize: 13, color: "#666" }}>Altura:</label>
+              <input
+                type="range"
+                min={40}
+                max={100}
+                value={section.height || 70}
+                onChange={(e) => onChange({ ...section, height: parseInt(e.target.value) })}
+                style={{ flex: 1 }}
+              />
+              <span style={{ fontSize: 13, color: "#666", minWidth: 40 }}>{section.height || 70}vh</span>
+            </div>
+            <div style={{ display: "flex", gap: 4 }}>
+              {(["left", "center", "right"] as const).map((a) => (
+                <button
+                  key={a}
+                  onClick={() => onChange({ ...section, textAlign: a })}
+                  style={{ padding: "6px 14px", background: section.textAlign === a ? "#111" : "#f0f0f0", color: section.textAlign === a ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
+                >
+                  {a === "left" ? "⬅ Esquerda" : a === "center" ? "⬌ Centro" : "➡ Direita"}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      case "html":
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <label style={{ fontSize: 13, fontWeight: 500 }}>Código HTML:</label>
+            <textarea
+              value={section.content || ""}
+              onChange={(e) => onChange({ ...section, content: e.target.value })}
+              style={{ width: "100%", minHeight: 400, padding: 12, fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace", fontSize: 13, background: "#0d1117", color: "#c9d1d9", border: "1px solid #30363d", borderRadius: 6, resize: "vertical", lineHeight: 1.5, tabSize: 2 }}
+              spellCheck={false}
+            />
           </div>
         );
       default:
@@ -1664,6 +1819,29 @@ export default function BackofficePage() {
                             fontWeight: 500,
                           }}>{section.buttonText || "Botão"}</span>
                         </div>
+                      );
+                    case "hero-image":
+                      return (
+                        <div key={section._key} style={{
+                          position: "relative",
+                          minHeight: `${section.height || 70}vh`,
+                          display: "flex",
+                          alignItems: "flex-end",
+                          overflow: "hidden",
+                          background: section.imageUrl ? `url(${section.imageUrl}) center/cover no-repeat` : "#111",
+                        }}>
+                          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.35)" }} />
+                          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)" }} />
+                          <div style={{ position: "relative", zIndex: 2, padding: "4rem 1.5rem 2.5rem", width: "100%", maxWidth: 1400, textAlign: section.textAlign || "left" }}>
+                            <h1 style={{ margin: 0, color: "#fff", fontFamily: "'NewYork', ui-serif, Garamond, serif", fontWeight: 400, fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.05, letterSpacing: "-0.01em", maxWidth: "18ch", whiteSpace: "pre-line" }}>
+                              {section.heading || "Título do Hero"}
+                            </h1>
+                          </div>
+                        </div>
+                      );
+                    case "html":
+                      return (
+                        <div key={section._key} dangerouslySetInnerHTML={{ __html: section.content || "" }} style={{ margin: "32px 0" }} />
                       );
                     default:
                       return null;

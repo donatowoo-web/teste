@@ -140,6 +140,29 @@ export default async function CustomPage({
                   </a>
                 </div>
               );
+            case "hero-image":
+              return (
+                <div key={section._key} className={styles.heroImage} style={{ minHeight: `${section.height || 70}vh` }}>
+                  {section.imageUrl && (
+                    <div className={styles.heroImageBg} style={{ backgroundImage: `url(${section.imageUrl})` }} />
+                  )}
+                  <div className={styles.heroOverlay} />
+                  <div className={styles.heroGradient} />
+                  <div className={styles.heroInner} style={{ textAlign: section.textAlign || "left" }}>
+                    <h1 className={styles.heroTitle} style={{ whiteSpace: "pre-line" }}>
+                      {section.heading || ""}
+                    </h1>
+                  </div>
+                </div>
+              );
+            case "html":
+              return (
+                <div
+                  key={section._key}
+                  className={styles.htmlBlock}
+                  dangerouslySetInnerHTML={{ __html: section.content || "" }}
+                />
+              );
             default:
               return null;
           }
