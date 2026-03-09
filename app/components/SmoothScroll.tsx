@@ -5,6 +5,9 @@ import Lenis from "lenis";
 
 export default function SmoothScroll() {
   useEffect(() => {
+    // Skip Lenis entirely on backoffice
+    if (window.location.pathname.startsWith("/backoffice")) return;
+
     let lenis: Lenis | null = null;
     let rafId: number;
 
@@ -32,32 +35,10 @@ export default function SmoothScroll() {
       }
     }
 
-    // Verificar estado inicial
-    const isStopped = document.documentElement.classList.contains("lenis-stopped");
-    if (!isStopped) {
-      createLenis();
-    }
-
-    // Adicionar classe ao html
+    createLenis();
     document.documentElement.classList.add("lenis");
 
-    // Observar mudanças na classe para destruir/recriar Lenis
-    const observer = new MutationObserver(() => {
-      const shouldStop = document.documentElement.classList.contains("lenis-stopped");
-      if (shouldStop && lenis) {
-        destroyLenis();
-      } else if (!shouldStop && !lenis) {
-        createLenis();
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
     return () => {
-      observer.disconnect();
       destroyLenis();
       document.documentElement.classList.remove("lenis");
     };

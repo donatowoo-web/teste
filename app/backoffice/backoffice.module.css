@@ -15,8 +15,9 @@
 .container label,
 .container input,
 .container textarea,
-.container button {
-  font-family: "Poppins", system-ui, sans-serif;
+.container button,
+.container a {
+  font-family: "Poppins", system-ui, sans-serif !important;
 }
 
 /* LOGIN */
