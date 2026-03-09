@@ -41,3 +41,4 @@ jobs:
           scp -i ~/.ssh/id_ed25519 /tmp/out.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/www/out.tar.gz
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /www && rm -rf out_old && mv out out_old && mkdir out && tar -xzf out.tar.gz -C out && rm out.tar.gz"
           echo "Deploy complete!"
+
