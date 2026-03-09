@@ -548,7 +548,7 @@ export default function BackofficePage() {
             Accept: "application/vnd.github.v3+json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ref: "main" }),
+          body: JSON.stringify({ ref: "master" }),
         }
       );
       if (res.status === 204 || res.ok) {
