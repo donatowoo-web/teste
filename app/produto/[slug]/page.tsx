@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import FadeInOnScroll from "../../components/FadeInOnScroll";
+import GaleriaCasa from "../../components/GaleriaCasa";
 
 import BotaoDesenvolverProjeto from "../../components/BotaoDesenvolverProjeto";
 
@@ -40,8 +41,9 @@ export default async function CasaDetalhePage({
 
   const outrasCasas = getRandomCasas(casas, casa.slug, 3);
 
-  const imagens =
-    casa.galeria && casa.galeria.length > 0 ? casa.galeria : [casa.thumbnail];
+  // Filtrar plantas da galeria de imagens
+  const imagens = (casa.galeria && casa.galeria.length > 0 ? casa.galeria : [casa.thumbnail])
+    .filter((src) => !src.startsWith("/plantas/"));
 
   const CardContent = (
     <>
@@ -78,7 +80,8 @@ export default async function CasaDetalhePage({
 
   return (
     <main className={styles.wrapper}>
-      <section className={styles.galleryWrap}>
+      {/* HERO */}
+      <section className={styles.heroWrap}>
         {/* DESKTOP sticky */}
         <div className={styles.desktopOnly}>
           <div className={styles.stickyLayer}>
@@ -95,53 +98,62 @@ export default async function CasaDetalhePage({
           </div>
         </div>
 
-        {/* IMAGENS */}
-        {imagens.map((src, idx) => {
-          const isPlanta = src.startsWith("/plantas/");
-          return (
-          <div key={`${src}-${idx}`}>
-            <FadeInOnScroll
-              as="section"
-              className={styles.screen}
-              y={18}
-              blur={12}
-              amount={0.15}
-              durationMs={750}
-              delayMs={0}
-              once
-            >
-              <div className={`${styles.screenMedia} ${isPlanta ? styles.plantaMedia : ""}`}>
-                <Image
-                  src={src}
-                  alt={`${casa.nomeProjeto} - ${isPlanta ? "planta" : `imagem ${idx + 1}`}`}
-                  fill
-                  priority={idx === 0}
-                  sizes="100vw"
-                  className={`${styles.screenImg} ${isPlanta ? styles.plantaImg : ""}`}
-                />
-                <div className={styles.screenOverlay} />
-              </div>
-            </FadeInOnScroll>
-
-            {/* mantém o card 1x no mobile, após a 1ª imagem */}
-            {idx === 0 && (
-              <div className={styles.mobileOnly}>
-                <FadeInOnScroll
-                  className={styles.infoCard}
-                  y={10}
-                  blur={10}
-                  amount={0.2}
-                  durationMs={650}
-                  once
-                >
-                  {CardContent}
-                </FadeInOnScroll>
-              </div>
-            )}
+        {/* IMAGEM PRINCIPAL */}
+        <FadeInOnScroll
+          as="section"
+          className={styles.screen}
+          y={18}
+          blur={12}
+          amount={0.15}
+          durationMs={750}
+          delayMs={0}
+          once
+        >
+          <div className={styles.screenMedia}>
+            <Image
+              src={imagens[0] || casa.thumbnail}
+              alt={`${casa.nomeProjeto} - imagem principal`}
+              fill
+              priority
+              sizes="100vw"
+              className={styles.screenImg}
+            />
+            <div className={styles.screenOverlay} />
           </div>
-        );
-        })}
+        </FadeInOnScroll>
+
+        {/* MOBILE card */}
+        <div className={styles.mobileOnly}>
+          <FadeInOnScroll
+            className={styles.infoCard}
+            y={10}
+            blur={10}
+            amount={0.2}
+            durationMs={650}
+            once
+          >
+            {CardContent}
+          </FadeInOnScroll>
+        </div>
       </section>
+
+      {/* GALERIA COM TABS */}
+      <FadeInOnScroll
+        className={styles.galleryTitle}
+        as="h2"
+        y={20}
+        blur={10}
+        durationMs={800}
+      >
+        {casa.nomeProjeto}
+      </FadeInOnScroll>
+
+      <GaleriaCasa
+        images={imagens}
+        planta={casa.planta}
+        nomeProjeto={casa.nomeProjeto}
+        descricao={casa.descricao}
+      />
 
       <section className={styles.outrasSection}>
         <div className={styles.outrasContainer}>
