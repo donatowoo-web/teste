@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { useState } from "react";
 import FadeInOnScroll from "./FadeInOnScroll";
@@ -49,30 +50,33 @@ export default function GaleriaCasa({
         <section className={styles.gallery}>
           {images.map((src, idx) => {
             const layoutClass = layoutClasses[idx % layoutClasses.length];
+            // Insert description after the 2nd image (between left and right)
+            const showDescAfter = idx === 1 && descricao;
 
             return (
-              <FadeInOnScroll
-                key={`${src}-${idx}`}
-                className={`${styles.galleryItem} ${layoutClass}`}
-                y={40}
-                blur={10}
-                durationMs={750}
-              >
-                <Image
-                  src={src}
-                  alt={`${nomeProjeto} - imagem ${idx + 1}`}
-                  fill
-                  loading="lazy"
-                  sizes="(max-width: 900px) 100vw, 85vw"
-                  className={styles.galleryImg}
-                />
-              </FadeInOnScroll>
+              <React.Fragment key={`${src}-${idx}`}>
+                <FadeInOnScroll
+                  className={`${styles.galleryItem} ${layoutClass}`}
+                  y={40}
+                  blur={10}
+                  durationMs={750}
+                >
+                  <Image
+                    src={src}
+                    alt={`${nomeProjeto} - imagem ${idx + 1}`}
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 900px) 100vw, 85vw"
+                    className={styles.galleryImg}
+                  />
+                </FadeInOnScroll>
+
+                {showDescAfter && (
+                  <p className={styles.galleryDesc}>{descricao}</p>
+                )}
+              </React.Fragment>
             );
           })}
-
-          {descricao && (
-            <p className={styles.galleryDesc}>{descricao}</p>
-          )}
         </section>
       )}
 
