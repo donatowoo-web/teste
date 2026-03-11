@@ -26,7 +26,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 100,
     wc: 1,
-    descricao: "",
+    descricao: "Uma casa que se desenha com silêncio. Linhas limpas, luz generosa e a elegância rara de quem não precisa de exageros.",
     galeria: [
       "/Casas/Oakland/1-6-scaled.jpg",
       "/Casas/Oakland/2-12-scaled.jpg",
@@ -45,7 +45,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 161,
     wc: 2,
-    descricao: "",
+    descricao: "Há casas que nos recebem antes de entrarmos. Esta é uma delas — clara, serena, com espaço para respirar e para ficar.",
     galeria: ["/Casas/San diego/capa_san diego.webp", "/Casas/San diego/sandiego_sala.webp", "/Casas/San diego/2-3-scaled.jpg", "/Casas/San diego/3-1.jpg", "/plantas/San-Diego.png"],
     planta: "/plantas/San-Diego.png",
   },
@@ -57,7 +57,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 123,
     wc: 2,
-    descricao: "",
+    descricao: "Contemporânea e cheia de carácter. Uma casa que joga com a luz, com o contraste e com a vontade de ser diferente.",
     galeria: [
       "/Casas/Toronto/1-7-scaled.jpg",
       "/Casas/Toronto/salatoronto.webp",
@@ -76,7 +76,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 93,
     wc: 1,
-    descricao: "",
+    descricao: "Uma forma que fica na memória. Ousada, transparente e com a beleza de quem abraça a simplicidade até ao fim.",
     galeria: [
       "/Casas/Vermont/ver1.jpg",
       "/Casas/Vermont/ver2.jpg",
@@ -100,7 +100,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 185,
     wc: 3,
-    descricao: "",
+    descricao: "Presença que se sente antes de se ver. Proporções generosas, elegância natural e a certeza de que viver bem é uma arte.",
     galeria: [
       "/Casas/Miami/1-2-scaled.jpg",
       "/Casas/Miami/salamiami.webp",
@@ -118,7 +118,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 171,
     wc: 2,
-    descricao: "",
+    descricao: "Quando a geometria encontra a emoção. Uma casa que surpreende, que encanta e que transforma o comum em extraordinário.",
     galeria: [
       "/Casas/Aspen/aspen-scaled.jpg",
       "/Casas/Aspen/aspen1.jpg",
@@ -140,7 +140,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 228,
     wc: 2,
-    descricao: "",
+    descricao: "Silenciosa e envolvente. Uma casa que fala baixo mas diz tudo — nos detalhes, na luz, no modo como nos faz sentir em casa.",
     galeria: [
       "/Casas/Portland/pt_1.jpg",
       "/Casas/Portland/pt_2.jpg",
@@ -159,7 +159,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 177,
     wc: 2,
-    descricao: "",
+    descricao: "Cada linha tem um propósito. Cada espaço, uma intenção. Uma casa desenhada para quem acredita que os detalhes fazem a diferença.",
     galeria: [
       "/Casas/Phoenix/phoenix_4.jpg",
       "/Casas/Phoenix/phoenix_5.jpg",
@@ -182,7 +182,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 403,
     wc: 4,
-    descricao: "",
+    descricao: "Grandeza sem peso. Uma casa que se estende com naturalidade, onde o espaço respira e a elegância vive em cada canto.",
     galeria: [
       "/Casas/Long Beach/lb1.jpg",
       "/Casas/Long Beach/lb2.jpg",
@@ -204,7 +204,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 75,
     wc: 1,
-    descricao: "",
+    descricao: "A prova de que a beleza não precisa de escala. Compacta, sofisticada e com uma presença que nos aquece por dentro.",
     galeria: [
       "/Casas/Riverside/rvcapa-scaled.jpg",
       "/Casas/Riverside/1-13.jpg",
@@ -221,7 +221,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 98,
     wc: 1,
-    descricao: "",
+    descricao: "Honesta e acolhedora. Uma casa onde tudo é verdadeiro — os materiais, a luz e a sensação de já pertencer.",
     galeria: [
       "/Casas/Atenas/1-15-scaled.jpg",
       "/Casas/Atenas/2-5-scaled.jpg",
@@ -238,7 +238,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 133,
     wc: 2,
-    descricao: "",
+    descricao: "Serena como um fim de tarde. Uma fachada que transmite calma, janelas que convidam a luz e o conforto de quem chega a casa.",
     galeria: [
       "/Casas/Baiona/1-6-scaled.jpg",
       "/Casas/Baiona/baiona_sala.webp",
@@ -255,7 +255,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 71,
     wc: 1,
-    descricao: "",
+    descricao: "Compacta e íntima, como um abraço. Uma casa desenhada para o essencial, onde cada metro conta e cada momento importa.",
     galeria: [
       "/Casas/Berlim/1-1.jpg",
       "/Casas/Berlim/2-1-scaled.jpg",
@@ -273,7 +273,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 102,
     wc: 2,
-    descricao: "",
+    descricao: "Simetria e luz numa harmonia perfeita. Uma casa luminosa que convida a entrar, a ficar e a não querer sair.",
     galeria: [
       "/Casas/Budapeste/budapestecapa-scaled.jpg",
       "/Casas/Budapeste/budapeste_sala.webp",
@@ -290,7 +290,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 108,
     wc: 1,
-    descricao: "",
+    descricao: "O rústico elevado ao sublime. Uma casa com alma do campo e olhar contemporâneo, onde a tradição ganha vida nova.",
     galeria: [
       "/Casas/Chale-Arrabida/1-9.jpg",
       "/Casas/Chale-Arrabida/2-9-scaled.jpg",
@@ -309,7 +309,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 58,
     wc: 1,
-    descricao: "",
+    descricao: "Pequena em escala, imensa em charme. Uma casa com personalidade própria, desenhada para quem sabe que o belo está no simples.",
     galeria: ["/Casas/Chale-Geres/ge1-scaled.jpg", "/Casas/Chale-Geres/2-10.jpg", "/Casas/Chale-Geres/quartogeres.webp", "/plantas/Chale-Geres.png"],
     planta: "/plantas/Chale-Geres.png",
   },
@@ -321,7 +321,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 75,
     wc: 1,
-    descricao: "",
+    descricao: "Carácter forte e aconchego profundo. Uma casa que nos envolve, nos protege e nos faz sentir que estamos exatamente onde devíamos.",
     galeria: [
       "/Casas/Chale-Serra-da-Estrela/1-3-scaled.jpg",
       "/Casas/Chale-Serra-da-Estrela/2-8.jpg",
@@ -339,7 +339,7 @@ export const casas: Casa[] = [
     tipologia: "V0",
     areaTotal: 27,
     wc: 1,
-    descricao: "",
+    descricao: "Um contraste que fascina. Escura por fora, quente por dentro — uma casa que guarda segredos e revela surpresas.",
     galeria: ["/Casas/Glasgow/1-2.jpg", "/Casas/Glasgow/salaglasgow.webp", "/plantas/Glasgow.png"],
     planta: "/plantas/Glasgow.png",
   },
@@ -351,7 +351,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 45,
     wc: 1,
-    descricao: "",
+    descricao: "Discreta por fora, radiante por dentro. Uma casa com atitude silenciosa, onde a luz é a protagonista de cada divisão.",
     galeria: [
       "/Casas/Lagos/1-1-scaled.jpg",
       "/Casas/Lagos/2-1-scaled.jpg",
@@ -368,7 +368,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 88,
     wc: 2,
-    descricao: "",
+    descricao: "Leve como a brisa. Uma casa funcional e honesta, onde menos é sempre mais e viver é um prazer descomplicado.",
     galeria: [
       "/Casas/Lisboa/1_-scaled.jpg",
       "/Casas/Lisboa/2-11-scaled.jpg",
@@ -384,7 +384,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 45,
     wc: 1,
-    descricao: "",
+    descricao: "Atemporal e cheia de encanto. Uma casa feita para durar, para acolher e para guardar as melhores memórias.",
     galeria: [
       "/Casas/Londres/1-9-scaled.jpg",
       "/Casas/Londres/salalondres.webp",
@@ -401,7 +401,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 95,
     wc: 1,
-    descricao: "",
+    descricao: "Tons quentes e texturas que se sentem. Uma casa virada para a vida, onde cada detalhe é um convite a ficar mais um pouco.",
     galeria: [
       "/Casas/Madrid/1-14-scaled.jpg",
       "/Casas/Madrid/3-3-scaled.jpg",
@@ -418,7 +418,7 @@ export const casas: Casa[] = [
     tipologia: "V0",
     areaTotal: 56,
     wc: 1,
-    descricao: "",
+    descricao: "Uma silhueta que se recorta no céu. Icónica, poética e com a força tranquila de quem sabe exatamente o que é.",
     galeria: [
       "/Casas/Mimosa/1-1-scaled.jpg",
       "/Casas/Mimosa/2-scaled.jpg",
@@ -434,7 +434,7 @@ export const casas: Casa[] = [
     tipologia: "V0",
     areaTotal: 28,
     wc: 1,
-    descricao: "",
+    descricao: "O encanto mora nos detalhes. Uma casa pequena com coração grande, onde cada recanto tem algo para contar.",
     galeria: ["/Casas/Monaco/1-7-scaled.jpg", "/Casas/Monaco/22.jpg", "/plantas/Monaco.png"],
     planta: "/plantas/Monaco.png",
   },
@@ -446,7 +446,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 47,
     wc: 1,
-    descricao: "",
+    descricao: "Elegância que não precisa de gritar. Compacta e pensada ao pormenor, pronta para ser vivida desde o primeiro dia.",
     galeria: [
       "/Casas/Oslo/1ma-1-scaled.jpg",
       "/Casas/Oslo/2-8-scaled.jpg",
@@ -463,7 +463,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 65,
     wc: 1,
-    descricao: "",
+    descricao: "Serena e imponente ao mesmo tempo. Uma casa que se estende com calma, abraça o horizonte e convida ao silêncio.",
     galeria: [
       "/Casas/Paris/1-13-scaled.jpg",
       "/Casas/Paris/3-scaled.jpg",
@@ -480,7 +480,7 @@ export const casas: Casa[] = [
     tipologia: "V4",
     areaTotal: 224,
     wc: 3,
-    descricao: "",
+    descricao: "Presença que se impõe com naturalidade. Uma casa com alma, com história para contar e espaço para criar novas.",
     galeria: [
       "/Casas/Praga/1-14-scaled.jpg",
       "/Casas/Praga/2-14-scaled.jpg",
@@ -497,7 +497,7 @@ export const casas: Casa[] = [
     tipologia: "V1",
     areaTotal: 50,
     wc: 1,
-    descricao: "",
+    descricao: "Cada linha é um gesto. Uma casa escultórica que desafia o convencional e transforma o espaço em emoção.",
     galeria: [
       "/Casas/Ribeira Brava/ext-scaled.jpg",
       "/Casas/Ribeira Brava/int_rb-scaled.jpg",
@@ -513,7 +513,7 @@ export const casas: Casa[] = [
     tipologia: "V2",
     areaTotal: 90,
     wc: 1,
-    descricao: "",
+    descricao: "Luz natural, volumes abertos e o calor de uma casa pensada para ser vivida. Moderna sem perder a alma.",
     galeria: [
       "/Casas/Vail/v1_-scaled.jpg",
       "/Casas/Vail/v1_2-scaled.jpg",
@@ -530,7 +530,7 @@ export const casas: Casa[] = [
     tipologia: "V3",
     areaTotal: 117,
     wc: 2,
-    descricao: "",
+    descricao: "Rente ao chão, perto de tudo. Uma casa que dissolve fronteiras, onde o dentro e o fora se encontram em perfeita harmonia.",
     galeria: [
       "/Casas/Viena/1-2.jpg",
       "/Casas/Viena/2-2-scaled.jpg",
