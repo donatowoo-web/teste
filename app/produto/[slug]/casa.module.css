@@ -181,98 +181,156 @@
    GALLERY TITLE
    ========================= */
 .galleryTitle {
-  font-size: 32px;
-  font-weight: 600;
+  position: relative;
+  z-index: 5;
+  background: #000;
+  width: 100%;
+  margin: 0;
+  padding: 80px 24px;
+  font-size: clamp(64px, 10vw, 160px);
+  font-weight: 700;
+  line-height: 1;
   text-align: center;
-  margin: 48px 0 20px;
-  padding: 0 24px;
+  letter-spacing: -0.03em;
+  color: #fff;
+  clear: both;
 }
 
 /* =========================
    TABS
    ========================= */
 .tabs {
+  position: relative;
+  z-index: 5;
+  background: #000;
   display: flex;
   justify-content: center;
   gap: 0;
-  margin: 0 auto 32px;
+  padding: 0 24px 40px;
 }
 
 .tab {
-  padding: 10px 28px;
+  padding: 12px 32px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.4);
+  border: none;
+  border-bottom: 2px solid transparent;
   font-size: 15px;
   font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.3s, border-color 0.3s;
   font-family: inherit;
 }
 
-.tab:first-child {
-  border-right: none;
+.tab:hover {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .tabActive {
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.06);
+  border-bottom-color: #fff;
 }
 
 /* =========================
-   GALLERY GRID
+   GALLERY
    ========================= */
 .gallery {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 48px 48px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  position: relative;
+  z-index: 5;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  padding: 80px 0 100px;
 }
 
 .galleryItem {
   position: relative;
   overflow: hidden;
-  background: #111;
 }
 
 .galleryWide {
-  grid-column: 1 / -1;
-  aspect-ratio: 21 / 9;
+  aspect-ratio: 16 / 9;
+  width: 85%;
+  max-width: 1300px;
+  margin: 0 auto 160px;
 }
 
 .galleryLeft {
-  grid-column: 1 / 2;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
+  float: left;
+  width: 52%;
+  margin: 0 4% 6px auto;
 }
 
 .galleryRight {
-  grid-column: 2 / 3;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 5;
+  float: right;
+  width: 40%;
+  margin: 0 auto 160px 4%;
+}
+
+.galleryRight + .galleryBleed,
+.galleryRight + .galleryWide {
+  clear: both;
 }
 
 .galleryBleed {
-  grid-column: 1 / -1;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 21 / 9;
+  clear: both;
+  width: 100%;
+  margin: 0 0 180px;
 }
 
 .galleryImg {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
   object-position: center;
 }
 
 .galleryDesc {
-  grid-column: 1 / -1;
-  font-size: 16px;
-  line-height: 1.6;
-  opacity: 0.7;
+  clear: both;
+  width: 85%;
+  max-width: 1300px;
+  margin: 240px auto;
+  padding: 0;
+  font-size: clamp(26px, 3.5vw, 42px);
+  font-weight: 300;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: #fff;
   text-align: center;
-  padding: 8px 24px;
-  margin: 0;
+}
+
+/* =========================
+   PLANTA
+   ========================= */
+.plantaSection {
+  position: relative;
+  z-index: 5;
+  background: #000;
+  padding: 0 24px 100px;
+}
+
+.plantaViewer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 10;
+  background: #fff;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+
+.plantaImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center;
 }
 
 /* =========================
@@ -330,27 +388,43 @@
 @media (max-width: 1024px) {
   .stickyInner { padding: 0 0 28px 24px; }
   .infoCard { width: min(720px, calc(100vw - 48px)); }
+  .gallery { padding: 40px 16px 60px; }
   .outrasContainer { padding: 48px 24px; }
   .outrasGrid { gap: 20px; }
 }
 
 /* MOBILE */
 @media (max-width: 900px) {
-  .galleryTitle { font-size: 24px; margin: 32px 0 16px; }
-  .tabs { margin-bottom: 20px; }
-  .tab { padding: 8px 20px; font-size: 14px; }
+  .galleryTitle { display: none; }
+  .tabs {
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 24px 16px 32px;
+  }
+  .tab { padding: 10px 20px; font-size: 13px; }
   .gallery {
-    grid-template-columns: 1fr;
-    padding: 0 12px 32px;
-    gap: 12px;
+    padding: 32px 0 48px;
+    overflow: hidden;
   }
   .galleryWide,
   .galleryLeft,
   .galleryRight,
   .galleryBleed {
-    grid-column: 1 / -1;
+    float: none;
     aspect-ratio: 16 / 10;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 6px;
   }
+  .galleryDesc {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 50px auto;
+    padding: 0 20px;
+    font-size: 16px;
+  }
+  .plantaSection { padding: 0 12px 60px; }
+  .plantaViewer { aspect-ratio: auto; min-height: 50vh; }
 
   .wrapper {
     margin-top: 0;

@@ -20,7 +20,7 @@ export default function GaleriaCasa({
 }) {
   const [tab, setTab] = useState<Tab>("imagens");
 
-  // gallery layout classes cycle
+  // Layout pattern: wide, left+right, desc, bleed, then repeat
   const layoutClasses = [
     styles.galleryWide,
     styles.galleryLeft,
@@ -63,7 +63,7 @@ export default function GaleriaCasa({
                   alt={`${nomeProjeto} - imagem ${idx + 1}`}
                   fill
                   loading="lazy"
-                  sizes="(max-width: 900px) 100vw, 50vw"
+                  sizes="(max-width: 900px) 100vw, 85vw"
                   className={styles.galleryImg}
                 />
               </FadeInOnScroll>
@@ -77,22 +77,17 @@ export default function GaleriaCasa({
       )}
 
       {tab === "planta" && (
-        <section className={styles.gallery}>
-          <FadeInOnScroll
-            className={`${styles.galleryItem} ${styles.galleryWide}`}
-            y={40}
-            blur={10}
-            durationMs={750}
-          >
+        <section className={styles.plantaSection}>
+          <div className={styles.plantaViewer}>
             <Image
               src={planta}
               alt={`${nomeProjeto} - planta`}
-              fill
-              sizes="100vw"
-              className={styles.galleryImg}
-              style={{ objectFit: "contain", background: "#fff" }}
+              width={1200}
+              height={800}
+              className={styles.plantaImage}
+              style={{ objectFit: "contain" }}
             />
-          </FadeInOnScroll>
+          </div>
         </section>
       )}
     </>
