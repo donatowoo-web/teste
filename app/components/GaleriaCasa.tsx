@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useState } from "react";
 import FadeInOnScroll from "./FadeInOnScroll";
+import WordReveal from "./WordReveal";
 import styles from "../produto/[slug]/casa.module.css";
 
 type Tab = "imagens" | "planta";
@@ -72,7 +73,7 @@ export default function GaleriaCasa({
                 </FadeInOnScroll>
 
                 {showDescAfter && (
-                  <p className={styles.galleryDesc}>{descricao}</p>
+                  <WordReveal text={descricao} className={styles.galleryDesc} />
                 )}
               </React.Fragment>
             );
