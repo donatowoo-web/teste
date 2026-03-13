@@ -149,7 +149,7 @@ const components: PortableTextComponents = {
     strong: ({ children }) => <strong>{children}</strong>,
     em: ({ children }) => <em>{children}</em>,
     link: ({ children, value }) => (
-      <a href={value?.href} style={{ color: "#88f", textDecoration: "underline" }}>
+      <a href={value?.href} style={{ color: "#b4d429", textDecoration: "underline" }}>
         {children}
       </a>
     ),

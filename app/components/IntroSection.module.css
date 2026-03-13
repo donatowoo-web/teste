@@ -113,6 +113,17 @@
   margin-top: 2rem;
 }
 
+.greenLink {
+  color: #b4d429;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 160ms ease;
+}
+
+.greenLink:hover {
+  opacity: 0.8;
+}
+
 /* Acessibilidade */
 @media (prefers-reduced-motion: reduce) {
   .imageWrap {

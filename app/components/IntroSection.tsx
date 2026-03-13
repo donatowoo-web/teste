@@ -172,8 +172,11 @@ export default function IntroSection() {
               </p>
 
               <p className={styles.paragraph} data-reveal>
-                Trabalhamos com os sistemas construtivos mais avançados (aço leve)
-                ou madeira, garantindo soluções práticas, inovação, no conforto e
+                Trabalhamos com os sistemas construtivos mais avançados{" "}
+                <a href="/construcao-em-lsf" className={styles.greenLink}>aço leve</a>
+                {" "}ou{" "}
+                <a href="/construcao-em-madeira" className={styles.greenLink}>madeira</a>
+                , garantindo soluções práticas, inovação, no conforto e
                 na durabilidade.
               </p>
             </div>
