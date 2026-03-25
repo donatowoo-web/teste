@@ -1909,6 +1909,16 @@ export default function BackofficePage() {
                     </span>
                   </div>
                   <div className={styles.postActions}>
+                    <a
+                      href={`https://evaplace.pt/paginas/${page.slug.current}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${styles.btn} ${styles.btnSmall}`}
+                      style={{ textDecoration: "none", background: "#1a73e8", color: "#fff" }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Ver no site
+                    </a>
                     <button
                       className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
                       onClick={(e) => { e.stopPropagation(); openEditPage(page); }}
@@ -2003,6 +2013,16 @@ export default function BackofficePage() {
                   </span>
                 </div>
                 <div className={styles.postActions}>
+                  <a
+                    href={`https://evaplace.pt/${post.slug.current}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.btn} ${styles.btnSmall}`}
+                    style={{ textDecoration: "none", background: "#1a73e8", color: "#fff" }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Ver no site
+                  </a>
                   <button
                     className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
                     onClick={(e) => {
