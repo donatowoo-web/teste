@@ -23,7 +23,7 @@ jobs:
           echo "NEXT_PUBLIC_GH_REPO=${{ secrets.GH_REPO }}" >> .env.local
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Build
         run: npm run build
