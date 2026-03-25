@@ -8,7 +8,7 @@ const PROJECT_ID = "onxd36ek";
 const DATASET = "production";
 const API_VERSION = "2024-01-01";
 const TOKEN = process.env.NEXT_PUBLIC_SANITY_WRITE_TOKEN || "";
-const BACKOFFICE_PW = "evaeva";
+const BACKOFFICE_PW = "eva";
 
 const SANITY_API = `https://${PROJECT_ID}.api.sanity.io/v${API_VERSION}`;
 const GH_DEPLOY_TOKEN = process.env.NEXT_PUBLIC_GH_DEPLOY_TOKEN || "";
