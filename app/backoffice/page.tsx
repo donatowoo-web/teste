@@ -275,7 +275,25 @@ function htmlToPortableText(html: string): any[] {
     flushList();
 
     if (tag === "img") {
-      // Skip images in content for now - handle separately
+      const src = el.getAttribute("src") || "";
+      const alt = el.getAttribute("alt") || "";
+      const assetRef = (el as HTMLElement).dataset?.sanityAsset || "";
+      if (assetRef) {
+        blocks.push({
+          _type: "image",
+          _key: rand(),
+          alt,
+          asset: { _type: "reference", _ref: assetRef },
+        });
+      } else if (src) {
+        // Image without sanity ref - store URL in alt for reference
+        blocks.push({
+          _type: "image",
+          _key: rand(),
+          alt,
+          asset: { _type: "reference", _ref: src },
+        });
+      }
       continue;
     }
 
@@ -1323,7 +1341,7 @@ export default function BackofficePage() {
           _type: "image",
           asset: { _type: "reference", _ref: imageRef },
         },
-        body: content,
+        content: content,
       };
 
       // Remove undefined fields

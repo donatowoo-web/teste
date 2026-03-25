@@ -23,6 +23,7 @@ type Post = {
   title: string;
   publishedAt?: string;
   body?: any;
+  mainImage?: { asset?: { url: string } };
 };
 
 const postQuery = `
@@ -33,7 +34,8 @@ const postQuery = `
 ][0]{
   title,
   publishedAt,
-  body[]{
+  mainImage { asset-> { url } },
+  "body": coalesce(content, body)[]{
     ...,
     _type == "image" => {
       _type,
@@ -180,6 +182,19 @@ export default async function ArtigoPage({
           <p style={{ opacity: 0.6, margin: "0 0 28px" }}>
             {new Date(post.publishedAt).toLocaleDateString("pt-PT")}
           </p>
+        )}
+
+        {post.mainImage?.asset?.url && (
+          <div style={{ margin: "0 0 32px" }}>
+            <Image
+              src={post.mainImage.asset.url}
+              alt={post.title}
+              width={900}
+              height={500}
+              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+              priority
+            />
+          </div>
         )}
 
         <PortableText value={richText} components={components} />
