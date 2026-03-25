@@ -122,7 +122,8 @@ function portableTextToHtml(blocks: any[]): string {
     .map((block) => {
       if (block._type === "image") {
         const url = block.asset?.url || "";
-        return url ? `<img src="${url}" alt="${block.alt || ""}">` : "";
+        const ref = block.asset?._ref || "";
+        return url ? `<img src="${url}" alt="${block.alt || ""}" data-sanity-asset="${ref}">` : "";
       }
       if (block._type !== "block") return "";
 
@@ -275,25 +276,18 @@ function htmlToPortableText(html: string): any[] {
     flushList();
 
     if (tag === "img") {
-      const src = el.getAttribute("src") || "";
       const alt = el.getAttribute("alt") || "";
-      const assetRef = (el as HTMLElement).dataset?.sanityAsset || "";
-      if (assetRef) {
+      const assetRef = el.getAttribute("data-sanity-asset") || (el as HTMLElement).dataset?.sanityAsset || "";
+      if (assetRef && assetRef.startsWith("image-")) {
         blocks.push({
           _type: "image",
           _key: rand(),
           alt,
           asset: { _type: "reference", _ref: assetRef },
         });
-      } else if (src) {
-        // Image without sanity ref - store URL in alt for reference
-        blocks.push({
-          _type: "image",
-          _key: rand(),
-          alt,
-          asset: { _type: "reference", _ref: src },
-        });
       }
+      // Images without a valid Sanity asset ref are skipped
+      // (they need to be re-uploaded via the toolbar image button)
       continue;
     }
 
@@ -1201,7 +1195,7 @@ export default function BackofficePage() {
         *[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
           _id, title, slug, excerpt, publishedAt,
           mainImage { "ref": asset._ref, "url": asset->url },
-          "content": coalesce(body, content)[]{ ..., _type == "image" => { ..., "asset": { "_ref": asset._ref, "url": asset->url } } }
+          "content": coalesce(content, body)[]{ ..., _type == "image" => { ..., "asset": { "_ref": asset._ref, "url": asset->url } } }
         }
       `);
       setPosts(data || []);
@@ -1353,6 +1347,7 @@ export default function BackofficePage() {
             patch: {
               id: editingPost._id,
               set: doc,
+              unset: ["body"],
             },
           },
         ]);
