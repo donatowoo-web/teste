@@ -12,13 +12,11 @@ type PageDoc = {
 export async function generateStaticParams() {
   const slugs: string[] = await client.fetch(
     `*[_type == "page" && published == true && defined(slug.current) && !(_id in path("drafts.**"))].slug.current`
-  );
-
-  if (!slugs || slugs.length === 0) {
-    return [];
-  }
-
-  return slugs.map((slug) => ({ slug }));
+  ).catch(() => []);
+  // Always include a placeholder to satisfy Next.js static export requirement
+  const params = (slugs || []).map((slug) => ({ slug }));
+  if (params.length === 0) params.push({ slug: "_placeholder" });
+  return params;
 }
 
 export async function generateMetadata({
