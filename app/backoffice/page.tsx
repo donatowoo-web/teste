@@ -123,7 +123,8 @@ function portableTextToHtml(blocks: any[]): string {
       if (block._type === "image") {
         const url = block.asset?.url || "";
         const ref = block.asset?._ref || "";
-        return url ? `<img src="${url}" alt="${block.alt || ""}" data-sanity-asset="${ref}">` : "";
+        if (!url) return "";
+        return `<div data-image-block="true"><img src="${url}" alt="${block.alt || ""}" data-sanity-asset="${ref}" style="max-width:100%;height:auto;border-radius:4px"></div>`;
       }
       if (block._type !== "block") return "";
 
@@ -169,6 +170,32 @@ function htmlToPortableText(html: string): any[] {
     listItems = [];
   }
 
+  // Extract image block from an <img> element
+  function makeImageBlock(img: Element): any | null {
+    const alt = img.getAttribute("alt") || "";
+    const assetRef = img.getAttribute("data-sanity-asset") || (img as HTMLElement).dataset?.sanityAsset || "";
+    if (assetRef) {
+      return {
+        _type: "image",
+        _key: rand(),
+        alt,
+        asset: { _type: "reference", _ref: assetRef },
+      };
+    }
+    return null;
+  }
+
+  // Find all <img> tags inside an element (at any depth)
+  function extractImages(el: Element): any[] {
+    const images: any[] = [];
+    const imgs = el.querySelectorAll("img");
+    imgs.forEach((img) => {
+      const block = makeImageBlock(img);
+      if (block) images.push(block);
+    });
+    return images;
+  }
+
   function parseChildren(el: Element): any[] {
     const children: any[] = [];
     const markDefs: any[] = [];
@@ -189,6 +216,9 @@ function htmlToPortableText(html: string): any[] {
       if (node.nodeType !== Node.ELEMENT_NODE) return;
       const el = node as Element;
       const tag = el.tagName.toLowerCase();
+
+      // Skip img tags inside blocks - they are handled separately
+      if (tag === "img") return;
 
       let newMarks = [...marks];
       if (tag === "strong" || tag === "b") newMarks.push("strong");
@@ -275,22 +305,24 @@ function htmlToPortableText(html: string): any[] {
 
     flushList();
 
+    // Handle standalone <img> tags
     if (tag === "img") {
-      const alt = el.getAttribute("alt") || "";
-      const assetRef = el.getAttribute("data-sanity-asset") || (el as HTMLElement).dataset?.sanityAsset || "";
-      if (assetRef && assetRef.startsWith("image-")) {
-        blocks.push({
-          _type: "image",
-          _key: rand(),
-          alt,
-          asset: { _type: "reference", _ref: assetRef },
-        });
-      }
-      // Images without a valid Sanity asset ref are skipped
-      // (they need to be re-uploaded via the toolbar image button)
+      const imgBlock = makeImageBlock(el);
+      if (imgBlock) blocks.push(imgBlock);
       continue;
     }
 
+    // For block elements (p, h2, div, etc.) — extract any nested images first
+    const nestedImages = extractImages(el);
+
+    // If the block ONLY contains an image (e.g. <p><img></p>), just add the image
+    const textContent = (el.textContent || "").trim();
+    if (nestedImages.length > 0 && !textContent) {
+      blocks.push(...nestedImages);
+      continue;
+    }
+
+    // Parse the text content of the block
     let style = "normal";
     if (tag === "h2") style = "h2";
     else if (tag === "h3") style = "h3";
@@ -298,13 +330,23 @@ function htmlToPortableText(html: string): any[] {
     else if (tag === "blockquote") style = "blockquote";
 
     const [children, markDefs] = parseChildren(el);
-    blocks.push({
-      _type: "block",
-      _key: rand(),
-      style,
-      children,
-      markDefs,
-    });
+
+    // Only add text block if it has real content
+    const hasText = children.some((c: any) => c.text && c.text.trim());
+    if (hasText) {
+      blocks.push({
+        _type: "block",
+        _key: rand(),
+        style,
+        children,
+        markDefs,
+      });
+    }
+
+    // Add nested images after the text block
+    if (nestedImages.length > 0 && textContent) {
+      blocks.push(...nestedImages);
+    }
   }
 
   flushList();
