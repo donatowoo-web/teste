@@ -148,6 +148,11 @@ function portableTextToHtml(blocks: any[]): string {
         .join("");
 
       const style = block.style || "normal";
+      // Raw HTML blocks (style, table, etc.) — output as-is
+      if (style === "html") {
+        const raw = (block.children || []).map((c: any) => c.text || "").join("");
+        return raw;
+      }
       if (block.listItem === "bullet") return `<li>${children}</li>`;
       if (block.listItem === "number") return `<li>${children}</li>`;
       if (style === "h2") return `<h2>${children}</h2>`;
@@ -268,6 +273,19 @@ function htmlToPortableText(html: string): any[] {
     if (node.nodeType !== Node.ELEMENT_NODE) continue;
     const el = node as Element;
     const tag = el.tagName.toLowerCase();
+
+    // Preserve <style>, <table>, <div> as raw HTML blocks
+    if (tag === "style" || tag === "table" || (tag === "div" && el.querySelector("table, style"))) {
+      flushList();
+      blocks.push({
+        _type: "block",
+        _key: rand(),
+        style: "html",
+        children: [{ _type: "span", _key: rand(), marks: [], text: el.outerHTML }],
+        markDefs: [],
+      });
+      continue;
+    }
 
     if (tag === "ul" || tag === "ol") {
       flushList();
