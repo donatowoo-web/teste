@@ -1,9 +1,4 @@
 {
   "framework": "nextjs",
-  "routes": [
-    {
-      "src": "/googlea24ea802baba2302.html",
-      "dest": "/googlea24ea802baba2302.html"
-    }
-  ]
+  "cleanUrls": false
 }
