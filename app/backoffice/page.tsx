@@ -590,10 +590,9 @@ function ContentEditor({
         />
       )}
       {mode === "preview" && (
-        <div
-          className={styles.editorArea}
-          dangerouslySetInnerHTML={{ __html: htmlCode }}
-        />
+        <div className={styles.previewWrap}>
+          <div className={styles.previewArticle} dangerouslySetInnerHTML={{ __html: htmlCode }} />
+        </div>
       )}
     </div>
   );
