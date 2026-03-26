@@ -11,7 +11,9 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const pathname = usePathname();
-  const isBlog = pathname?.startsWith("/blog");
+  const knownRoutes = ["/", "/blog", "/sobre-nos", "/servicos", "/faq", "/contactos", "/casas-lsf-madeira", "/construcao-em-lsf", "/construcao-em-madeira", "/clientes", "/projetos", "/projetos-eva", "/recrutamento", "/produto", "/paginas", "/inicie-o-seu-projeto", "/inicio-de-projeto", "/obrigado", "/politica-de-cookies", "/politica-de-privacidade", "/backoffice"];
+  const isKnownRoute = knownRoutes.some((r) => pathname === r || (r !== "/" && pathname?.startsWith(r + "/")));
+  const isBlog = pathname?.startsWith("/blog") || (!isKnownRoute && pathname !== "/");
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
 
