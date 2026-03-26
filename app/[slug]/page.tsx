@@ -279,7 +279,7 @@ const components: PortableTextComponents = {
         ?.map((c: any) => c.text || "")
         .join("");
       if (!raw) return null;
-      return <div dangerouslySetInnerHTML={{ __html: raw }} />;
+      return <div style={{ color: "#000" }} dangerouslySetInnerHTML={{ __html: raw }} />;
     },
     h1: ({ children }) => (
       <h1 style={{ marginTop: "40px", marginBottom: "16px" }}>{children}</h1>
