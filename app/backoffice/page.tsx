@@ -1307,7 +1307,7 @@ export default function BackofficePage() {
     showStatus("A publicar site...");
     try {
       // Trigger Vercel deploy hook
-      const hookUrl = "https://api.vercel.com/v1/integrations/deploy/prj_CeG7RVrMa71vey9TFDJmTzpHhhPt/PWlKmaDuS5";
+      const hookUrl = "https://api.vercel.com/v1/integrations/deploy/prj_CeG7RVrMa71vey9TFDJmTzpHhhPt/XQZsoZ86He";
       const res = await fetch(hookUrl, { method: "POST" });
       if (res.ok) {
         showStatus("Publicacao iniciada! O site sera atualizado em 1-2 minutos.");
