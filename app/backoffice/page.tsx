@@ -1304,29 +1304,18 @@ export default function BackofficePage() {
   async function handleDeploy() {
     if (deploying) return;
     setDeploying(true);
-    showStatus("A iniciar deploy...");
+    showStatus("A publicar site...");
     try {
-      // Trigger GitHub Actions workflow
-      const res = await fetch(
-        `https://api.github.com/repos/${GH_REPO}/actions/workflows/deploy.yml/dispatches`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${GH_DEPLOY_TOKEN}`,
-            Accept: "application/vnd.github.v3+json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ref: "master" }),
-        }
-      );
-      if (res.status === 204 || res.ok) {
-        showStatus("Deploy iniciado! O site sera atualizado em 2-3 minutos.");
+      // Trigger Vercel deploy hook
+      const hookUrl = "https://api.vercel.com/v1/integrations/deploy/prj_CeG7RVrMa71vey9TFDJmTzpHhhPt/PWlKmaDuS5";
+      const res = await fetch(hookUrl, { method: "POST" });
+      if (res.ok) {
+        showStatus("Publicacao iniciada! O site sera atualizado em 1-2 minutos.");
       } else {
-        const data = await res.json().catch(() => ({}));
-        showStatus(data.message || `Erro no deploy (${res.status})`, true);
+        showStatus(`Erro na publicacao (${res.status})`, true);
       }
     } catch (e: any) {
-      showStatus("Erro ao iniciar deploy: " + (e.message || ""), true);
+      showStatus("Erro ao publicar: " + (e.message || ""), true);
     }
     setDeploying(false);
   }
