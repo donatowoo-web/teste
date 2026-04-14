@@ -1,0 +1,158 @@
+.wrapper {
+  padding: 3rem 0;
+  margin: 2rem 0 0;
+}
+
+.box {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2.5rem 2.5rem;
+}
+
+.title {
+  text-align: center;
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.dot {
+  width: 32px;
+  height: 4px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  transition: background 0.3s;
+}
+
+.dotActive {
+  background: #86a941;
+}
+
+.label {
+  display: block;
+  margin: 1.2rem 0 0.45rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.req {
+  color: #ef4444;
+  margin-left: 0.2rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  color: #334155;
+}
+
+.radio {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  margin-top: 0.25rem;
+  color: #334155;
+}
+
+.input,
+.select {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1e293b;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #86a941;
+}
+
+.actions {
+  margin-top: 1.6rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.4rem;
+}
+
+.btnGhost {
+  width: 100%;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.btnGhost:hover {
+  background: #f1f5f9;
+}
+
+.btnNext {
+  width: 100%;
+  background: #86a941;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btnNext:hover {
+  background: #769a35;
+}
+
+.btnNext:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  margin-top: 0.5rem;
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+.success {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #86a941;
+}
+
+@media (max-width: 640px) {
+  .box {
+    padding: 2rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+}
