@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Metadata } from "next";
 import styles from "../artigo.module.css";
+import MultiStepFormBlog from "../components/MultiStepFormBlog";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 60; // revalidate every 60 seconds
 
 export async function generateStaticParams() {
   const slugs: string[] = await client.fetch(`
@@ -137,8 +139,8 @@ function preprocessBlocks(blocks: any[], title: string): any[] {
       };
     }
 
-    // Block contains HTML tags
-    if (trimmed.includes("<table") || trimmed.includes("<style") || trimmed.includes("<div")) {
+    // Block contains multistep form placeholder or HTML tags
+    if (trimmed.includes("data-multistep-form") || trimmed.includes("<table") || trimmed.includes("<style") || trimmed.includes("<div")) {
       return {
         ...block,
         style: "html",
@@ -279,6 +281,10 @@ const components: PortableTextComponents = {
         ?.map((c: any) => c.text || "")
         .join("");
       if (!raw) return null;
+      // Detect multistep form placeholder
+      if (raw.includes('data-multistep-form')) {
+        return <MultiStepFormBlog />;
+      }
       return <div style={{ color: "#000" }} dangerouslySetInnerHTML={{ __html: raw }} />;
     },
     h1: ({ children }) => (
