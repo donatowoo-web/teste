@@ -66,20 +66,24 @@ type PageDoc = {
 
 // ─── Sanity Helpers ───
 async function sanityFetch(query: string) {
-  const url = `${SANITY_API}/data/query/${DATASET}?query=${encodeURIComponent(query)}&tag=backoffice`;
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${TOKEN}` },
-    mode: "cors",
-  });
-  if (!res.ok) {
-    // Fallback: try with CDN (no auth needed for reads)
-    const cdnUrl = `https://${PROJECT_ID}.apicdn.sanity.io/v${API_VERSION}/data/query/${DATASET}?query=${encodeURIComponent(query)}`;
-    const cdnRes = await fetch(cdnUrl);
-    const cdnData = await cdnRes.json();
-    return cdnData.result;
+  // Try authenticated API first, fall back to CDN
+  if (TOKEN) {
+    try {
+      const url = `${SANITY_API}/data/query/${DATASET}?query=${encodeURIComponent(query)}&tag=backoffice`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.result;
+      }
+    } catch { /* fall through to CDN */ }
   }
-  const data = await res.json();
-  return data.result;
+  // Fallback: CDN (no auth needed for reads)
+  const cdnUrl = `https://${PROJECT_ID}.apicdn.sanity.io/v${API_VERSION}/data/query/${DATASET}?query=${encodeURIComponent(query)}`;
+  const cdnRes = await fetch(cdnUrl);
+  const cdnData = await cdnRes.json();
+  return cdnData.result;
 }
 
 async function sanityMutate(mutations: any[]) {
@@ -568,6 +572,17 @@ function ContentEditor({
             </button>
             <button className={styles.toolbarBtn} onClick={insertImage} title="Imagem">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </button>
+            <div className={styles.toolbarSep} />
+            <button className={styles.toolbarBtn} onClick={() => {
+              const formHtml = `<div data-multistep-form="true" style="text-align:center;padding:40px 20px;background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:12px;margin:32px 0"><p style="font-size:1.1rem;font-weight:600;color:#0f172a;margin:0 0 8px">Formulário de Contacto</p><p style="color:#64748b;margin:0;font-size:0.9rem">Este bloco será substituído pelo formulário interativo no site publicado.</p></div>`;
+              if (mode === "visual") {
+                exec("insertHTML", formHtml);
+              } else {
+                setHtmlCode(htmlCode + "\n" + formHtml);
+              }
+            }} title="Inserir Formulário de Contacto">
+              <span style={{ fontSize: "11px", fontWeight: 700 }}>Form</span>
             </button>
           </>
         )}
