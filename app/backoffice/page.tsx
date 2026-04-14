@@ -459,18 +459,28 @@ function ContentEditor({
   setHtmlCode: (v: string) => void;
 }) {
   const [mode, setMode] = useState<"visual" | "html" | "preview">("visual");
+  const initializedRef = useRef(false);
 
   useEffect(() => {
     setHtmlCode(initialHtml);
+    initializedRef.current = false;
   }, [initialHtml]);
+
+  // Set initial content only once per mount, don't overwrite on re-render
+  useEffect(() => {
+    if (mode === "visual" && editorRef.current && !initializedRef.current) {
+      editorRef.current.innerHTML = htmlCode;
+      initializedRef.current = true;
+    }
+  }, [mode, htmlCode]);
 
   // Sync between modes
   function switchMode(newMode: "visual" | "html" | "preview") {
     if (mode === "visual" && editorRef.current) {
       setHtmlCode(editorRef.current.innerHTML);
     }
-    if (mode === "html" && newMode === "visual" && editorRef.current) {
-      // will be set via dangerouslySetInnerHTML on re-render
+    if (mode === "html" && newMode === "visual") {
+      initializedRef.current = false; // allow re-init when switching back to visual
     }
     setMode(newMode);
   }
@@ -593,7 +603,6 @@ function ContentEditor({
           className={styles.editorArea}
           contentEditable
           suppressContentEditableWarning
-          dangerouslySetInnerHTML={{ __html: htmlCode }}
         />
       )}
       {mode === "html" && (
@@ -1377,6 +1386,12 @@ export default function BackofficePage() {
 
     const finalSlug = slug || slugify(title);
 
+    // Capture editor content BEFORE any state changes that trigger re-render
+    const finalHtml = editorRef.current?.isContentEditable
+      ? editorRef.current.innerHTML
+      : htmlCode;
+    const content = htmlToPortableText(finalHtml);
+
     setSaving(true);
     try {
       // Upload image if new
@@ -1390,12 +1405,6 @@ export default function BackofficePage() {
         setSaving(false);
         return;
       }
-
-      // Sync from visual editor if active
-      const finalHtml = editorRef.current?.isContentEditable
-        ? editorRef.current.innerHTML
-        : htmlCode;
-      const content = htmlToPortableText(finalHtml);
 
       const doc: any = {
         _type: "post",
