@@ -4,6 +4,9 @@ import { Metadata } from "next";
 import styles from "./pagina.module.css";
 import PageSections from "./PageSections";
 
+export const dynamicParams = true;
+export const revalidate = 60;
+
 type PageDoc = {
   title: string;
   sectionsData?: string;
