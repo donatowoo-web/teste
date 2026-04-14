@@ -1300,24 +1300,58 @@ export default function BackofficePage() {
   }
 
   const [deploying, setDeploying] = useState(false);
+  const [deployState, setDeployState] = useState<string>("");
+
+  async function pollDeployStatus() {
+    const stateLabels: Record<string, string> = {
+      QUEUED: "Na fila...",
+      BUILDING: "A construir site...",
+      READY: "Publicado com sucesso!",
+      ERROR: "Erro na publicacao",
+      CANCELED: "Publicacao cancelada",
+    };
+
+    for (let i = 0; i < 40; i++) { // poll up to ~3 min
+      await new Promise((r) => setTimeout(r, 5000));
+      try {
+        const res = await fetch("/api/deploy-status");
+        const data = await res.json();
+        const label = stateLabels[data.state] || data.state;
+        setDeployState(label);
+        showStatus(label, data.state === "ERROR");
+        if (data.state === "READY" || data.state === "ERROR" || data.state === "CANCELED") {
+          setDeploying(false);
+          return;
+        }
+      } catch { /* continue polling */ }
+    }
+    setDeployState("");
+    showStatus("Timeout — verifica o estado no Vercel", true);
+    setDeploying(false);
+  }
 
   async function handleDeploy() {
     if (deploying) return;
     setDeploying(true);
-    showStatus("A publicar site...");
+    setDeployState("A iniciar...");
+    showStatus("A iniciar publicacao...");
     try {
-      // Trigger Vercel deploy hook
       const hookUrl = "https://api.vercel.com/v1/integrations/deploy/prj_CeG7RVrMa71vey9TFDJmTzpHhhPt/XQZsoZ86He";
       const res = await fetch(hookUrl, { method: "POST" });
       if (res.ok) {
-        showStatus("Publicacao iniciada! O site sera atualizado em 1-2 minutos.");
+        setDeployState("Na fila...");
+        showStatus("Na fila...");
+        pollDeployStatus();
       } else {
         showStatus(`Erro na publicacao (${res.status})`, true);
+        setDeploying(false);
+        setDeployState("");
       }
     } catch (e: any) {
       showStatus("Erro ao publicar: " + (e.message || ""), true);
+      setDeploying(false);
+      setDeployState("");
     }
-    setDeploying(false);
   }
 
   function handleLogout() {
@@ -1956,7 +1990,7 @@ export default function BackofficePage() {
               onClick={handleDeploy}
               disabled={deploying}
             >
-              {deploying ? "A publicar..." : "Publicar Site"}
+              {deploying ? (deployState || "A publicar...") : "Publicar Site"}
             </button>
             <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`} onClick={handleLogout}>
               Sair
@@ -2052,7 +2086,7 @@ export default function BackofficePage() {
             onClick={handleDeploy}
             disabled={deploying}
           >
-            {deploying ? "A publicar..." : "Publicar Site"}
+            {deploying ? (deployState || "A publicar...") : "Publicar Site"}
           </button>
           <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`} onClick={handleLogout}>
             Sair
