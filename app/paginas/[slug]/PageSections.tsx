@@ -5,6 +5,107 @@ import FadeInOnScroll from "@/app/components/FadeInOnScroll";
 import MultiStepForm from "@/app/components/MultiStepForm";
 import styles from "./pagina.module.css";
 
+/**
+ * Scope every CSS rule inside <style> blocks of user HTML to a wrapper
+ * class so the page author's CSS can't leak out and style the site header,
+ * body, nav, etc.
+ *
+ * - Top-level selectors get prefixed with `scopeSel`.
+ * - `:root`, `html`, `body` are rewritten to the scope (so CSS variables
+ *   only apply inside the block).
+ * - `@media` / `@supports` are recursed into; `@keyframes`, `@font-face`,
+ *   `@import`, `@charset` are left untouched.
+ */
+function scopeHtmlStyles(html: string, scopeSel: string): string {
+  return html.replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gi, (_, css) => {
+    return `<style>${scopeCss(css, scopeSel)}</style>`;
+  });
+}
+
+function scopeCss(css: string, scope: string): string {
+  let out = "";
+  let i = 0;
+  const n = css.length;
+
+  function findMatchingBrace(start: number): number {
+    let depth = 1;
+    let j = start + 1;
+    while (j < n && depth > 0) {
+      if (css[j] === "{") depth++;
+      else if (css[j] === "}") depth--;
+      j++;
+    }
+    return j;
+  }
+
+  function scopeSelectorList(sel: string): string {
+    return sel
+      .split(",")
+      .map((part) => {
+        const t = part.trim();
+        if (!t) return part;
+        if (t === ":root" || t === "html" || t === "body") return scope;
+        if (/^(html|body)\b/.test(t))
+          return `${scope} ${t.replace(/^(html|body)\s*/, "")}`.trim();
+        return `${scope} ${t}`;
+      })
+      .join(", ");
+  }
+
+  while (i < n) {
+    // preserve whitespace
+    const wsStart = i;
+    while (i < n && /\s/.test(css[i])) i++;
+    out += css.slice(wsStart, i);
+    if (i >= n) break;
+
+    if (css[i] === "@") {
+      const atMatch = css.slice(i).match(/^@([a-zA-Z-]+)/);
+      const name = atMatch?.[1].toLowerCase() || "";
+      const braceStart = css.indexOf("{", i);
+      const semi = css.indexOf(";", i);
+      const isBlock = braceStart !== -1 && (semi === -1 || braceStart < semi);
+
+      if (!isBlock) {
+        // @charset / @import / @namespace etc. — keep as-is
+        const end = semi === -1 ? n : semi + 1;
+        out += css.slice(i, end);
+        i = end;
+        continue;
+      }
+
+      if (name === "media" || name === "supports") {
+        const end = findMatchingBrace(braceStart);
+        const header = css.slice(i, braceStart + 1);
+        const inner = css.slice(braceStart + 1, end - 1);
+        out += header + scopeCss(inner, scope) + "}";
+        i = end;
+        continue;
+      }
+
+      // keyframes / font-face / page etc. — keep as-is
+      const end = findMatchingBrace(braceStart);
+      out += css.slice(i, end);
+      i = end;
+      continue;
+    }
+
+    // normal rule
+    const braceStart = css.indexOf("{", i);
+    if (braceStart === -1) {
+      out += css.slice(i);
+      break;
+    }
+    const sel = css.slice(i, braceStart);
+    const end = findMatchingBrace(braceStart);
+    const body = css.slice(braceStart, end); // { ... }
+    out += scopeSelectorList(sel) + body;
+    i = end;
+  }
+
+  return out;
+}
+
 type PageSection = {
   _key: string;
   type: string;
@@ -155,10 +256,13 @@ function renderSection(section: PageSection) {
       ) {
         return <MultiStepForm />;
       }
+      // Scope any <style> blocks in the user's HTML so nav/body/etc. rules
+      // can't leak out and restyle the site chrome (header, footer, etc.).
+      const scoped = scopeHtmlStyles(html, `.${styles.htmlBlock}`);
       return (
         <div
           className={styles.htmlBlock}
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: scoped }}
         />
       );
     }
