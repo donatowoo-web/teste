@@ -873,10 +873,7 @@ function SectionEditor({
   isFirst: boolean;
   isLast: boolean;
 }) {
-  const [editing, setEditing] = useState(false);
-  const textRef = useRef<HTMLDivElement>(null);
-  const leftRef = useRef<HTMLDivElement>(null);
-  const rightRef = useRef<HTMLDivElement>(null);
+  const [editing, setEditing] = useState(true);
 
   const widget = SECTION_WIDGETS.find((w) => w.type === section.type);
 
