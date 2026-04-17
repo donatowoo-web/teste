@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import FadeInOnScroll from "@/app/components/FadeInOnScroll";
+import MultiStepForm from "@/app/components/MultiStepForm";
 import styles from "./pagina.module.css";
 
 type PageSection = {
@@ -66,9 +67,11 @@ function HeroSection({ section }: { section: PageSection }) {
       <div className={styles.heroGradient} />
       <div ref={contentRef} className={styles.heroInner} style={{ textAlign: section.textAlign || "left" }}>
         <FadeInOnScroll y={30} blur={8} durationMs={800} delayMs={200}>
-          <h1 className={styles.heroTitle} style={{ whiteSpace: "pre-line" }}>
-            {section.heading || ""}
-          </h1>
+          <h1
+            className={styles.heroTitle}
+            style={{ whiteSpace: "pre-line" }}
+            dangerouslySetInnerHTML={{ __html: section.heading || "" }}
+          />
         </FadeInOnScroll>
       </div>
     </div>
@@ -80,9 +83,11 @@ function renderSection(section: PageSection) {
     case "heading": {
       const Tag = section.headingLevel || "h2";
       return (
-        <Tag className={styles[`heading${(section.headingLevel || "h2").toUpperCase()}`]} style={{ textAlign: section.textAlign || "left" }}>
-          {section.heading}
-        </Tag>
+        <Tag
+          className={styles[`heading${(section.headingLevel || "h2").toUpperCase()}`]}
+          style={{ textAlign: section.textAlign || "left" }}
+          dangerouslySetInnerHTML={{ __html: section.heading || "" }}
+        />
       );
     }
     case "text":
@@ -137,18 +142,26 @@ function renderSection(section: PageSection) {
           <a
             href={section.buttonUrl || "#"}
             className={`${styles.pageButton} ${styles[`btn${(section.buttonStyle || "primary").charAt(0).toUpperCase() + (section.buttonStyle || "primary").slice(1)}`]}`}
-          >
-            {section.buttonText || "Botão"}
-          </a>
+            dangerouslySetInnerHTML={{ __html: section.buttonText || "Botão" }}
+          />
         </div>
       );
-    case "html":
+    case "html": {
+      const html = section.content || "";
+      // Swap the multistep placeholder for the real interactive form
+      if (
+        html.includes("multistep-form-wrapper") ||
+        html.includes("data-multistep-form")
+      ) {
+        return <MultiStepForm />;
+      }
       return (
         <div
           className={styles.htmlBlock}
-          dangerouslySetInnerHTML={{ __html: section.content || "" }}
+          dangerouslySetInnerHTML={{ __html: html }}
         />
       );
+    }
     default:
       return null;
   }

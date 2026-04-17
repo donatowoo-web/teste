@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./backoffice.module.css";
+import RichTextEditor from "./components/RichTextEditor";
 
 // ─── Sanity Config ───
 const PROJECT_ID = "onxd36ek";
@@ -122,50 +123,84 @@ async function uploadImage(file: File): Promise<{ id: string; url: string }> {
 // ─── Portable Text ↔ HTML ───
 function portableTextToHtml(blocks: any[]): string {
   if (!blocks || !Array.isArray(blocks)) return "<p><br></p>";
-  return blocks
-    .map((block) => {
-      if (block._type === "image") {
-        const url = block.asset?.url || "";
-        const ref = block.asset?._ref || "";
-        if (!url) return "";
-        return `<div data-image-block="true"><img src="${url}" alt="${block.alt || ""}" data-sanity-asset="${ref}" style="max-width:100%;height:auto;border-radius:4px"></div>`;
-      }
-      if (block._type !== "block") return "";
 
-      const children = (block.children || [])
-        .map((child: any) => {
-          let text = child.text || "";
-          text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-          if (child.marks?.includes("strong")) text = `<strong>${text}</strong>`;
-          if (child.marks?.includes("em")) text = `<em>${text}</em>`;
-          if (child.marks?.includes("underline")) text = `<u>${text}</u>`;
-          const linkMark = child.marks?.find(
-            (m: string) =>
-              block.markDefs?.find((d: any) => d._key === m && d._type === "link")
-          );
-          if (linkMark) {
-            const def = block.markDefs.find((d: any) => d._key === linkMark);
-            if (def) text = `<a href="${def.href}">${text}</a>`;
-          }
-          return text;
-        })
-        .join("");
+  function renderInline(block: any): string {
+    return (block.children || [])
+      .map((child: any) => {
+        let text = child.text || "";
+        text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        if (child.marks?.includes("strong")) text = `<strong>${text}</strong>`;
+        if (child.marks?.includes("em")) text = `<em>${text}</em>`;
+        if (child.marks?.includes("underline")) text = `<u>${text}</u>`;
+        const linkMark = child.marks?.find(
+          (m: string) =>
+            block.markDefs?.find((d: any) => d._key === m && d._type === "link")
+        );
+        if (linkMark) {
+          const def = block.markDefs.find((d: any) => d._key === linkMark);
+          if (def) text = `<a href="${def.href}">${text}</a>`;
+        }
+        return text;
+      })
+      .join("");
+  }
 
-      const style = block.style || "normal";
-      // Raw HTML blocks (style, table, etc.) — output as-is
-      if (style === "html") {
-        const raw = (block.children || []).map((c: any) => c.text || "").join("");
-        return raw;
+  const out: string[] = [];
+  let i = 0;
+  while (i < blocks.length) {
+    const block = blocks[i];
+
+    if (block?._type === "image") {
+      const url = block.asset?.url || "";
+      const ref = block.asset?._ref || "";
+      if (url) {
+        out.push(`<div data-image-block="true"><img src="${url}" alt="${block.alt || ""}" data-sanity-asset="${ref}" style="max-width:100%;height:auto;border-radius:4px"></div>`);
       }
-      if (block.listItem === "bullet") return `<li>${children}</li>`;
-      if (block.listItem === "number") return `<li>${children}</li>`;
-      if (style === "h2") return `<h2>${children}</h2>`;
-      if (style === "h3") return `<h3>${children}</h3>`;
-      if (style === "h4") return `<h4>${children}</h4>`;
-      if (style === "blockquote") return `<blockquote>${children}</blockquote>`;
-      return `<p>${children || "<br>"}</p>`;
-    })
-    .join("\n");
+      i++;
+      continue;
+    }
+
+    if (block?._type !== "block") { i++; continue; }
+
+    // Group consecutive list items of the same kind into a real <ul>/<ol>
+    if (block.listItem === "bullet" || block.listItem === "number") {
+      const listType = block.listItem;
+      const tag = listType === "bullet" ? "ul" : "ol";
+      const items: string[] = [];
+      while (
+        i < blocks.length &&
+        blocks[i]?._type === "block" &&
+        blocks[i]?.listItem === listType
+      ) {
+        items.push(`<li>${renderInline(blocks[i])}</li>`);
+        i++;
+      }
+      out.push(`<${tag}>${items.join("")}</${tag}>`);
+      continue;
+    }
+
+    const style = block.style || "normal";
+
+    // Raw HTML blocks (style, table, etc.) — output as-is
+    if (style === "html") {
+      const raw = (block.children || []).map((c: any) => c.text || "").join("");
+      out.push(raw);
+      i++;
+      continue;
+    }
+
+    const children = renderInline(block);
+
+    if (style === "h2") out.push(`<h2>${children}</h2>`);
+    else if (style === "h3") out.push(`<h3>${children}</h3>`);
+    else if (style === "h4") out.push(`<h4>${children}</h4>`);
+    else if (style === "blockquote") out.push(`<blockquote>${children}</blockquote>`);
+    else out.push(`<p>${children || "<br>"}</p>`);
+
+    i++;
+  }
+
+  return out.join("\n");
 }
 
 function htmlToPortableText(html: string): any[] {
@@ -179,16 +214,29 @@ function htmlToPortableText(html: string): any[] {
     listItems = [];
   }
 
-  // Extract image block from an <img> element
+  // Build a Sanity image block, or fall back to a raw-HTML block so external
+  // images (no data-sanity-asset) aren't silently dropped on save.
   function makeImageBlock(img: Element): any | null {
     const alt = img.getAttribute("alt") || "";
-    const assetRef = img.getAttribute("data-sanity-asset") || (img as HTMLElement).dataset?.sanityAsset || "";
+    const assetRef =
+      img.getAttribute("data-sanity-asset") ||
+      (img as HTMLElement).dataset?.sanityAsset ||
+      "";
     if (assetRef) {
       return {
         _type: "image",
         _key: rand(),
         alt,
         asset: { _type: "reference", _ref: assetRef },
+      };
+    }
+    if (img.getAttribute("src")) {
+      return {
+        _type: "block",
+        _key: rand(),
+        style: "html",
+        children: [{ _type: "span", _key: rand(), marks: [], text: img.outerHTML }],
+        markDefs: [],
       };
     }
     return null;
@@ -259,118 +307,133 @@ function htmlToPortableText(html: string): any[] {
     return [children, markDefs] as any;
   }
 
-  for (const node of Array.from(div.childNodes)) {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = (node.textContent || "").trim();
-      if (text) {
+  function processNodes(nodeList: ArrayLike<ChildNode>) {
+    for (const node of Array.from(nodeList)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = (node.textContent || "").trim();
+        if (text) {
+          flushList();
+          blocks.push({
+            _type: "block",
+            _key: rand(),
+            style: "normal",
+            children: [{ _type: "span", _key: rand(), marks: [], text }],
+            markDefs: [],
+          });
+        }
+        continue;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) continue;
+      const el = node as Element;
+      const tag = el.tagName.toLowerCase();
+
+      // Preserve <style>, <table>, or divs containing them as raw HTML blocks
+      if (
+        tag === "style" ||
+        tag === "table" ||
+        (tag === "div" && el.querySelector("table, style"))
+      ) {
         flushList();
         blocks.push({
           _type: "block",
           _key: rand(),
-          style: "normal",
-          children: [{ _type: "span", _key: rand(), marks: [], text }],
+          style: "html",
+          children: [{ _type: "span", _key: rand(), marks: [], text: el.outerHTML }],
           markDefs: [],
         });
+        continue;
       }
-      continue;
-    }
-    if (node.nodeType !== Node.ELEMENT_NODE) continue;
-    const el = node as Element;
-    const tag = el.tagName.toLowerCase();
 
-    // Preserve <style>, <table>, <div> as raw HTML blocks
-    if (tag === "style" || tag === "table" || (tag === "div" && el.querySelector("table, style"))) {
-      flushList();
-      blocks.push({
-        _type: "block",
-        _key: rand(),
-        style: "html",
-        children: [{ _type: "span", _key: rand(), marks: [], text: el.outerHTML }],
-        markDefs: [],
-      });
-      continue;
-    }
+      // Recurse into generic <div> wrappers so inner <p>, <h2>, <ul>, <img>
+      // etc. keep their structure instead of collapsing into plain text.
+      // Covers the image-block div as well (its <img> child is handled below).
+      if (tag === "div") {
+        processNodes(el.childNodes);
+        continue;
+      }
 
-    if (tag === "ul" || tag === "ol") {
-      flushList();
-      for (const li of Array.from(el.children)) {
-        if (li.tagName.toLowerCase() === "li") {
-          const [children, markDefs] = parseChildren(li);
-          listItems.push({
-            _type: "block",
-            _key: rand(),
-            style: "normal",
-            listItem: tag === "ul" ? "bullet" : "number",
-            level: 1,
-            children,
-            markDefs,
-          });
+      if (tag === "ul" || tag === "ol") {
+        flushList();
+        for (const li of Array.from(el.children)) {
+          if (li.tagName.toLowerCase() === "li") {
+            const [children, markDefs] = parseChildren(li);
+            listItems.push({
+              _type: "block",
+              _key: rand(),
+              style: "normal",
+              listItem: tag === "ul" ? "bullet" : "number",
+              level: 1,
+              children,
+              markDefs,
+            });
+          }
         }
+        flushList();
+        continue;
       }
+
+      if (tag === "li") {
+        const [children, markDefs] = parseChildren(el);
+        listItems.push({
+          _type: "block",
+          _key: rand(),
+          style: "normal",
+          listItem: "bullet",
+          level: 1,
+          children,
+          markDefs,
+        });
+        continue;
+      }
+
       flushList();
-      continue;
-    }
 
-    if (tag === "li") {
+      // Handle standalone <img> tags
+      if (tag === "img") {
+        const imgBlock = makeImageBlock(el);
+        if (imgBlock) blocks.push(imgBlock);
+        continue;
+      }
+
+      // For block elements (p, h2, etc.) — extract any nested images first
+      const nestedImages = extractImages(el);
+
+      // If the block ONLY contains an image (e.g. <p><img></p>), just add the image
+      const textContent = (el.textContent || "").trim();
+      if (nestedImages.length > 0 && !textContent) {
+        blocks.push(...nestedImages);
+        continue;
+      }
+
+      // Parse the text content of the block
+      let style = "normal";
+      if (tag === "h2") style = "h2";
+      else if (tag === "h3") style = "h3";
+      else if (tag === "h4") style = "h4";
+      else if (tag === "blockquote") style = "blockquote";
+
       const [children, markDefs] = parseChildren(el);
-      listItems.push({
-        _type: "block",
-        _key: rand(),
-        style: "normal",
-        listItem: "bullet",
-        level: 1,
-        children,
-        markDefs,
-      });
-      continue;
-    }
 
-    flushList();
+      // Only add text block if it has real content
+      const hasText = children.some((c: any) => c.text && c.text.trim());
+      if (hasText) {
+        blocks.push({
+          _type: "block",
+          _key: rand(),
+          style,
+          children,
+          markDefs,
+        });
+      }
 
-    // Handle standalone <img> tags
-    if (tag === "img") {
-      const imgBlock = makeImageBlock(el);
-      if (imgBlock) blocks.push(imgBlock);
-      continue;
-    }
-
-    // For block elements (p, h2, div, etc.) — extract any nested images first
-    const nestedImages = extractImages(el);
-
-    // If the block ONLY contains an image (e.g. <p><img></p>), just add the image
-    const textContent = (el.textContent || "").trim();
-    if (nestedImages.length > 0 && !textContent) {
-      blocks.push(...nestedImages);
-      continue;
-    }
-
-    // Parse the text content of the block
-    let style = "normal";
-    if (tag === "h2") style = "h2";
-    else if (tag === "h3") style = "h3";
-    else if (tag === "h4") style = "h4";
-    else if (tag === "blockquote") style = "blockquote";
-
-    const [children, markDefs] = parseChildren(el);
-
-    // Only add text block if it has real content
-    const hasText = children.some((c: any) => c.text && c.text.trim());
-    if (hasText) {
-      blocks.push({
-        _type: "block",
-        _key: rand(),
-        style,
-        children,
-        markDefs,
-      });
-    }
-
-    // Add nested images after the text block
-    if (nestedImages.length > 0 && textContent) {
-      blocks.push(...nestedImages);
+      // Add nested images after the text block
+      if (nestedImages.length > 0 && textContent) {
+        blocks.push(...nestedImages);
+      }
     }
   }
 
+  processNodes(div.childNodes);
   flushList();
 
   if (blocks.length === 0) {
@@ -819,14 +882,21 @@ function SectionEditor({
 
   function renderPreview() {
     switch (section.type) {
-      case "heading":
+      case "heading": {
+        const headingHtml = section.heading || "";
+        const style = { margin: 0, color: "#fff" };
+        const common = {
+          dangerouslySetInnerHTML: { __html: headingHtml },
+          style,
+        };
         return (
           <div style={{ textAlign: section.textAlign || "left" }}>
-            {section.headingLevel === "h1" && <h1 style={{ margin: 0, fontSize: 28, color: "#fff" }}>{section.heading}</h1>}
-            {section.headingLevel === "h2" && <h2 style={{ margin: 0, fontSize: 24, color: "#fff" }}>{section.heading}</h2>}
-            {section.headingLevel === "h3" && <h3 style={{ margin: 0, fontSize: 20, color: "#fff" }}>{section.heading}</h3>}
+            {section.headingLevel === "h1" && <h1 {...common} style={{ ...style, fontSize: 28 }} />}
+            {section.headingLevel === "h2" && <h2 {...common} style={{ ...style, fontSize: 24 }} />}
+            {section.headingLevel === "h3" && <h3 {...common} style={{ ...style, fontSize: 20 }} />}
           </div>
         );
+      }
       case "text":
         return <div dangerouslySetInnerHTML={{ __html: section.content || "" }} style={{ textAlign: section.textAlign || "left", lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }} />;
       case "image":
@@ -860,17 +930,20 @@ function SectionEditor({
       case "button":
         return (
           <div style={{ textAlign: section.textAlign || "center" }}>
-            <span style={{
-              display: "inline-block",
-              padding: "12px 32px",
-              background: section.buttonStyle === "outline" ? "transparent" : "rgba(0,0,0,0.15)",
-              color: "#fff",
-              border: section.buttonStyle === "outline" ? "2px solid #fff" : "1px solid rgba(136,177,75,0.6)",
-              boxShadow: section.buttonStyle === "outline" ? "none" : "0 0 12px rgba(136,177,75,0.3)",
-              borderRadius: 4,
-              fontSize: 15,
-              fontWeight: 500,
-            }}>{section.buttonText || "Botão"}</span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "12px 32px",
+                background: section.buttonStyle === "outline" ? "transparent" : "rgba(0,0,0,0.15)",
+                color: "#fff",
+                border: section.buttonStyle === "outline" ? "2px solid #fff" : "1px solid rgba(136,177,75,0.6)",
+                boxShadow: section.buttonStyle === "outline" ? "none" : "0 0 12px rgba(136,177,75,0.3)",
+                borderRadius: 4,
+                fontSize: 15,
+                fontWeight: 500,
+              }}
+              dangerouslySetInnerHTML={{ __html: section.buttonText || "Botão" }}
+            />
           </div>
         );
       case "hero-image":
@@ -887,9 +960,10 @@ function SectionEditor({
             <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.35)" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)" }} />
             <div style={{ position: "relative", zIndex: 2, padding: "4rem 1.5rem 2.5rem", width: "100%", maxWidth: 1400, textAlign: section.textAlign || "left" }}>
-              <h1 style={{ margin: 0, color: "#fff", fontFamily: "'NewYork', ui-serif, Garamond, serif", fontWeight: 400, fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.05, letterSpacing: "-0.01em", maxWidth: "18ch" }}>
-                {section.heading || "Título do Hero"}
-              </h1>
+              <h1
+                style={{ margin: 0, color: "#fff", fontFamily: "'NewYork', ui-serif, Garamond, serif", fontWeight: 400, fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.05, letterSpacing: "-0.01em", maxWidth: "18ch" }}
+                dangerouslySetInnerHTML={{ __html: section.heading || "Título do Hero" }}
+              />
             </div>
             {!section.imageUrl && (
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 3, color: "#666", fontSize: 14 }}>
@@ -914,12 +988,12 @@ function SectionEditor({
       case "heading":
         return (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <input
-              type="text"
+            <RichTextEditor
+              variant="inline"
               value={section.heading || ""}
-              onChange={(e) => onChange({ ...section, heading: e.target.value })}
-              style={{ padding: "10px 14px", border: "1px solid #ddd", borderRadius: 4, fontSize: 16, fontWeight: 600 }}
+              onChange={(html) => onChange({ ...section, heading: html })}
               placeholder="Texto do título"
+              compact
             />
             <div style={{ display: "flex", gap: 8 }}>
               {(["h1", "h2", "h3"] as const).map((h) => (
@@ -947,29 +1021,12 @@ function SectionEditor({
         );
       case "text":
         return (
-          <div>
-            <div style={{ display: "flex", gap: 4, marginBottom: 8 }}>
-              {(["left", "center", "right"] as const).map((a) => (
-                <button
-                  key={a}
-                  onClick={() => onChange({ ...section, textAlign: a })}
-                  style={{ padding: "4px 10px", background: section.textAlign === a ? "#111" : "#f0f0f0", color: section.textAlign === a ? "#fff" : "#333", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
-                >
-                  {a === "left" ? "⬅" : a === "center" ? "⬌" : "➡"}
-                </button>
-              ))}
-            </div>
-            <div
-              ref={textRef}
-              contentEditable
-              suppressContentEditableWarning
-              dangerouslySetInnerHTML={{ __html: section.content || "" }}
-              onBlur={() => {
-                if (textRef.current) onChange({ ...section, content: textRef.current.innerHTML });
-              }}
-              style={{ minHeight: 120, padding: 16, border: "1px solid #ddd", borderRadius: 4, outline: "none", lineHeight: 1.7, fontSize: 15 }}
-            />
-          </div>
+          <RichTextEditor
+            variant="full"
+            value={section.content || ""}
+            onChange={(html) => onChange({ ...section, content: html })}
+            placeholder="Escreva aqui o seu texto…"
+          />
         );
       case "image":
         return (
@@ -1037,24 +1094,18 @@ function SectionEditor({
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
               <label style={{ fontSize: 12, color: "#999", marginBottom: 4, display: "block" }}>Coluna esquerda</label>
-              <div
-                ref={leftRef}
-                contentEditable
-                suppressContentEditableWarning
-                dangerouslySetInnerHTML={{ __html: section.leftContent || "" }}
-                onBlur={() => { if (leftRef.current) onChange({ ...section, leftContent: leftRef.current.innerHTML }); }}
-                style={{ minHeight: 100, padding: 12, border: "1px solid #ddd", borderRadius: 4, outline: "none", lineHeight: 1.6, fontSize: 14 }}
+              <RichTextEditor
+                variant="full"
+                value={section.leftContent || ""}
+                onChange={(html) => onChange({ ...section, leftContent: html })}
               />
             </div>
             <div>
               <label style={{ fontSize: 12, color: "#999", marginBottom: 4, display: "block" }}>Coluna direita</label>
-              <div
-                ref={rightRef}
-                contentEditable
-                suppressContentEditableWarning
-                dangerouslySetInnerHTML={{ __html: section.rightContent || "" }}
-                onBlur={() => { if (rightRef.current) onChange({ ...section, rightContent: rightRef.current.innerHTML }); }}
-                style={{ minHeight: 100, padding: 12, border: "1px solid #ddd", borderRadius: 4, outline: "none", lineHeight: 1.6, fontSize: 14 }}
+              <RichTextEditor
+                variant="full"
+                value={section.rightContent || ""}
+                onChange={(html) => onChange({ ...section, rightContent: html })}
               />
             </div>
           </div>
@@ -1075,12 +1126,12 @@ function SectionEditor({
       case "button":
         return (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <input
-              type="text"
+            <RichTextEditor
+              variant="inline"
               value={section.buttonText || ""}
-              onChange={(e) => onChange({ ...section, buttonText: e.target.value })}
+              onChange={(html) => onChange({ ...section, buttonText: html })}
               placeholder="Texto do botão"
-              style={{ padding: "8px 12px", border: "1px solid #ddd", borderRadius: 4, fontSize: 14 }}
+              compact
             />
             <input
               type="text"
@@ -1144,12 +1195,12 @@ function SectionEditor({
                 {section.imageUrl ? "Trocar imagem" : "Escolher imagem de fundo"}
               </button>
             </div>
-            <input
-              type="text"
+            <RichTextEditor
+              variant="inline"
               value={section.heading || ""}
-              onChange={(e) => onChange({ ...section, heading: e.target.value })}
+              onChange={(html) => onChange({ ...section, heading: html })}
               placeholder="Título do hero"
-              style={{ padding: "10px 14px", border: "1px solid #ddd", borderRadius: 4, fontSize: 16, fontWeight: 600 }}
+              compact
             />
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <label style={{ fontSize: 13, color: "#666" }}>Altura:</label>

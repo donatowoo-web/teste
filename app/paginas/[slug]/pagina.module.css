@@ -3,7 +3,9 @@
   color: #fff;
   min-height: 100vh;
   padding: 0;
-  overflow-x: hidden;
+  /* overflow-x: hidden promotes overflow-y to auto -> extra scrollbar.
+     overflow: clip constrains horizontal only without creating a scroll container. */
+  overflow-x: clip;
 }
 
 /* When hero is NOT first, add top spacing for navbar */
