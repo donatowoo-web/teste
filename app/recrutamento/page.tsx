@@ -2,9 +2,14 @@ import { Metadata } from "next";
 import { client } from "@/sanity/lib/client";
 import styles from "./recrutamento.module.css";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata: Metadata = {
   title: "Recrutamento | EVAPLACE - Carreiras em Construção LSF",
   description: "Junta-te à equipa EVAPLACE. Oportunidades de carreira em construção em aço leve (LSF), engenharia e produção. Trabalha connosco em Portugal.",
+  alternates: {
+    canonical: `${BASE_URL}/recrutamento`,
+  },
 };
 
 type Job = {

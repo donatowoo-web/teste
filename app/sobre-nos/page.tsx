@@ -5,9 +5,14 @@ import AboutSplitSection from "../components/AboutSplitSection";
 import AboutCardsSection from "../components/AboutCardsSection";
 import MultiStepForm from "../components/MultiStepForm";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata: Metadata = {
   title: "Sobre Nós | EVAPLACE - Especialistas em Construção LSF",
   description: "Conheça a EVAPLACE, empresa especializada em construção em aço leve (LSF - Light Steel Frame) em Portugal. Estruturas metálicas de alta qualidade, inovação e compromisso com a excelência.",
+  alternates: {
+    canonical: `${BASE_URL}/sobre-nos`,
+  },
 };
 
 export default function SobreNosPage() {

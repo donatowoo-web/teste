@@ -2,6 +2,33 @@ import { client } from "@/sanity/lib/client";
 import { notFound } from "next/navigation";
 import CandidaturaPopup from "@/app/components/CandidaturaPopup";
 import styles from "../recrutamento.module.css";
+import { Metadata } from "next";
+
+const BASE_URL = "https://www.evaplace.pt";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+  
+  const job = await client.fetch<{ title?: string; description?: string } | null>(
+    `*[_type == "job" && slug.current == $slug && isActive == true][0]{ title, description }`,
+    { slug: decodedSlug }
+  );
+
+  if (!job) return { title: "Vaga | EVAPLACE" };
+
+  return {
+    title: `${job.title} | EVAPLACE`,
+    description: job.description,
+    alternates: {
+      canonical: `${BASE_URL}/recrutamento/${slug}`,
+    },
+  };
+}
 
 // dynamicParams desativado quando não há vagas
 

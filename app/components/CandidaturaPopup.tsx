@@ -7,7 +7,7 @@ type Props = {
   jobTitle: string;
 };
 
-const WEBHOOK = "https://hook.eu1.make.com/9rebqkacjw8djh3zsah7gft9etsu7kbk";
+const WEBHOOK = "https://hook.eu1.make.com/d895wnow1v8kbmnqs7ihcn372xoo7axz";
 
 export default function CandidaturaPopup({ jobTitle }: Props) {
   const [open, setOpen] = useState(false);

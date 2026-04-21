@@ -4,6 +4,8 @@ import { client } from "@/sanity/lib/client";
 import styles from "./construcao-madeira.module.css";
 import FeaturesSection from "./FeaturesSection";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 type Post = {
   title: string;
   slug: { current: string };
@@ -34,6 +36,9 @@ export const metadata = {
     description:
       "Soluções de construção em madeira para projetos turísticos. Materiais duráveis, design contemporâneo e rentabilidade garantida.",
     images: ["/madeira/hero-madeira.jpg"],
+  },
+  alternates: {
+    canonical: `${BASE_URL}/construcao-em-madeira`,
   },
 };
 

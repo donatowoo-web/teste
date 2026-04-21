@@ -8,10 +8,15 @@ import GalleryCarousel from "./components/GalleryCarousel";
 import FAQSection from "./components/FAQSection";
 import MultiStepForm from "./components/MultiStepForm";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata: Metadata = {
   title: "Evaplace | Construção em Aço Leve LSF e Madeira em Portugal",
   description: "Especialistas em construção em aço leve (LSF - Light Steel Frame) e madeira em Portugal. Casas com estrutura metálica galvanizada, design contemporâneo e máxima eficiência energética.",
   keywords: "construção aço leve, LSF, Light Steel Frame, casas LSF, estrutura metálica, construção em madeira, Portugal, Maia",
+  alternates: {
+    canonical: BASE_URL,
+  },
   openGraph: {
     title: "Evaplace | Construção em Aço Leve LSF",
     description: "Especialistas em construção em aço leve (LSF) e madeira em Portugal. Estrutura metálica galvanizada e design contemporâneo.",

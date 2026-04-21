@@ -1,0 +1,64 @@
+RewriteEngine On
+
+# Forçar HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Remover www (opcional - descomenta se quiseres)
+# RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+# RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# ========== REDIRECTS 301 ==========
+
+# Páginas antigas
+Redirect 301 /formulario-construcao-casa-de-aco-leve/ /contactos/
+Redirect 301 /projetos-eva/ /casas-lsf-madeira/
+Redirect 301 /pesquisa-avancada/ /casas-lsf-madeira/
+Redirect 301 /formulario-construcao-casa-de-madeira/ /contactos/
+Redirect 301 /construcao-de-casas-em-madeira/ /construcao-em-lsf/
+Redirect 301 /ja-tem-projeto/ /contactos/
+Redirect 301 /wood-frame/ /construcao-em-lsf/
+Redirect 301 /minha-conta/ /
+
+# Produto com slug alterado
+Redirect 301 /produto/serra-da-estrela/ /produto/chale-serra-da-estrela/
+
+# Projetos antigos
+Redirect 301 /projetos/casa-pacos-de-gaiolo/ /casas-lsf-madeira/
+Redirect 301 /projetos/casa-em-madeira-no-geres/ /casas-lsf-madeira/
+Redirect 301 /projetos/casa-caminha/ /casas-lsf-madeira/
+Redirect 301 /projetos/casa-valenca/ /casas-lsf-madeira/
+Redirect 301 /projetos/camping-pod/ /casas-lsf-madeira/
+Redirect 301 /projetos/casa-da-arvore/ /casas-lsf-madeira/
+Redirect 301 /projetos/ /casas-lsf-madeira/
+
+# Categorias
+Redirect 301 /category/construcao-em-madeira/ /blog/
+Redirect 301 /category/construcao-em-lsf/ /blog/
+Redirect 301 /category/ /blog/
+
+# Blog posts antigos
+Redirect 301 /o-que-e-realmente-o-iva-a-6-na-construcao/ /blog/
+Redirect 301 /empresa-de-construcao-credivel-como-escolher/ /blog/
+Redirect 301 /construcao-sustentavel-aco-leve/ /blog/
+Redirect 301 /a-casa-que-cresce-consigo/ /blog/
+Redirect 301 /o-que-e-lsf/ /blog/
+Redirect 301 /construcao-em-aco-leve-seguranca-durabilidade-e-eficiencia-comprovadas/ /blog/
+Redirect 301 /arranha-ceus-madeira-europa-construcao-sustentavel/ /blog/
+Redirect 301 /isolamento-termico-e-acustico-lsf-vs-madeira-o-que-muda/ /blog/
+Redirect 301 /iva-de-6-na-construcao-de-casas-ate-648-mil-euros-o-que-muda-e-por-que/ /blog/
+Redirect 301 /esta-a-pensar-construir-em-lsf-descubra-porque-o-preco-da-casa-e-apenas-uma-parte-do-orcamento/ /blog/
+Redirect 301 /vantagens-e-desvantagens-das-casas-de-madeira-para-quem-vive-em-portugal/ /blog/
+Redirect 301 /guia-casas-madeira-lsf/ /blog/
+Redirect 301 /mass-timber-o-futuro-das-cidades-em-madeira-e-o-que-portugal-pode-aprender-com-estocolmo/ /blog/
+Redirect 301 /como-o-lsf-esta-a-acelerar-o-ritmo-da-construcao/ /blog/
+Redirect 301 /reinventar-o-conceito-de-habitacao-por-que-precisamos-de-olhar-alem-dos-centros-urbanos/ /blog/
+Redirect 301 /quanto-custa-a-incerteza-o-impacto-dos-atrasos-na-construcao/ /blog/
+Redirect 301 /manutencao-de-casas-de-madeira-dicas-para-preservar-a-durabilidade-e-a-aparencia/ /blog/
+
+# WooCommerce - atributos de produto
+RewriteRule ^pa_(.*)$ /casas-lsf-madeira/ [R=301,L]
+RewriteRule ^product-category/(.*)$ /casas-lsf-madeira/ [R=301,L]
+
+# ========== ERRO 404 ==========
+ErrorDocument 404 /404.html

@@ -10,6 +10,8 @@ import { getRandomCasas } from "../../lib/getRandomCasas";
 
 import styles from "./casa.module.css";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export function generateStaticParams() {
   return casas.map((casa) => ({ slug: casa.slug }));
 }
@@ -27,6 +29,9 @@ export async function generateMetadata({
   return {
     title: `${casa.nomeProjeto} | EVAPLACE`,
     description: casa.descricao,
+    alternates: {
+      canonical: `${BASE_URL}/produto/${slug}`,
+    },
   };
 }
 

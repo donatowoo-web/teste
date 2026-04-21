@@ -7,6 +7,22 @@ import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
 import GTMPageView from "./components/GTMPageView";
 import SmoothScroll from "./components/SmoothScroll";
+import { Metadata } from "next";
+
+const BASE_URL = "https://www.evaplace.pt";
+
+export function generateCanonicalMetadata(pathname: string): Metadata {
+  const url = `${BASE_URL}${pathname}`;
+  return {
+    alternates: {
+      canonical: url,
+      languages: {
+        pt: url,
+        en: `${BASE_URL}/en${pathname}`,
+      },
+    },
+  };
+}
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,6 +36,17 @@ const playfair = Playfair_Display({
   variable: "--font-serif",
 });
 
+export function generateMetadata(): Metadata {
+  return {
+    alternates: {
+      canonical: BASE_URL,
+      languages: {
+        pt: BASE_URL,
+      },
+    },
+  };
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -27,6 +54,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt">
+      <head>
+        <link rel="canonical" href={BASE_URL} />
+      </head>
       <GoogleTagManager gtmId="GTM-MXPCKV3G" />
       <body className={`${poppins.variable} ${playfair.variable}`}>
         <GTMPageView />

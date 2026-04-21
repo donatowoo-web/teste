@@ -3,10 +3,15 @@ import { casas } from "../data/casas";
 import FadeInOnScroll from "../components/FadeInOnScroll";
 import styles from "./casas.module.css";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata = {
   title: "Casas em Aço Leve LSF | EVAPLACE",
   description:
     "Explore os nossos modelos de casas em aço leve (LSF - Light Steel Frame). Estrutura metálica galvanizada, arquitetura moderna e máxima eficiência energética em Portugal.",
+  alternates: {
+    canonical: `${BASE_URL}/casas-lsf-madeira`,
+  },
 };
 
 export default function CasasLSFPage() {

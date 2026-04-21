@@ -4,10 +4,15 @@ import Link from "next/link";
 import { projetos } from "../data/projetos";
 import styles from "./projetos-eva.module.css";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata: Metadata = {
   title: "Projetos EVA | EVAPLACE - Construção em Aço Leve e Madeira",
   description:
     "Explore os nossos projetos de construção em aço leve (LSF) e madeira. Casas, alojamentos e estruturas com design contemporâneo e qualidade garantida.",
+  alternates: {
+    canonical: `${BASE_URL}/projetos-eva`,
+  },
 };
 
 export default function ProjetosEvaPage() {

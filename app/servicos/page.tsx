@@ -2,9 +2,14 @@ import { Metadata } from "next";
 import FadeInOnScroll from "../components/FadeInOnScroll";
 import styles from "./servicos.module.css";
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata: Metadata = {
   title: "Serviços | EVAPLACE - Construção em Aço Leve LSF",
   description: "Serviços completos de construção em aço leve (LSF), arquitetura e engenharia. Casas com estrutura metálica galvanizada, soluções chave na mão em Portugal.",
+  alternates: {
+    canonical: `${BASE_URL}/servicos`,
+  },
 };
 
 export const dynamic = "error";

@@ -4,9 +4,14 @@ import { client } from "@/sanity/lib/client";
 
 export const revalidate = 60; // revalidate every 60 seconds
 
+const BASE_URL = "https://www.evaplace.pt";
+
 export const metadata: Metadata = {
   title: "Blog | EVAPLACE - Artigos sobre Construção em Aço Leve LSF",
   description: "Artigos e novidades sobre construção em aço leve (LSF - Light Steel Frame), estruturas metálicas, eficiência energética e tendências de construção em Portugal.",
+  alternates: {
+    canonical: `${BASE_URL}/blog`,
+  },
 };
 
 type Post = {

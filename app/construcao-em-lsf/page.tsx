@@ -3,6 +3,17 @@ import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import styles from "./construcao-lsf.module.css";
 import FAQAccordion from "./FAQAccordion";
+import { Metadata } from "next";
+
+const BASE_URL = "https://www.evaplace.pt";
+
+export const metadata: Metadata = {
+  title: "Construção em Aço Leve LSF | EVAPLACE",
+  description: "Construção em aço leve (LSF - Light Steel Frame). Estrutura metálica galvanizada, construção rápida, eficiente e sustentável em Portugal.",
+  alternates: {
+    canonical: `${BASE_URL}/construcao-em-lsf`,
+  },
+};
 
 type Post = {
   title: string;
@@ -14,12 +25,6 @@ type Post = {
     alt?: string;
   };
   publishedAt?: string;
-};
-
-export const metadata = {
-  title: "Construção em Light Steel Frame (LSF) | EVAPLACE",
-  description:
-    "Casas em Light Steel Frame (LSF) - Construção em aço leve com rapidez, eficiência e menor impacto ambiental. Descubra as vantagens do sistema LSF em Portugal.",
 };
 
 const FEATURES = [
