@@ -6,8 +6,7 @@ import { Metadata } from "next";
 import styles from "../artigo.module.css";
 import MultiStepFormBlog from "../components/MultiStepFormBlog";
 
-export const dynamicParams = true;
-export const revalidate = 60; // revalidate every 60 seconds
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const slugs: string[] = await client.fetch(`

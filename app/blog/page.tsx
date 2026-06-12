@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { client } from "@/sanity/lib/client";
 
-export const revalidate = 60; // revalidate every 60 seconds
-
 const BASE_URL = "https://www.evaplace.pt";
 
 export const metadata: Metadata = {

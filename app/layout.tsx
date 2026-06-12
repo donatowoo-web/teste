@@ -38,6 +38,7 @@ const playfair = Playfair_Display({
 
 export function generateMetadata(): Metadata {
   return {
+    metadataBase: new URL(BASE_URL),
     alternates: {
       canonical: BASE_URL,
       languages: {
