@@ -15,30 +15,37 @@ Não precisas de FileZilla nem de ter o PC ligado: quem constrói e envia o site
 
 ```
 Botão Publicar ──> /api/trigger-deploy.php (no teu servidor)
-                       │  (usa o token guardado em /www/.github_token)
+                       │  (usa o token guardado em .github_token na RAIZ do FTP)
                        ▼
                    GitHub Actions: constrói o site (npm run build)
                        │
                        ▼
-                   Envia por SSH para o servidor: /www/out  (site novo)
-                   A versão anterior fica em /www/out_old  (backup)
+                   Envia por FTP (FTPS, porta 21) para a pasta out/ do servidor
+                   Incremental: só sobe ficheiros que mudaram.
 ```
 
 A barra de progresso lê o estado real no GitHub através de
 `/api/deploy-status.php`.
 
+## Estrutura real do servidor (FTP)
+
+- Ligação: `km31109.keymachine.de:21`, utilizador `evaplaceftp`, **FTPS** (TLS).
+- O site evaplace.pt é servido a partir da pasta **`out/`** (na raiz do FTP).
+- O **token do GitHub** está em **`.github_token`** na raiz do FTP
+  (um nível ACIMA de `out/`), por isso a web nunca lhe chega.
+- A raiz tem muitos backups antigos (`out_old`, `out_bk`, `out_*.zip`, etc.) —
+  não são usados pelo site; podem ser limpos um dia.
+
 ## Reverter o site (botão de emergência)
 
-Se uma publicação correr mal, a versão anterior está guardada no servidor.
-Para voltar atrás, corre no PC (Git Bash):
+Antes de cada publicação **não** há swap de pastas (o FTP atualiza ficheiro a
+ficheiro). Por isso o "reverter" rápido é repor um backup. Tens vários no
+servidor (ex.: `out_06_05_bk`, `out_bk`, e os `.zip`). Em último recurso,
+o FileZilla continua a funcionar: enviar uma versão antiga para `out/`.
 
-```bash
-ssh -i ~/.ssh/id_ed25519 evaplace@km31109.keymachine.de \
-  "cd /www && mv out out_broken && mv out_old out && mv out_broken out_old"
-```
-
-Isto troca o site atual pelo backup (e guarda o "mau" como out_old,
-por isso correr 2x volta tudo ao que estava).
+Para uma reversão limpa, o mais simples é abrir o GitHub → Actions, encontrar
+um deploy anterior que estava bom e... (como o build vem do código, basta
+voltar o código atrás com `git revert` e carregar Publicar outra vez).
 
 ## Se o botão Publicar falhar (planos B)
 
@@ -51,15 +58,15 @@ por isso correr 2x volta tudo ao que estava).
 
 | Peça | Onde | Função |
 |---|---|---|
-| `public/api/trigger-deploy.php` | servidor, `/www/out/api/` | recebe o clique e acorda o GitHub |
-| `public/api/deploy-status.php` | servidor, `/www/out/api/` | diz à barra de progresso como vai a construção |
-| `/www/.github_token` | servidor (fora da pasta pública) | token fine-grained do GitHub (Actions: read/write, só o repo `teste`) |
-| `.github/workflows/deploy.yml` | repo | o robô: build + envio por SSH |
-| Secrets do repo no GitHub | github.com → Settings → Secrets | SSH_PRIVATE_KEY, SSH_HOST, SSH_USER, SANITY_WRITE_TOKEN, … |
+| `public/api/trigger-deploy.php` | servidor, `out/api/` | recebe o clique e acorda o GitHub |
+| `public/api/deploy-status.php` | servidor, `out/api/` | diz à barra de progresso como vai a construção |
+| `.github_token` | servidor, **raiz do FTP** (fora de `out/`) | token do GitHub (Actions). PHP procura-o em vários caminhos |
+| `.github/workflows/deploy.yml` | repo | o robô: build + envio por **FTP** |
+| Secrets do repo no GitHub | github.com → repo → Settings → Secrets and variables → Actions | FTP_HOST, FTP_USER, FTP_PASSWORD, SANITY_WRITE_TOKEN, … |
 
-## Se o token do GitHub expirar
+## Se o token do GitHub expirar / mudar a password do FTP
 
-O botão passa a dar "GitHub respondeu 401". Criar token novo em
-github.com → Settings → Developer settings → Fine-grained tokens
-(Repository access: só `donatowoo-web/teste`; Permissions: Actions = Read and write)
-e substituir o conteúdo de `/www/.github_token` no servidor.
+- Botão dá **"GitHub respondeu 401"** → token do GitHub mudou: gerar novo e
+  substituir o ficheiro `.github_token` na raiz do FTP (via FileZilla).
+- Deploy falha no passo **FTP** → password do FTP mudou: atualizar o secret
+  `FTP_PASSWORD` em github.com → repo → Settings → Secrets and variables → Actions.
