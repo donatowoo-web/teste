@@ -43,7 +43,7 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./out/
-          server-dir: ./
+          server-dir: ./out/
           dangerous-clean-slate: false
           # Nunca tocar nestes ficheiros do servidor:
           exclude: |

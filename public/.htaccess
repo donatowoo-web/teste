@@ -17,11 +17,24 @@
 RedirectPermanent /sitemap_index.xml /sitemap.xml
 
 # Nunca servir o token do GitHub nem o estado do deploy pela web
+# (compativel com Apache 2.2 e 2.4)
 <Files ".github_token">
-  Require all denied
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
 </Files>
 <Files ".ftp-deploy-sync-state.json">
-  Require all denied
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
 </Files>
 
 # Content Security Policy para GTM e GA4
