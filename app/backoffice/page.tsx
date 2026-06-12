@@ -1350,7 +1350,7 @@ export default function BackofficePage() {
   const [deploying, setDeploying] = useState(false);
   const [deployState, setDeployState] = useState<string>("");
 
-  async function pollDeployStatus() {
+  async function pollDeployStatus(since: string) {
     const stateLabels: Record<string, string> = {
       QUEUED: "Na fila...",
       BUILDING: "A construir site...",
@@ -1359,10 +1359,10 @@ export default function BackofficePage() {
       CANCELED: "Publicacao cancelada",
     };
 
-    for (let i = 0; i < 40; i++) { // poll up to ~3 min
+    for (let i = 0; i < 60; i++) { // poll up to ~5 min
       await new Promise((r) => setTimeout(r, 5000));
       try {
-        const res = await fetch("/api/deploy-status");
+        const res = await fetch(`/api/deploy-status.php?since=${encodeURIComponent(since)}`);
         const data = await res.json();
         const label = stateLabels[data.state] || data.state;
         setDeployState(label);
@@ -1374,7 +1374,7 @@ export default function BackofficePage() {
       } catch { /* continue polling */ }
     }
     setDeployState("");
-    showStatus("Timeout — verifica o estado no Vercel", true);
+    showStatus("Timeout — verifica o estado no GitHub (Actions)", true);
     setDeploying(false);
   }
 
@@ -1384,12 +1384,15 @@ export default function BackofficePage() {
     setDeployState("A iniciar...");
     showStatus("A iniciar publicacao...");
     try {
-      const hookUrl = "https://api.vercel.com/v1/integrations/deploy/prj_CeG7RVrMa71vey9TFDJmTzpHhhPt/XQZsoZ86He";
-      const res = await fetch(hookUrl, { method: "POST" });
+      const res = await fetch("/api/trigger-deploy.php", {
+        method: "POST",
+        headers: { "X-Deploy-Secret": "eva-deploy-2026-secret-key" },
+      });
       if (res.ok) {
+        const data = await res.json().catch(() => null);
         setDeployState("Na fila...");
         showStatus("Na fila...");
-        pollDeployStatus();
+        pollDeployStatus(data?.dispatchedAt || new Date().toISOString());
       } else {
         showStatus(`Erro na publicacao (${res.status})`, true);
         setDeploying(false);
