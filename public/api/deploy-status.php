@@ -5,12 +5,28 @@
 
 $GH_REPO  = 'donatowoo-web/teste';
 $WORKFLOW = 'deploy.yml';
-$TOKEN_FILE = dirname(__DIR__, 2) . '/.github_token'; // /www/.github_token
+
+// O token do GitHub vive FORA do alcance da web. Procura-o em varios sitios.
+function read_github_token() {
+    $candidates = array(
+        dirname(__DIR__, 2) . '/.github_token',
+        dirname(__DIR__) . '/.github_token',
+        '/www/.github_token',
+        getenv('HOME') ? getenv('HOME') . '/.github_token' : null,
+    );
+    foreach ($candidates as $c) {
+        if ($c && is_readable($c)) {
+            $t = trim((string) file_get_contents($c));
+            if ($t !== '') return $t;
+        }
+    }
+    return '';
+}
 
 header('Content-Type: application/json');
 header('Cache-Control: no-store');
 
-$token = @trim(@file_get_contents($TOKEN_FILE));
+$token = read_github_token();
 if (!$token) {
     http_response_code(500);
     echo json_encode(['error' => 'Token do GitHub nao configurado no servidor']);

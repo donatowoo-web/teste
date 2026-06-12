@@ -8,7 +8,24 @@ $SECRET   = 'eva-deploy-2026-secret-key';
 $GH_REPO  = 'donatowoo-web/teste';
 $WORKFLOW = 'deploy.yml';
 $BRANCH   = 'master';
-$TOKEN_FILE = dirname(__DIR__, 2) . '/.github_token'; // /www/.github_token
+
+// O token do GitHub vive FORA do alcance da web. Procura-o em varios sitios
+// (o layout exato do servidor pode variar), o primeiro que existir ganha.
+function read_github_token() {
+    $candidates = array(
+        dirname(__DIR__, 2) . '/.github_token', // um nivel acima da pasta publica
+        dirname(__DIR__) . '/.github_token',    // raiz da pasta publica
+        '/www/.github_token',
+        getenv('HOME') ? getenv('HOME') . '/.github_token' : null,
+    );
+    foreach ($candidates as $c) {
+        if ($c && is_readable($c)) {
+            $t = trim((string) file_get_contents($c));
+            if ($t !== '') return $t;
+        }
+    }
+    return '';
+}
 
 header('Content-Type: application/json');
 
@@ -18,15 +35,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$headers = getallheaders();
-$auth = isset($headers['X-Deploy-Secret']) ? $headers['X-Deploy-Secret'] : '';
+$headers = array_change_key_case(getallheaders(), CASE_LOWER);
+$auth = isset($headers['x-deploy-secret']) ? $headers['x-deploy-secret'] : '';
 if ($auth !== $SECRET) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
     exit;
 }
 
-$token = @trim(@file_get_contents($TOKEN_FILE));
+$token = read_github_token();
 if (!$token) {
     http_response_code(500);
     echo json_encode(['error' => 'Token do GitHub nao configurado no servidor']);

@@ -28,17 +28,26 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy
-        run: |
-          tar -czf /tmp/out.tar.gz -C out .
-          scp -i ~/.ssh/id_ed25519 /tmp/out.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/www/out.tar.gz
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /www && rm -rf out_old && mv out out_old && mkdir out && tar -xzf out.tar.gz -C out && rm out.tar.gz"
-          echo "Deploy complete!"
-
+      # Envio por FTP para o servidor (keymachine).
+      # Este servidor NAO tem SSH para o utilizador do site — so FTP (porta 21).
+      # Sobe o conteudo de out/ para a raiz do FTP (= pasta publica do site).
+      # Incremental: depois da 1a vez, so envia ficheiros alterados.
+      # NUNCA apaga ficheiros que nao conhece (dangerous-clean-slate: false).
+      # Se falhar com erro de TLS/certificado, trocar protocol para: ftp
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./out/
+          server-dir: ./
+          dangerous-clean-slate: false
+          # Nunca tocar nestes ficheiros do servidor:
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github_token
+            **/.ftp-deploy-sync-state.json

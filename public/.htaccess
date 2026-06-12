@@ -16,6 +16,14 @@
 # Redirect sitemap_index.xml para sitemap.xml
 RedirectPermanent /sitemap_index.xml /sitemap.xml
 
+# Nunca servir o token do GitHub nem o estado do deploy pela web
+<Files ".github_token">
+  Require all denied
+</Files>
+<Files ".ftp-deploy-sync-state.json">
+  Require all denied
+</Files>
+
 # Content Security Policy para GTM e GA4
 <IfModule mod_headers.c>
   Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagmanager.google.com https://connect.facebook.net https://translate.google.com https://translate.googleapis.com; connect-src 'self' https://onxd36ek.api.sanity.io https://onxd36ek.apicdn.sanity.io https://api.github.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://hook.eu1.make.com https://www.facebook.com https://translate.googleapis.com; img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://ssl.gstatic.com https://www.gstatic.com https://cdn.sanity.io https://www.facebook.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://tagmanager.google.com https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com data:; frame-src https://www.googletagmanager.com;"
