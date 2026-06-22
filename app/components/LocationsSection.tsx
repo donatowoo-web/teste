@@ -45,11 +45,11 @@ export default async function LocationsSection() {
     <section
       style={{
         background: "#0a0a0a",
-        padding: "80px 16px",
+        padding: "80px 24px",
         borderTop: "1px solid rgba(255,255,255,0.1)",
       }}
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1400, margin: "0 auto" }}>
         <h2
           style={{
             color: "#fff",
@@ -73,13 +73,7 @@ export default async function LocationsSection() {
           construção de casas em aço leve (LSF) perto de si.
         </p>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: 16,
-          }}
-        >
+        <div className="locGrid">
           {pages.map((p) => (
             <a key={p.slug} href={`/paginas/${p.slug}/`} className="locCard">
               <span className="locKicker">Construção em aço leve</span>
@@ -93,6 +87,17 @@ export default async function LocationsSection() {
       </div>
 
       <style>{`
+        .locGrid {
+          display: grid;
+          gap: 16px;
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 600px) {
+          .locGrid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 960px) {
+          .locGrid { grid-template-columns: repeat(3, 1fr); }
+        }
         .locCard {
           position: relative;
           display: flex;
@@ -117,7 +122,7 @@ export default async function LocationsSection() {
         }
         .locCity {
           font-size: 21px;
-          font-weight: 600;
+          font-weight: 400;
           color: #fff;
           line-height: 1.25;
         }
