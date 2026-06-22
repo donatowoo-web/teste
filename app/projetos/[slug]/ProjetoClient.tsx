@@ -35,13 +35,15 @@ export default function ProjetoClient({ projeto }: { projeto: Projeto }) {
       {/* Hero com imagem principal */}
       <section className={styles.hero}>
         <div className={styles.heroImage}>
-          <Image
-            src={projeto.imagens[0]}
-            alt={projeto.titulo}
-            fill
-            style={{ objectFit: "cover" }}
-            priority
-          />
+          {(projeto.imagens[0] || projeto.thumbnail) && (
+            <Image
+              src={projeto.imagens[0] || projeto.thumbnail}
+              alt={projeto.titulo}
+              fill
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          )}
           <div className={styles.heroOverlay} />
         </div>
         <div className={styles.heroContent}>

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { projetos } from "../data/projetos";
+import { getProjetos } from "../lib/getProjetos";
 import styles from "./projetos-eva.module.css";
 
 const BASE_URL = "https://www.evaplace.pt";
@@ -15,7 +15,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProjetosEvaPage() {
+export default async function ProjetosEvaPage() {
+  const projetos = await getProjetos();
   return (
     <main className={styles.main}>
       <div className={styles.topSpacer} />
@@ -29,12 +30,14 @@ export default function ProjetosEvaPage() {
               className={styles.card}
             >
               <div className={styles.media}>
-                <Image
-                  src={projeto.thumbnail}
-                  alt={projeto.titulo}
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
+                {projeto.thumbnail && (
+                  <Image
+                    src={projeto.thumbnail}
+                    alt={projeto.titulo}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                )}
                 <div className={styles.overlay} />
                 <div className={styles.caption}>
                   <h2 className={styles.title}>{projeto.titulo}</h2>

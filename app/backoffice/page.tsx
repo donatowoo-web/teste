@@ -31,7 +31,7 @@ type Post = {
   content?: any[];
 };
 
-type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor";
+type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor" | "projetos" | "projeto-editor";
 
 // ─── Page Builder Types ───
 type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button" | "hero-image" | "html";
@@ -1314,6 +1314,22 @@ export default function BackofficePage() {
   const [uploadingCasaImg, setUploadingCasaImg] = useState(false);
   const [confirmDeleteCasa, setConfirmDeleteCasa] = useState<any | null>(null);
 
+  // Projetos state
+  const [projetos, setProjetos] = useState<any[]>([]);
+  const [editingProjeto, setEditingProjeto] = useState<any | null>(null);
+  const [projTitulo, setProjTitulo] = useState("");
+  const [projSlug, setProjSlug] = useState("");
+  const [projDescricao, setProjDescricao] = useState("");
+  const [projLocalizacao, setProjLocalizacao] = useState("");
+  const [projSistema, setProjSistema] = useState("");
+  const [projArea, setProjArea] = useState("");
+  const [projAno, setProjAno] = useState("");
+  const [projFinalidade, setProjFinalidade] = useState("");
+  const [projThumbnail, setProjThumbnail] = useState("");
+  const [projImagens, setProjImagens] = useState<string[]>([]);
+  const [savingProjeto, setSavingProjeto] = useState(false);
+  const [confirmDeleteProjeto, setConfirmDeleteProjeto] = useState<any | null>(null);
+
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
     setStatusError(isError);
@@ -1334,6 +1350,7 @@ export default function BackofficePage() {
   useEffect(() => {
     if (view === "list") loadPosts();
     if (view === "casas") loadCasas();
+    if (view === "projetos") loadProjetos();
   }, [view]);
 
   async function loadPosts() {
@@ -1461,6 +1478,101 @@ export default function BackofficePage() {
       await sanityMutate([{ delete: { id: c._id } }]);
       showStatus("Modelo eliminado.");
       loadCasas();
+    } catch (e: any) {
+      showStatus("Erro ao eliminar: " + (e.message || ""), true);
+    }
+  }
+
+  // ─── Projetos ───
+  async function loadProjetos() {
+    setLoading(true);
+    try {
+      const data = await sanityFetch(`
+        *[_type == "projeto" && !(_id in path("drafts.**"))]
+          | order(coalesce(ordem, 9999) asc, titulo asc){
+          _id, titulo, "slug": slug.current, descricao, localizacao, sistema,
+          area, ano, finalidade, thumbnail, "imagens": coalesce(imagens, []), ordem
+        }
+      `);
+      setProjetos(data || []);
+    } catch {
+      showStatus("Erro ao carregar projetos", true);
+    }
+    setLoading(false);
+  }
+
+  function openNewProjeto() {
+    setEditingProjeto(null);
+    setProjTitulo(""); setProjSlug(""); setProjDescricao(""); setProjLocalizacao("");
+    setProjSistema(""); setProjArea(""); setProjAno(""); setProjFinalidade("");
+    setProjThumbnail(""); setProjImagens([]);
+    setView("projeto-editor");
+  }
+
+  function openEditProjeto(p: any) {
+    setEditingProjeto(p);
+    setProjTitulo(p.titulo || "");
+    setProjSlug(p.slug || "");
+    setProjDescricao(p.descricao || "");
+    setProjLocalizacao(p.localizacao || "");
+    setProjSistema(p.sistema || "");
+    setProjArea(p.area || "");
+    setProjAno(p.ano || "");
+    setProjFinalidade(p.finalidade || "");
+    setProjThumbnail(p.thumbnail || "");
+    setProjImagens(Array.isArray(p.imagens) ? p.imagens : []);
+    setView("projeto-editor");
+  }
+
+  async function saveProjeto() {
+    if (!projTitulo.trim()) {
+      showStatus("Indica o título do projeto", true);
+      return;
+    }
+    if (!projThumbnail.trim()) {
+      showStatus("Escolhe uma imagem de capa para o projeto", true);
+      return;
+    }
+    const slugVal = (projSlug.trim() || slugify(projTitulo));
+    setSavingProjeto(true);
+    try {
+      const fields = {
+        _type: "projeto",
+        titulo: projTitulo.trim(),
+        slug: { _type: "slug", current: slugVal },
+        descricao: projDescricao,
+        localizacao: projLocalizacao.trim(),
+        sistema: projSistema.trim(),
+        area: projArea.trim(),
+        ano: projAno.trim(),
+        finalidade: projFinalidade.trim(),
+        thumbnail: projThumbnail.trim(),
+        imagens: projImagens.filter(Boolean),
+      };
+      if (editingProjeto?._id) {
+        await sanityMutate([{ patch: { id: editingProjeto._id, set: fields } }]);
+      } else {
+        await sanityMutate([{ create: { _id: `projeto-${slugVal}`, ...fields, ordem: 999 } }]);
+      }
+      showStatus("Projeto guardado! Carrega em Publicar para o pôr no site.");
+      setView("projetos");
+    } catch (e: any) {
+      const msg = (e.message || "");
+      if (/already exists/i.test(msg)) {
+        showStatus("Já existe um projeto com esse link (slug). Muda o título/slug.", true);
+      } else {
+        showStatus("Erro ao guardar: " + msg, true);
+      }
+    }
+    setSavingProjeto(false);
+  }
+
+  async function handleDeleteProjeto(p: any) {
+    setConfirmDeleteProjeto(null);
+    try {
+      await sanityMutate([{ delete: { id: p._id } }]);
+      showStatus("Projeto eliminado.");
+      loadProjetos();
     } catch (e: any) {
       showStatus("Erro ao eliminar: " + (e.message || ""), true);
     }
@@ -2166,6 +2278,7 @@ export default function BackofficePage() {
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Páginas</button>
               <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
+              <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2264,6 +2377,7 @@ export default function BackofficePage() {
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
               <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Casas</button>
+              <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2509,6 +2623,240 @@ export default function BackofficePage() {
     );
   }
 
+  // PROJETOS LIST VIEW
+  if (view === "projetos") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>Backoffice EVAPLACE</h1>
+          <div className={styles.headerActions}>
+            <div className={styles.navTabs}>
+              <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
+              <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+              <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
+              <button className={`${styles.navTab} ${styles.navTabActive}`}>Projetos</button>
+            </div>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
+              onClick={handleDeploy}
+              disabled={deploying}
+            >
+              {deploying ? (deployState || "A publicar...") : "Publicar Site"}
+            </button>
+            <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`} onClick={handleLogout}>
+              Sair
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          <div className={styles.listHeader}>
+            <h2>Projetos ({projetos.length})</h2>
+            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewProjeto}>
+              Novo Projeto
+            </button>
+          </div>
+
+          {loading ? (
+            <div className={styles.loading}>
+              <span className={styles.spinner} /> A carregar...
+            </div>
+          ) : projetos.length === 0 ? (
+            <div className={styles.emptyState}>
+              <p>Ainda não existem projetos.</p>
+              <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewProjeto}>
+                Criar primeiro projeto
+              </button>
+            </div>
+          ) : (
+            <div className={styles.postList}>
+              {projetos.map((p) => (
+                <div key={p._id} className={styles.postItem} onClick={() => openEditProjeto(p)}>
+                  <div className={styles.postThumb}>
+                    {p.thumbnail && <img src={p.thumbnail} alt="" />}
+                  </div>
+                  <div className={styles.postInfo}>
+                    <h3>{p.titulo}</h3>
+                    <span>
+                      {[p.localizacao, p.ano].filter(Boolean).join(" · ")} · /projetos/{p.slug}
+                    </span>
+                  </div>
+                  <div className={styles.postActions}>
+                    <a
+                      href={`https://evaplace.pt/projetos/${p.slug}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${styles.btn} ${styles.btnSmall}`}
+                      style={{ textDecoration: "none", background: "#1a73e8", color: "#fff" }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Ver no site
+                    </a>
+                    <button
+                      className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
+                      onClick={(e) => { e.stopPropagation(); openEditProjeto(p); }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className={`${styles.btn} ${styles.btnDanger} ${styles.btnSmall}`}
+                      onClick={(e) => { e.stopPropagation(); setConfirmDeleteProjeto(p); }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {confirmDeleteProjeto && (
+          <ConfirmModal
+            title="Eliminar projeto"
+            message={`Tem a certeza que quer eliminar "${confirmDeleteProjeto.titulo}"? Esta ação não pode ser revertida.`}
+            onConfirm={() => handleDeleteProjeto(confirmDeleteProjeto)}
+            onCancel={() => setConfirmDeleteProjeto(null)}
+          />
+        )}
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
+  // PROJETO EDITOR VIEW
+  if (view === "projeto-editor") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <button
+            className={`${styles.btn} ${styles.btnBack}`}
+            onClick={() => setView("projetos")}
+            title="Voltar"
+          >
+            &#8592; Voltar
+          </button>
+          <h1>{editingProjeto ? "Editar Projeto" : "Novo Projeto"}</h1>
+          <div className={styles.headerActions}>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              onClick={saveProjeto}
+              disabled={savingProjeto}
+            >
+              {savingProjeto ? "A guardar..." : "Guardar"}
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.editor}>
+          <div className={styles.field}>
+            <label>Título</label>
+            <input
+              type="text"
+              value={projTitulo}
+              onChange={(e) => {
+                setProjTitulo(e.target.value);
+                if (!editingProjeto) setProjSlug(slugify(e.target.value));
+              }}
+              placeholder="Ex: Casa Caminha"
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label>Slug (link da página)</label>
+            <input type="text" value={projSlug} onChange={(e) => setProjSlug(e.target.value)} placeholder="casa-caminha" />
+          </div>
+
+          <div className={styles.field}>
+            <label>Descrição</label>
+            <textarea value={projDescricao} onChange={(e) => setProjDescricao(e.target.value)} rows={4} placeholder="Descrição do projeto" />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className={styles.field}>
+              <label>Localização</label>
+              <input type="text" value={projLocalizacao} onChange={(e) => setProjLocalizacao(e.target.value)} placeholder="Caminha" />
+            </div>
+            <div className={styles.field}>
+              <label>Sistema construtivo</label>
+              <input type="text" value={projSistema} onChange={(e) => setProjSistema(e.target.value)} placeholder="Madeira" />
+            </div>
+            <div className={styles.field}>
+              <label>Área</label>
+              <input type="text" value={projArea} onChange={(e) => setProjArea(e.target.value)} placeholder="138 m²" />
+            </div>
+            <div className={styles.field}>
+              <label>Ano</label>
+              <input type="text" value={projAno} onChange={(e) => setProjAno(e.target.value)} placeholder="2025" />
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label>Finalidade</label>
+            <input type="text" value={projFinalidade} onChange={(e) => setProjFinalidade(e.target.value)} placeholder="Habitação permanente" />
+          </div>
+
+          <div className={styles.field}>
+            <label>Imagem de capa</label>
+            {projThumbnail ? (
+              <div className={styles.imagePreview}>
+                <img src={projThumbnail} alt="capa" />
+                <button className={styles.removeImage} onClick={() => setProjThumbnail("")}>X</button>
+              </div>
+            ) : (
+              <div className={styles.imageUpload}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    if (f) { const u = await uploadCasaImage(f); if (u) setProjThumbnail(u); }
+                  }}
+                />
+                <p>{uploadingCasaImg ? "A enviar..." : "Clique para escolher a imagem de capa"}</p>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <label>Galeria ({projImagens.length} imagens)</label>
+            {projImagens.length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 10, marginBottom: 12 }}>
+                {projImagens.map((src, idx) => (
+                  <div key={src + idx} style={{ position: "relative" }}>
+                    <img src={src} alt="" style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 4, display: "block" }} />
+                    <button
+                      onClick={() => setProjImagens((prev) => prev.filter((_, i) => i !== idx))}
+                      style={{ position: "absolute", top: 4, right: 4, background: "rgba(0,0,0,0.7)", color: "#fff", border: "none", borderRadius: 4, width: 22, height: 22, cursor: "pointer", lineHeight: "20px" }}
+                      title="Remover"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className={styles.imageUpload}>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={async (e) => {
+                  const files = Array.from(e.target.files || []);
+                  const urls: string[] = [];
+                  for (const f of files) { const u = await uploadCasaImage(f); if (u) urls.push(u); }
+                  if (urls.length) setProjImagens((prev) => [...prev, ...urls]);
+                }}
+              />
+              <p>{uploadingCasaImg ? "A enviar..." : "Adicionar imagens à galeria"}</p>
+            </div>
+          </div>
+        </div>
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
   // LIST VIEW (Articles)
   return (
     <div className={styles.container}>
@@ -2519,6 +2867,7 @@ export default function BackofficePage() {
             <button className={`${styles.navTab} ${styles.navTabActive}`}>Blog</button>
             <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
             <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
+            <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
           </div>
           <button
             className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}

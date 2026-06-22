@@ -1,8 +1,9 @@
 import { Metadata } from "next";
-import { projetos } from "../../data/projetos";
+import { getProjetos } from "../../lib/getProjetos";
 import ProjetoClient from "./ProjetoClient";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const projetos = await getProjetos();
   return projetos.map((projeto) => ({
     slug: projeto.slug,
   }));
@@ -10,6 +11,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const projetos = await getProjetos();
   const projeto = projetos.find((p) => p.slug === slug);
 
   if (!projeto) {
@@ -26,6 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProjetoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const projetos = await getProjetos();
   const projeto = projetos.find((p) => p.slug === slug);
 
   if (!projeto) {
