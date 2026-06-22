@@ -58,3 +58,12 @@ jobs:
             **/.git*/**
             **/.github_token
             **/.ftp-deploy-sync-state.json
+            **/*.tmp_up
+            # Pastas de fotos pesadas (estáticas, já no servidor, nunca mudam pelo
+            # backoffice). Excluí-las mantém cada publicação pequena e fiável
+            # (evita o limite de ligações FTP do servidor). Se precisares de
+            # mudar uma destas fotos, envia-a por FileZilla.
+            Casas/**
+            plantas/**
+            video/**
+            gallery/**

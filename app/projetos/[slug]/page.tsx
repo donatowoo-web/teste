@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${projeto.titulo} | EVAPLACE`,
     description: projeto.descricao,
+    alternates: { canonical: `https://www.evaplace.pt/projetos/${slug}/` },
   };
 }
 
