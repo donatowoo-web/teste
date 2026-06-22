@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { casas } from "../data/casas";
+import { getCasas } from "../lib/getCasas";
 import FadeInOnScroll from "../components/FadeInOnScroll";
 import styles from "./casas.module.css";
 
@@ -14,7 +14,8 @@ export const metadata = {
   },
 };
 
-export default function CasasLSFPage() {
+export default async function CasasLSFPage() {
+  const casas = await getCasas();
   return (
     <main className={styles.wrapper}>
       {/* espaço equivalente ao antigo h1 */}
@@ -28,14 +29,16 @@ export default function CasasLSFPage() {
               className={styles.card}
             >
               <div className={styles.media}>
-                <Image
-                  src={casa.thumbnail}
-                  alt={`Casa ${casa.nomeProjeto} em LSF e madeira`}
-                  fill
-                  style={{ objectFit: "cover" }}
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
-                />
+                {casa.thumbnail && (
+                  <Image
+                    src={casa.thumbnail}
+                    alt={`Casa ${casa.nomeProjeto} em LSF e madeira`}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
+                  />
+                )}
 
                 <div className={styles.overlay} />
 

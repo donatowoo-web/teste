@@ -31,7 +31,7 @@ type Post = {
   content?: any[];
 };
 
-type View = "login" | "list" | "editor" | "pages" | "page-builder";
+type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor";
 
 // ─── Page Builder Types ───
 type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button" | "hero-image" | "html";
@@ -1298,6 +1298,22 @@ export default function BackofficePage() {
   const [confirmDeletePage, setConfirmDeletePage] = useState<PageDoc | null>(null);
   const [showPagePreview, setShowPagePreview] = useState(false);
 
+  // Casas state
+  const [casas, setCasas] = useState<any[]>([]);
+  const [editingCasa, setEditingCasa] = useState<any | null>(null);
+  const [casaNome, setCasaNome] = useState("");
+  const [casaSlug, setCasaSlug] = useState("");
+  const [casaTipologia, setCasaTipologia] = useState("");
+  const [casaArea, setCasaArea] = useState("");
+  const [casaWc, setCasaWc] = useState("");
+  const [casaDescricao, setCasaDescricao] = useState("");
+  const [casaThumbnail, setCasaThumbnail] = useState("");
+  const [casaGaleria, setCasaGaleria] = useState<string[]>([]);
+  const [casaPlanta, setCasaPlanta] = useState("");
+  const [savingCasa, setSavingCasa] = useState(false);
+  const [uploadingCasaImg, setUploadingCasaImg] = useState(false);
+  const [confirmDeleteCasa, setConfirmDeleteCasa] = useState<any | null>(null);
+
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
     setStatusError(isError);
@@ -1317,6 +1333,7 @@ export default function BackofficePage() {
   // Fetch posts
   useEffect(() => {
     if (view === "list") loadPosts();
+    if (view === "casas") loadCasas();
   }, [view]);
 
   async function loadPosts() {
@@ -1334,6 +1351,119 @@ export default function BackofficePage() {
       showStatus("Erro ao carregar artigos", true);
     }
     setLoading(false);
+  }
+
+  // ─── Casas ───
+  async function loadCasas() {
+    setLoading(true);
+    try {
+      const data = await sanityFetch(`
+        *[_type == "casa" && !(_id in path("drafts.**"))]
+          | order(coalesce(ordem, 9999) asc, nomeProjeto asc){
+          _id, nomeProjeto, "slug": slug.current, tipologia, areaTotal, wc,
+          descricao, thumbnail, "galeria": coalesce(galeria, []), planta, ordem
+        }
+      `);
+      setCasas(data || []);
+    } catch {
+      showStatus("Erro ao carregar casas", true);
+    }
+    setLoading(false);
+  }
+
+  function openNewCasa() {
+    setEditingCasa(null);
+    setCasaNome("");
+    setCasaSlug("");
+    setCasaTipologia("");
+    setCasaArea("");
+    setCasaWc("");
+    setCasaDescricao("");
+    setCasaThumbnail("");
+    setCasaGaleria([]);
+    setCasaPlanta("");
+    setView("casa-editor");
+  }
+
+  function openEditCasa(c: any) {
+    setEditingCasa(c);
+    setCasaNome(c.nomeProjeto || "");
+    setCasaSlug(c.slug || "");
+    setCasaTipologia(c.tipologia || "");
+    setCasaArea(c.areaTotal != null ? String(c.areaTotal) : "");
+    setCasaWc(c.wc != null ? String(c.wc) : "");
+    setCasaDescricao(c.descricao || "");
+    setCasaThumbnail(c.thumbnail || "");
+    setCasaGaleria(Array.isArray(c.galeria) ? c.galeria : []);
+    setCasaPlanta(c.planta || "");
+    setView("casa-editor");
+  }
+
+  async function uploadCasaImage(file: File): Promise<string | null> {
+    setUploadingCasaImg(true);
+    try {
+      const { url } = await uploadImage(file);
+      return url;
+    } catch {
+      showStatus("Erro ao enviar imagem", true);
+      return null;
+    } finally {
+      setUploadingCasaImg(false);
+    }
+  }
+
+  async function saveCasa() {
+    if (!casaNome.trim()) {
+      showStatus("Indica o nome do modelo", true);
+      return;
+    }
+    if (!casaThumbnail.trim()) {
+      showStatus("Escolhe uma imagem de capa para o modelo", true);
+      return;
+    }
+    const slugVal = (casaSlug.trim() || slugify(casaNome));
+    setSavingCasa(true);
+    try {
+      const fields = {
+        _type: "casa",
+        nomeProjeto: casaNome.trim(),
+        slug: { _type: "slug", current: slugVal },
+        tipologia: casaTipologia.trim(),
+        areaTotal: Number(casaArea) || 0,
+        wc: Number(casaWc) || 0,
+        descricao: casaDescricao,
+        thumbnail: casaThumbnail.trim(),
+        galeria: casaGaleria.filter(Boolean),
+        planta: casaPlanta.trim(),
+      };
+      if (editingCasa?._id) {
+        await sanityMutate([{ patch: { id: editingCasa._id, set: fields } }]);
+      } else {
+        // _id estável por slug; "create" falha (em vez de sobrepor) se o slug já existir
+        await sanityMutate([{ create: { _id: `casa-${slugVal}`, ...fields, ordem: 999 } }]);
+      }
+      showStatus("Modelo guardado! Carrega em Publicar para o pôr no site.");
+      setView("casas");
+    } catch (e: any) {
+      const msg = (e.message || "");
+      if (/already exists/i.test(msg)) {
+        showStatus("Já existe um modelo com esse link (slug). Muda o nome/slug.", true);
+      } else {
+        showStatus("Erro ao guardar: " + msg, true);
+      }
+    }
+    setSavingCasa(false);
+  }
+
+  async function handleDeleteCasa(c: any) {
+    setConfirmDeleteCasa(null);
+    try {
+      await sanityMutate([{ delete: { id: c._id } }]);
+      showStatus("Modelo eliminado.");
+      loadCasas();
+    } catch (e: any) {
+      showStatus("Erro ao eliminar: " + (e.message || ""), true);
+    }
   }
 
   function handleLogin(e: React.FormEvent) {
@@ -2035,6 +2165,7 @@ export default function BackofficePage() {
             <div className={styles.navTabs}>
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Páginas</button>
+              <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2122,6 +2253,262 @@ export default function BackofficePage() {
     );
   }
 
+  // CASAS LIST VIEW
+  if (view === "casas") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>Backoffice EVAPLACE</h1>
+          <div className={styles.headerActions}>
+            <div className={styles.navTabs}>
+              <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
+              <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+              <button className={`${styles.navTab} ${styles.navTabActive}`}>Casas</button>
+            </div>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
+              onClick={handleDeploy}
+              disabled={deploying}
+            >
+              {deploying ? (deployState || "A publicar...") : "Publicar Site"}
+            </button>
+            <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`} onClick={handleLogout}>
+              Sair
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          <div className={styles.listHeader}>
+            <h2>Casas ({casas.length})</h2>
+            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewCasa}>
+              Novo Modelo
+            </button>
+          </div>
+
+          {loading ? (
+            <div className={styles.loading}>
+              <span className={styles.spinner} /> A carregar...
+            </div>
+          ) : casas.length === 0 ? (
+            <div className={styles.emptyState}>
+              <p>Ainda não existem modelos de casa.</p>
+              <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewCasa}>
+                Criar primeiro modelo
+              </button>
+            </div>
+          ) : (
+            <div className={styles.postList}>
+              {casas.map((c) => (
+                <div key={c._id} className={styles.postItem} onClick={() => openEditCasa(c)}>
+                  <div className={styles.postThumb}>
+                    {c.thumbnail && <img src={c.thumbnail} alt="" />}
+                  </div>
+                  <div className={styles.postInfo}>
+                    <h3>{c.nomeProjeto}</h3>
+                    <span>
+                      {[c.tipologia, c.areaTotal ? `${c.areaTotal} m²` : ""].filter(Boolean).join(" · ")} · /produto/{c.slug}
+                    </span>
+                  </div>
+                  <div className={styles.postActions}>
+                    <a
+                      href={`https://evaplace.pt/produto/${c.slug}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${styles.btn} ${styles.btnSmall}`}
+                      style={{ textDecoration: "none", background: "#1a73e8", color: "#fff" }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Ver no site
+                    </a>
+                    <button
+                      className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
+                      onClick={(e) => { e.stopPropagation(); openEditCasa(c); }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className={`${styles.btn} ${styles.btnDanger} ${styles.btnSmall}`}
+                      onClick={(e) => { e.stopPropagation(); setConfirmDeleteCasa(c); }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {confirmDeleteCasa && (
+          <ConfirmModal
+            title="Eliminar modelo"
+            message={`Tem a certeza que quer eliminar "${confirmDeleteCasa.nomeProjeto}"? Esta ação não pode ser revertida.`}
+            onConfirm={() => handleDeleteCasa(confirmDeleteCasa)}
+            onCancel={() => setConfirmDeleteCasa(null)}
+          />
+        )}
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
+  // CASA EDITOR VIEW
+  if (view === "casa-editor") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <button
+            className={`${styles.btn} ${styles.btnBack}`}
+            onClick={() => setView("casas")}
+            title="Voltar"
+          >
+            &#8592; Voltar
+          </button>
+          <h1>{editingCasa ? "Editar Modelo" : "Novo Modelo"}</h1>
+          <div className={styles.headerActions}>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              onClick={saveCasa}
+              disabled={savingCasa}
+            >
+              {savingCasa ? "A guardar..." : "Guardar"}
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.editor}>
+          <div className={styles.field}>
+            <label>Nome do modelo</label>
+            <input
+              type="text"
+              value={casaNome}
+              onChange={(e) => {
+                setCasaNome(e.target.value);
+                if (!editingCasa) setCasaSlug(slugify(e.target.value));
+              }}
+              placeholder="Ex: Oakland"
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label>Slug (link da página)</label>
+            <input
+              type="text"
+              value={casaSlug}
+              onChange={(e) => setCasaSlug(e.target.value)}
+              placeholder="oakland"
+            />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+            <div className={styles.field}>
+              <label>Tipologia</label>
+              <input type="text" value={casaTipologia} onChange={(e) => setCasaTipologia(e.target.value)} placeholder="V2" />
+            </div>
+            <div className={styles.field}>
+              <label>Área (m²)</label>
+              <input type="number" value={casaArea} onChange={(e) => setCasaArea(e.target.value)} placeholder="100" />
+            </div>
+            <div className={styles.field}>
+              <label>Casas de banho</label>
+              <input type="number" value={casaWc} onChange={(e) => setCasaWc(e.target.value)} placeholder="1" />
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label>Descrição</label>
+            <textarea
+              value={casaDescricao}
+              onChange={(e) => setCasaDescricao(e.target.value)}
+              rows={3}
+              placeholder="Descrição do modelo"
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label>Imagem de capa</label>
+            {casaThumbnail ? (
+              <div className={styles.imagePreview}>
+                <img src={casaThumbnail} alt="capa" />
+                <button className={styles.removeImage} onClick={() => setCasaThumbnail("")}>X</button>
+              </div>
+            ) : (
+              <div className={styles.imageUpload}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    if (f) { const u = await uploadCasaImage(f); if (u) setCasaThumbnail(u); }
+                  }}
+                />
+                <p>{uploadingCasaImg ? "A enviar..." : "Clique para escolher a imagem de capa"}</p>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <label>Galeria ({casaGaleria.length} imagens)</label>
+            {casaGaleria.length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 10, marginBottom: 12 }}>
+                {casaGaleria.map((src, idx) => (
+                  <div key={src + idx} style={{ position: "relative" }}>
+                    <img src={src} alt="" style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 4, display: "block" }} />
+                    <button
+                      onClick={() => setCasaGaleria((prev) => prev.filter((_, i) => i !== idx))}
+                      style={{ position: "absolute", top: 4, right: 4, background: "rgba(0,0,0,0.7)", color: "#fff", border: "none", borderRadius: 4, width: 22, height: 22, cursor: "pointer", lineHeight: "20px" }}
+                      title="Remover"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className={styles.imageUpload}>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={async (e) => {
+                  const files = Array.from(e.target.files || []);
+                  const urls: string[] = [];
+                  for (const f of files) { const u = await uploadCasaImage(f); if (u) urls.push(u); }
+                  if (urls.length) setCasaGaleria((prev) => [...prev, ...urls]);
+                }}
+              />
+              <p>{uploadingCasaImg ? "A enviar..." : "Adicionar imagens à galeria"}</p>
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label>Planta</label>
+            {casaPlanta ? (
+              <div className={styles.imagePreview}>
+                <img src={casaPlanta} alt="planta" />
+                <button className={styles.removeImage} onClick={() => setCasaPlanta("")}>X</button>
+              </div>
+            ) : (
+              <div className={styles.imageUpload}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    if (f) { const u = await uploadCasaImage(f); if (u) setCasaPlanta(u); }
+                  }}
+                />
+                <p>{uploadingCasaImg ? "A enviar..." : "Clique para escolher a planta"}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
   // LIST VIEW (Articles)
   return (
     <div className={styles.container}>
@@ -2131,6 +2518,7 @@ export default function BackofficePage() {
           <div className={styles.navTabs}>
             <button className={`${styles.navTab} ${styles.navTabActive}`}>Blog</button>
             <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+            <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
           </div>
           <button
             className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}

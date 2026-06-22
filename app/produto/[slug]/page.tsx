@@ -5,14 +5,15 @@ import GaleriaCasa from "../../components/GaleriaCasa";
 
 import BotaoDesenvolverProjeto from "../../components/BotaoDesenvolverProjeto";
 
-import { casas } from "../../data/casas";
+import { getCasas } from "../../lib/getCasas";
 import { getRandomCasas } from "../../lib/getRandomCasas";
 
 import styles from "./casa.module.css";
 
 const BASE_URL = "https://www.evaplace.pt";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const casas = await getCasas();
   return casas.map((casa) => ({ slug: casa.slug }));
 }
 
@@ -22,6 +23,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const casas = await getCasas();
   const casa = casas.find((c) => c.slug === slug);
 
   if (!casa) return { title: "Casa | EVAPLACE" };
@@ -41,14 +43,15 @@ export default async function CasaDetalhePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const casas = await getCasas();
   const casa = casas.find((c) => c.slug === slug);
   if (!casa) return notFound();
 
   const outrasCasas = getRandomCasas(casas, casa.slug, 3);
 
-  // Filtrar plantas da galeria de imagens
+  // Filtrar plantas da galeria de imagens (e ignorar vazios)
   const imagens = (casa.galeria && casa.galeria.length > 0 ? casa.galeria : [casa.thumbnail])
-    .filter((src) => !src.startsWith("/plantas/"));
+    .filter((src): src is string => Boolean(src) && !src.startsWith("/plantas/"));
 
   const CardContent = (
     <>
@@ -115,14 +118,16 @@ export default async function CasaDetalhePage({
           once
         >
           <div className={styles.screenMedia}>
-            <Image
-              src={imagens[0] || casa.thumbnail}
-              alt={`${casa.nomeProjeto} - imagem principal`}
-              fill
-              priority
-              sizes="100vw"
-              className={styles.screenImg}
-            />
+            {(imagens[0] || casa.thumbnail) && (
+              <Image
+                src={imagens[0] || casa.thumbnail}
+                alt={`${casa.nomeProjeto} - imagem principal`}
+                fill
+                priority
+                sizes="100vw"
+                className={styles.screenImg}
+              />
+            )}
             <div className={styles.screenOverlay} />
           </div>
         </FadeInOnScroll>
@@ -172,13 +177,15 @@ export default async function CasaDetalhePage({
                   className={styles.outraCard}
                 >
                   <div className={styles.outraImgWrap}>
-                    <Image
-                      src={c.thumbnail}
-                      alt={c.nomeProjeto}
-                      fill
-                      sizes="(max-width: 900px) 100vw, 33vw"
-                      className={styles.outraImg}
-                    />
+                    {c.thumbnail && (
+                      <Image
+                        src={c.thumbnail}
+                        alt={c.nomeProjeto}
+                        fill
+                        sizes="(max-width: 900px) 100vw, 33vw"
+                        className={styles.outraImg}
+                      />
+                    )}
                   </div>
                 </a>
               </FadeInOnScroll>
