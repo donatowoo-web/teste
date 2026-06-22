@@ -279,6 +279,43 @@
   margin: 2.5rem 0;
 }
 
+/* ── Override do conteúdo das páginas de localidade (HTML do Sanity) ──
+   Fundo preto (em vez de cinza) + subtítulos/títulos maiores na fonte
+   serif do site ("New York"). Aplica-se às 6 páginas de uma vez. */
+.htmlBlock {
+  --bg: #000000 !important;
+  --bg2: #0c0c0c !important;
+  --bg3: #141414 !important;
+  background: #000000 !important;
+}
+
+/* Subtítulos / eyebrows (eram 10px): maiores e em serif */
+.htmlBlock :global(.section-label) {
+  font-family: var(--font-title), "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-size: 16px !important;
+  letter-spacing: 0.06em !important;
+}
+.htmlBlock :global(.stat-label),
+.htmlBlock :global(.approach-num) {
+  font-family: var(--font-title), "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-size: 14px !important;
+  letter-spacing: 0.06em !important;
+}
+
+/* Títulos: serif + maiores */
+.htmlBlock :global(h2) {
+  font-family: var(--font-title), "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-size: clamp(34px, 5vw, 56px) !important;
+}
+.htmlBlock :global(.step h3) {
+  font-family: var(--font-title), "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-size: 26px !important;
+}
+.htmlBlock :global(.approach-item h4) {
+  font-family: var(--font-title), "NewYork", ui-serif, Garamond, "Times New Roman", serif !important;
+  font-size: 22px !important;
+}
+
 /* Section spacing — each pageContent wrapper gets vertical rhythm */
 .pageMain > div + div > .pageContent {
   padding-top: 0.5rem;
