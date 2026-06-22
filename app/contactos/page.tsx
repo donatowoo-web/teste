@@ -3,6 +3,9 @@
 import { useEffect, useRef } from "react";
 import styles from "./contactos.module.css";
 import MultiStepForm from "../components/MultiStepForm";
+import { tc } from "../lib/copy";
+
+const telHref = (n: string) => `tel:+351${n.replace(/\D/g, "")}`;
 
 export default function ContactosPage() {
   const formSectionRef = useRef<HTMLElement>(null);
@@ -51,15 +54,15 @@ export default function ContactosPage() {
             <div className={`${styles.block} ${styles.box}`}>
               <p className={styles.green}>Morada</p>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Rua+Rio+15,+4475-493+Maia,+Portugal"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${tc("contactos.morada.l1")} ${tc("contactos.morada.l2")}, Portugal`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <h2 className={styles.huge}>
-                  Rua Rio 15,
+                  {tc("contactos.morada.l1")}
                   <br />
-                  4475-493 Maia
+                  {tc("contactos.morada.l2")}
                 </h2>
               </a>
 
@@ -68,21 +71,21 @@ export default function ContactosPage() {
               <p className={styles.green}>Email</p>
 
               <p className={styles.smallGreen}>Orçamentos e Informações</p>
-              <a className={styles.bigLink} href="mailto:info@evaplace.pt">
-                info@evaplace.pt
+              <a className={styles.bigLink} href={`mailto:${tc("contactos.email.info")}`}>
+                {tc("contactos.email.info")}
               </a>
 
               <p className={styles.smallGreen}>Fornecedores e Compras</p>
-              <a className={styles.bigLink} href="mailto:compras@evaplace.pt">
-                compras@evaplace.pt
+              <a className={styles.bigLink} href={`mailto:${tc("contactos.email.compras")}`}>
+                {tc("contactos.email.compras")}
               </a>
 
               <p className={styles.smallGreen}>Recrutamento</p>
               <a
                 className={styles.bigLink}
-                href="mailto:recursoshumanos@evaplace.pt"
+                href={`mailto:${tc("contactos.email.rh")}`}
               >
-                recursoshumanos@evaplace.pt
+                {tc("contactos.email.rh")}
               </a>
             </div>
 
@@ -91,24 +94,24 @@ export default function ContactosPage() {
               <p className={styles.green}>Contacto</p>
 
               <p className={styles.smallGreen}>Central</p>
-              <a className={styles.phone} href="tel:+351229610296">
-                229 610 296
+              <a className={styles.phone} href={telHref(tc("contactos.tel.central"))}>
+                {tc("contactos.tel.central")}
               </a>
               <p className={styles.note}>(Chamada para telefone fixo)</p>
 
               <div className={styles.spacerLg} />
 
               <p className={styles.smallGreen}>Assistente Comercial</p>
-              <a className={styles.phone} href="tel:+351963770939">
-                963 770 939
+              <a className={styles.phone} href={telHref(tc("contactos.tel.comercial"))}>
+                {tc("contactos.tel.comercial")}
               </a>
               <p className={styles.note}>(Chamada para rede móvel)</p>
 
               <div className={styles.spacerLg} />
 
               <p className={styles.smallGreen}>Fornecedores e Compras</p>
-              <a className={styles.phone} href="tel:+351961143825">
-                961 143 825
+              <a className={styles.phone} href={telHref(tc("contactos.tel.compras"))}>
+                {tc("contactos.tel.compras")}
               </a>
               <p className={styles.note}>(Chamada para rede móvel)</p>
             </div>

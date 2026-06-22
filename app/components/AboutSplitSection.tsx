@@ -1,5 +1,6 @@
 import FadeInOnScroll from "./FadeInOnScroll";
 import styles from "./AboutSplitSection.module.css";
+import { tc } from "../lib/copy";
 
 export default function AboutSplitSection() {
   return (
@@ -10,27 +11,20 @@ export default function AboutSplitSection() {
           <FadeInOnScroll y={30} blur={8} delayMs={0} durationMs={700}>
             <div className={styles.left}>
               <h2 className={styles.title}>
-                A Transformar a
+                {tc("sobre.split.tit1")}
                 <br />
-                Construção
+                {tc("sobre.split.tit2")}
               </h2>
 
               <a href="/casas-lsf-madeira/" className={styles.cta}>
-                Ver todas as casas
+                {tc("sobre.split.cta")}
               </a>
             </div>
           </FadeInOnScroll>
 
           <FadeInOnScroll y={30} blur={8} delayMs={150} durationMs={700}>
             <div className={styles.right}>
-              <p>
-                A Evaplace nasceu com a missão de transformar o mercado da
-                construção, apostando no aço leve e na madeira para criar casas
-                mais rápidas, eficientes e com qualidade superior. Acreditamos que
-                a inovação é o caminho para construir melhor, com precisão,
-                responsabilidade, eficiência e um verdadeiro compromisso com o
-                futuro.
-              </p>
+              <p>{tc("sobre.split.texto")}</p>
             </div>
           </FadeInOnScroll>
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import styles from "./Hero.module.css";
+import { tc } from "../lib/copy";
 
 function SplitWords({ text }: { text: string }) {
   const words = text.split(" ");
@@ -77,33 +78,33 @@ export default function Hero() {
 
       <div ref={contentRef} className={styles.inner}>
         <div className={styles.container}>
-          <p className={styles.kicker}>CASAS EM AÇO LEVE E MADEIRA</p>
+          <p className={styles.kicker}>{tc("home.hero.kicker")}</p>
 
           <h1 className={styles.title}>
-            <SplitWords text="Espaços de Partilha" />
+            <SplitWords text={tc("home.hero.titulo")} />
           </h1>
 
           <div className={styles.blocksWrap}>
             <div className={styles.blocks}>
               <div className={styles.block}>
-                <p className={styles.blockLine}>Design</p>
-                <p className={styles.blockLine}>Contemporâneo</p>
+                <p className={styles.blockLine}>{tc("home.hero.b1a")}</p>
+                <p className={styles.blockLine}>{tc("home.hero.b1b")}</p>
               </div>
 
               <div className={styles.block}>
-                <p className={styles.blockLine}>Espaços</p>
-                <p className={styles.blockLine}>Personalizáveis</p>
+                <p className={styles.blockLine}>{tc("home.hero.b2a")}</p>
+                <p className={styles.blockLine}>{tc("home.hero.b2b")}</p>
               </div>
 
               <div className={styles.block}>
-                <p className={styles.blockLine}>Qualidade</p>
-                <p className={styles.blockLine}>Excecional</p>
+                <p className={styles.blockLine}>{tc("home.hero.b3a")}</p>
+                <p className={styles.blockLine}>{tc("home.hero.b3b")}</p>
               </div>
             </div>
 
             <div className={styles.ctaWrap}>
               <a href="/casas-lsf-madeira/" className={styles.cta}>
-                Ver Casas
+                {tc("home.hero.cta")}
               </a>
             </div>
           </div>

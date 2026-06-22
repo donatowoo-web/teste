@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import styles from "./SobreNosHero.module.css";
+import { tc } from "../lib/copy";
 
 export default function SobreNosHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -60,9 +61,9 @@ export default function SobreNosHero() {
       <div ref={contentRef} className={styles.inner}>
         <div className={styles.container}>
           <h1 className={styles.title}>
-            Histórias que
+            {tc("sobre.hero.l1")}
             <br />
-            nasceram na Maia.
+            {tc("sobre.hero.l2")}
           </h1>
         </div>
       </div>

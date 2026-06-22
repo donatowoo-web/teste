@@ -1,30 +1,27 @@
 import FadeInOnScroll from "./FadeInOnScroll";
 import styles from "./AboutCardsSection.module.css";
+import { tc } from "../lib/copy";
 
 const cards = [
   {
     img: "/sobre-nos/projetosfeitosamedida.webp",
-    title: "Projetos feitos à sua medida",
-    text:
-      "Todos os projetos são totalmente personalizáveis, da planta aos acabamentos. Adaptamos cada detalhe ao seu gosto e às necessidades da sua família. Se pretende algo único, criamos um projeto novo feito à sua medida, desenvolvido de raiz para transformar a sua ideia na realidade.",
+    title: tc("sobre.card1.tit"),
+    text: tc("sobre.card1.txt"),
   },
   {
     img: "/sobre-nos/qualidadedesdeorigem.webp",
-    title: "Qualidade desde a origem",
-    text:
-      "Criamos espaços modernos e esteticamente marcantes, sempre com acabamentos de excelência e um isolamento superior que garante conforto e eficiência. Fabricamos as estruturas em aço leve e madeira diretamente na nossa fábrica, garantindo precisão e qualidade desde a origem.",
+    title: tc("sobre.card2.tit"),
+    text: tc("sobre.card2.txt"),
   },
   {
     img: "/sobre-nos/servicocompleto.webp",
-    title: "Acompanhamento completo",
-    text:
-      "Acompanhamos todo o processo — arquitetura, especialidades, licenciamento e obra — com uma equipa próxima e dedicada. Garantimos um serviço transparente, rigoroso e contínuo, para que tenha total confiança do início ao fim.",
+    title: tc("sobre.card3.tit"),
+    text: tc("sobre.card3.txt"),
   },
   {
     img: "/sobre-nos/portugalcontinental.webp",
-    title: "Construções em todo Portugal",
-    text:
-      "Trabalhamos em todo o território continental, levando a mesma exigência e qualidade a qualquer região. A nossa operação está preparada para executar projetos com eficiência e consistência, independentemente da localização.",
+    title: tc("sobre.card4.tit"),
+    text: tc("sobre.card4.txt"),
   },
 ];
 

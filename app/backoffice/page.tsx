@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./backoffice.module.css";
 import RichTextEditor from "./components/RichTextEditor";
+import { CF, COPY_PAGES } from "../data/copyFields";
 
 // ─── Sanity Config ───
 const PROJECT_ID = "onxd36ek";
@@ -31,7 +32,7 @@ type Post = {
   content?: any[];
 };
 
-type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor" | "projetos" | "projeto-editor";
+type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor" | "projetos" | "projeto-editor" | "textos";
 
 // ─── Page Builder Types ───
 type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button" | "hero-image" | "html";
@@ -1330,6 +1331,10 @@ export default function BackofficePage() {
   const [savingProjeto, setSavingProjeto] = useState(false);
   const [confirmDeleteProjeto, setConfirmDeleteProjeto] = useState<any | null>(null);
 
+  // Textos (site copy) state
+  const [copyValues, setCopyValues] = useState<Record<string, string>>({});
+  const [savingCopy, setSavingCopy] = useState(false);
+
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
     setStatusError(isError);
@@ -1351,6 +1356,7 @@ export default function BackofficePage() {
     if (view === "list") loadPosts();
     if (view === "casas") loadCasas();
     if (view === "projetos") loadProjetos();
+    if (view === "textos") loadTextos();
   }, [view]);
 
   async function loadPosts() {
@@ -1576,6 +1582,49 @@ export default function BackofficePage() {
     } catch (e: any) {
       showStatus("Erro ao eliminar: " + (e.message || ""), true);
     }
+  }
+
+  // ─── Textos (site copy) ───
+  async function loadTextos() {
+    setLoading(true);
+    try {
+      const doc = await sanityFetch(`*[_id == "siteCopy"][0]{json}`);
+      let saved: Record<string, string> = {};
+      if (doc?.json) {
+        try { saved = JSON.parse(doc.json); } catch { saved = {}; }
+      }
+      // valor a mostrar = guardado (se existir) senão o default do catálogo
+      const init: Record<string, string> = {};
+      for (const key of Object.keys(CF)) {
+        init[key] = (saved[key] != null && saved[key] !== "") ? saved[key] : CF[key].def;
+      }
+      setCopyValues(init);
+    } catch {
+      const init: Record<string, string> = {};
+      for (const key of Object.keys(CF)) init[key] = CF[key].def;
+      setCopyValues(init);
+      showStatus("Erro ao carregar textos", true);
+    }
+    setLoading(false);
+  }
+
+  async function saveTextos() {
+    setSavingCopy(true);
+    try {
+      // guarda só o que foi alterado em relação ao default (mantém o doc enxuto)
+      const overrides: Record<string, string> = {};
+      for (const key of Object.keys(CF)) {
+        const v = (copyValues[key] ?? "").trim();
+        if (v && v !== CF[key].def) overrides[key] = v;
+      }
+      await sanityMutate([
+        { createOrReplace: { _id: "siteCopy", _type: "siteCopy", json: JSON.stringify(overrides) } },
+      ]);
+      showStatus("Textos guardados! Carrega em Publicar para os pôr no site.");
+    } catch (e: any) {
+      showStatus("Erro ao guardar: " + (e.message || ""), true);
+    }
+    setSavingCopy(false);
   }
 
   function handleLogin(e: React.FormEvent) {
@@ -2279,6 +2328,7 @@ export default function BackofficePage() {
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Páginas</button>
               <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
               <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
+              <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2378,6 +2428,7 @@ export default function BackofficePage() {
               <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Casas</button>
               <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
+              <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2635,6 +2686,7 @@ export default function BackofficePage() {
               <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
               <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Projetos</button>
+              <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2857,6 +2909,87 @@ export default function BackofficePage() {
     );
   }
 
+  // TEXTOS VIEW
+  if (view === "textos") {
+    const keysByPage = (pg: string) => Object.keys(CF).filter((k) => CF[k].page === pg);
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>Backoffice EVAPLACE</h1>
+          <div className={styles.headerActions}>
+            <div className={styles.navTabs}>
+              <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
+              <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+              <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
+              <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
+              <button className={`${styles.navTab} ${styles.navTabActive}`}>Textos</button>
+            </div>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
+              onClick={handleDeploy}
+              disabled={deploying}
+            >
+              {deploying ? (deployState || "A publicar...") : "Publicar Site"}
+            </button>
+            <button className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`} onClick={handleLogout}>
+              Sair
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          <div className={styles.listHeader}>
+            <h2>Textos das páginas</h2>
+            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveTextos} disabled={savingCopy || loading}>
+              {savingCopy ? "A guardar..." : "Guardar"}
+            </button>
+          </div>
+
+          {loading ? (
+            <div className={styles.loading}>
+              <span className={styles.spinner} /> A carregar...
+            </div>
+          ) : (
+            <div className={styles.editor}>
+              {COPY_PAGES.map((pg) => {
+                const keys = keysByPage(pg);
+                if (keys.length === 0) return null;
+                return (
+                  <div key={pg} style={{ marginBottom: 32 }}>
+                    <h3 style={{ margin: "0 0 14px", paddingBottom: 8, borderBottom: "2px solid #e6e6e6" }}>{pg}</h3>
+                    {keys.map((key) => (
+                      <div key={key} className={styles.field}>
+                        <label>{CF[key].label}</label>
+                        {CF[key].multiline ? (
+                          <textarea
+                            value={copyValues[key] ?? ""}
+                            onChange={(e) => setCopyValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                            rows={3}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={copyValues[key] ?? ""}
+                            onChange={(e) => setCopyValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+              <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveTextos} disabled={savingCopy}>
+                {savingCopy ? "A guardar..." : "Guardar textos"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
   // LIST VIEW (Articles)
   return (
     <div className={styles.container}>
@@ -2868,6 +3001,7 @@ export default function BackofficePage() {
             <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
             <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
             <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
+            <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
           </div>
           <button
             className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}

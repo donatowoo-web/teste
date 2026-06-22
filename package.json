@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/fetch-copy.mjs",
     "build": "next build",
     "serve": "npx serve@latest out -s -l 3001",
     "lint": "eslint"

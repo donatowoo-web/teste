@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./IntroSection.module.css";
+import { tc } from "../lib/copy";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -140,14 +141,14 @@ export default function IntroSection() {
           {/* ESQUERDA (TÍTULO) */}
           <div className={styles.left} ref={leftRef}>
             <h2 className={styles.title}>
-              <span className={styles.line} data-title-line>Elevamos a</span>
-              <span className={styles.line} data-title-line>construção a um</span>
-              <span className={styles.line} data-title-line>novo padrão.</span>
+              <span className={styles.line} data-title-line>{tc("home.intro.t1")}</span>
+              <span className={styles.line} data-title-line>{tc("home.intro.t2")}</span>
+              <span className={styles.line} data-title-line>{tc("home.intro.t3")}</span>
             </h2>
 
             <div className={styles.ctaWrap}>
               <a href="/sobre-nos/" className={styles.cta} data-reveal>
-                Sobre nós
+                {tc("home.intro.cta")}
               </a>
             </div>
           </div>
@@ -164,12 +165,7 @@ export default function IntroSection() {
             </div>
 
             <div className={styles.text}>
-              <p data-reveal>
-                Na Evaplace, criamos projetos que se distinguem pela estética
-                contemporânea e pela funcionalidade inteligente, com a exigência e
-                o saber-fazer que nos definem, verdadeiramente distintos em todo o
-                Portugal.
-              </p>
+              <p data-reveal>{tc("home.intro.p1")}</p>
 
               <p className={styles.paragraph} data-reveal>
                 Trabalhamos com os sistemas construtivos mais avançados{" "}
