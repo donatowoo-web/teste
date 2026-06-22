@@ -3,6 +3,13 @@ name: Deploy to Server
 on:
   workflow_dispatch:
 
+# Porteiro: só 1 deploy de cada vez. Se o botão Publicar for clicado
+# enquanto outro deploy corre, este espera o anterior terminar (não cancela
+# a meio) — evita que dois envios FTP em simultâneo colidam e falhem.
+concurrency:
+  group: deploy-ftp
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

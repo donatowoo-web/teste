@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import IntroSection from "./components/IntroSection";
 import ProjectsGrid from "./components/ProjectsGrid";
 import MethodsSection from "./components/MethodsSection";
+import LocationsSection from "./components/LocationsSection";
 import FeaturesSection from "./components/FeaturesSection";
 import GalleryCarousel from "./components/GalleryCarousel";
 import FAQSection from "./components/FAQSection";
@@ -31,6 +32,7 @@ export default function Home() {
       <IntroSection />
       <ProjectsGrid />
       <MethodsSection />
+      <LocationsSection />
       <FeaturesSection />
       <GalleryCarousel />
       <FAQSection />
