@@ -37,14 +37,11 @@ const playfair = Playfair_Display({
 });
 
 export function generateMetadata(): Metadata {
+  // NÃO definir canonical aqui (era aplicado a TODAS as páginas a apontar para
+  // a homepage). Cada página define o seu próprio canonical; metadataBase serve
+  // para resolver URLs relativos.
   return {
     metadataBase: new URL(BASE_URL),
-    alternates: {
-      canonical: BASE_URL,
-      languages: {
-        pt: BASE_URL,
-      },
-    },
   };
 }
 
@@ -56,7 +53,6 @@ export default function RootLayout({
   return (
     <html lang="pt">
       <head>
-        <link rel="canonical" href={BASE_URL} />
       </head>
       <GoogleTagManager gtmId="GTM-MXPCKV3G" />
       <body className={`${poppins.variable} ${playfair.variable}`}>

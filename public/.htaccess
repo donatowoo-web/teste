@@ -4,6 +4,13 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # ================================
+  # Forçar www (juntar evaplace.pt -> www.evaplace.pt, mesmo site)
+  # Tudo o que não seja www.evaplace.pt é redirecionado (301), mantendo o caminho.
+  # ================================
+  RewriteCond %{HTTP_HOST} !^www\.evaplace\.pt$ [NC]
+  RewriteRule ^(.*)$ https://www.evaplace.pt/$1 [R=301,L]
+
   # Redirect /en para / (homepage)
   RewriteRule ^en/?$ / [R=301,L]
 

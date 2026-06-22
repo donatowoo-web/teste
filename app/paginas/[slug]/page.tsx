@@ -31,7 +31,10 @@ export async function generateMetadata({
     `*[_type == "page" && slug.current == $slug && published == true && !(_id in path("drafts.**"))][0]{ title }`,
     { slug }
   );
-  return { title: page ? `${page.title} | EVAPLACE` : "Página" };
+  return {
+    title: page ? `${page.title} | EVAPLACE` : "Página",
+    alternates: { canonical: `https://www.evaplace.pt/paginas/${slug}/` },
+  };
 }
 
 export default async function CustomPage({

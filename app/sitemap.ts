@@ -2,10 +2,11 @@ import { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 import { client } from "@/sanity/lib/client";
-import { casas } from "./data/casas";
+import { getCasas } from "./lib/getCasas";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://evaplace.pt";
+  const baseUrl = "https://www.evaplace.pt";
+  const casas = await getCasas();
 
   // Páginas estáticas
   const staticPages = [
@@ -68,5 +69,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticUrls, ...productUrls, ...postUrls, ...jobUrls];
+  // Páginas de cidade (SEO local) — tipo "page" no Sanity
+  const cityPages = await client.fetch<{ slug: string; updatedAt: string }[]>(`
+    *[_type == "page" && published == true && defined(slug.current) && !(_id in path("drafts.**"))] {
+      "slug": slug.current,
+      "updatedAt": _updatedAt
+    }
+  `);
+
+  const cityUrls = cityPages.map((p) => ({
+    url: `${baseUrl}/paginas/${p.slug}`,
+    lastModified: new Date(p.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  // Projetos
+  const projetos = await client.fetch<{ slug: string; updatedAt: string }[]>(`
+    *[_type == "projeto" && defined(slug.current) && !(_id in path("drafts.**"))] {
+      "slug": slug.current,
+      "updatedAt": _updatedAt
+    }
+  `);
+
+  const projetoUrls = projetos.map((p) => ({
+    url: `${baseUrl}/projetos/${p.slug}`,
+    lastModified: new Date(p.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticUrls, ...productUrls, ...postUrls, ...jobUrls, ...cityUrls, ...projetoUrls];
 }
