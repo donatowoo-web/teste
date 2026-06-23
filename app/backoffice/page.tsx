@@ -32,7 +32,7 @@ type Post = {
   content?: any[];
 };
 
-type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor" | "projetos" | "projeto-editor" | "textos";
+type View = "login" | "list" | "editor" | "pages" | "page-builder" | "casas" | "casa-editor" | "projetos" | "projeto-editor" | "textos" | "texto-editor";
 
 // ─── Page Builder Types ───
 type SectionType = "heading" | "text" | "image" | "spacer" | "two-columns" | "video" | "button" | "hero-image" | "html";
@@ -1334,6 +1334,7 @@ export default function BackofficePage() {
   // Textos (site copy) state
   const [copyValues, setCopyValues] = useState<Record<string, string>>({});
   const [savingCopy, setSavingCopy] = useState(false);
+  const [selectedCopyPage, setSelectedCopyPage] = useState<string>("");
 
   const showStatus = useCallback((msg: string, isError = false) => {
     setStatus(msg);
@@ -2325,10 +2326,10 @@ export default function BackofficePage() {
           <div className={styles.headerActions}>
             <div className={styles.navTabs}>
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
-              <button className={`${styles.navTab} ${styles.navTabActive}`}>Páginas</button>
+              <button className={`${styles.navTab} ${styles.navTabActive}`}>Cidades</button>
               <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
               <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
-              <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
+              <button className={styles.navTab} onClick={() => setView("textos")}>Páginas do site</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2345,7 +2346,7 @@ export default function BackofficePage() {
 
         <div className={styles.content}>
           <div className={styles.listHeader}>
-            <h2>Páginas ({pages.length})</h2>
+            <h2>Cidades ({pages.length})</h2>
             <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={openNewPage}>
               Nova Página
             </button>
@@ -2425,10 +2426,10 @@ export default function BackofficePage() {
           <div className={styles.headerActions}>
             <div className={styles.navTabs}>
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
-              <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+              <button className={styles.navTab} onClick={() => setView("pages")}>Cidades</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Casas</button>
               <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
-              <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
+              <button className={styles.navTab} onClick={() => setView("textos")}>Páginas do site</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2683,10 +2684,10 @@ export default function BackofficePage() {
           <div className={styles.headerActions}>
             <div className={styles.navTabs}>
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
-              <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+              <button className={styles.navTab} onClick={() => setView("pages")}>Cidades</button>
               <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
               <button className={`${styles.navTab} ${styles.navTabActive}`}>Projetos</button>
-              <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
+              <button className={styles.navTab} onClick={() => setView("textos")}>Páginas do site</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2909,9 +2910,9 @@ export default function BackofficePage() {
     );
   }
 
-  // TEXTOS VIEW
+  // PÁGINAS DO SITE — LISTA
   if (view === "textos") {
-    const keysByPage = (pg: string) => Object.keys(CF).filter((k) => CF[k].page === pg);
+    const countByPage = (pg: string) => Object.keys(CF).filter((k) => CF[k].page === pg).length;
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -2919,10 +2920,10 @@ export default function BackofficePage() {
           <div className={styles.headerActions}>
             <div className={styles.navTabs}>
               <button className={styles.navTab} onClick={() => setView("list")}>Blog</button>
-              <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+              <button className={styles.navTab} onClick={() => setView("pages")}>Cidades</button>
               <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
               <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
-              <button className={`${styles.navTab} ${styles.navTabActive}`}>Textos</button>
+              <button className={`${styles.navTab} ${styles.navTabActive}`}>Páginas do site</button>
             </div>
             <button
               className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
@@ -2939,50 +2940,92 @@ export default function BackofficePage() {
 
         <div className={styles.content}>
           <div className={styles.listHeader}>
-            <h2>Textos das páginas</h2>
-            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveTextos} disabled={savingCopy || loading}>
-              {savingCopy ? "A guardar..." : "Guardar"}
-            </button>
+            <h2>Páginas do site</h2>
           </div>
+          <p style={{ color: "#666", margin: "0 0 18px" }}>Escolhe a página que queres editar:</p>
 
           {loading ? (
             <div className={styles.loading}>
               <span className={styles.spinner} /> A carregar...
             </div>
           ) : (
-            <div className={styles.editor}>
+            <div className={styles.postList}>
               {COPY_PAGES.map((pg) => {
-                const keys = keysByPage(pg);
-                if (keys.length === 0) return null;
+                const n = countByPage(pg);
+                if (n === 0) return null;
                 return (
-                  <div key={pg} style={{ marginBottom: 32 }}>
-                    <h3 style={{ margin: "0 0 14px", paddingBottom: 8, borderBottom: "2px solid #e6e6e6" }}>{pg}</h3>
-                    {keys.map((key) => (
-                      <div key={key} className={styles.field}>
-                        <label>{CF[key].label}</label>
-                        {CF[key].multiline ? (
-                          <textarea
-                            value={copyValues[key] ?? ""}
-                            onChange={(e) => setCopyValues((prev) => ({ ...prev, [key]: e.target.value }))}
-                            rows={3}
-                          />
-                        ) : (
-                          <input
-                            type="text"
-                            value={copyValues[key] ?? ""}
-                            onChange={(e) => setCopyValues((prev) => ({ ...prev, [key]: e.target.value }))}
-                          />
-                        )}
-                      </div>
-                    ))}
+                  <div
+                    key={pg}
+                    className={styles.postItem}
+                    onClick={() => { setSelectedCopyPage(pg); setView("texto-editor"); }}
+                  >
+                    <div className={styles.postInfo}>
+                      <h3>{pg}</h3>
+                      <span>{n} {n === 1 ? "texto" : "textos"} para editar</span>
+                    </div>
+                    <div className={styles.postActions}>
+                      <button
+                        className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSmall}`}
+                        onClick={(e) => { e.stopPropagation(); setSelectedCopyPage(pg); setView("texto-editor"); }}
+                      >
+                        Editar
+                      </button>
+                    </div>
                   </div>
                 );
               })}
-              <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveTextos} disabled={savingCopy}>
-                {savingCopy ? "A guardar..." : "Guardar textos"}
-              </button>
             </div>
           )}
+        </div>
+
+        <StatusMessage msg={status} isError={statusError} />
+      </div>
+    );
+  }
+
+  // PÁGINAS DO SITE — EDITOR DE UMA PÁGINA
+  if (view === "texto-editor") {
+    const keys = Object.keys(CF).filter((k) => CF[k].page === selectedCopyPage);
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <button
+            className={`${styles.btn} ${styles.btnBack}`}
+            onClick={() => setView("textos")}
+            title="Voltar"
+          >
+            &#8592; Voltar
+          </button>
+          <h1>{selectedCopyPage}</h1>
+          <div className={styles.headerActions}>
+            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveTextos} disabled={savingCopy}>
+              {savingCopy ? "A guardar..." : "Guardar"}
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.editor}>
+          {keys.map((key) => (
+            <div key={key} className={styles.field}>
+              <label>{CF[key].label}</label>
+              {CF[key].multiline ? (
+                <textarea
+                  value={copyValues[key] ?? ""}
+                  onChange={(e) => setCopyValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                  rows={3}
+                />
+              ) : (
+                <input
+                  type="text"
+                  value={copyValues[key] ?? ""}
+                  onChange={(e) => setCopyValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                />
+              )}
+            </div>
+          ))}
+          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={saveTextos} disabled={savingCopy}>
+            {savingCopy ? "A guardar..." : "Guardar"}
+          </button>
         </div>
 
         <StatusMessage msg={status} isError={statusError} />
@@ -2998,10 +3041,10 @@ export default function BackofficePage() {
         <div className={styles.headerActions}>
           <div className={styles.navTabs}>
             <button className={`${styles.navTab} ${styles.navTabActive}`}>Blog</button>
-            <button className={styles.navTab} onClick={() => setView("pages")}>Páginas</button>
+            <button className={styles.navTab} onClick={() => setView("pages")}>Cidades</button>
             <button className={styles.navTab} onClick={() => setView("casas")}>Casas</button>
             <button className={styles.navTab} onClick={() => setView("projetos")}>Projetos</button>
-            <button className={styles.navTab} onClick={() => setView("textos")}>Textos</button>
+            <button className={styles.navTab} onClick={() => setView("textos")}>Páginas do site</button>
           </div>
           <button
             className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
