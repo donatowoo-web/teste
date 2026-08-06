@@ -1,0 +1,114 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  /* acima do banner de cookies (9999) — a esta altura já fechou, mas se por
+     alguma razão reabrir, este fica por cima e continua legível */
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 32px 28px 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: entrar 320ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fechar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-size: 15px;
+  line-height: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fechar:hover {
+  background: #f5f5f5;
+  color: #111;
+}
+
+.titulo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #111;
+}
+
+.texto {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.btn {
+  font-family: var(--font-sans);
+  margin-top: 24px;
+  min-width: 160px;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  background: #111;
+  border: 1px solid #111;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #333;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .modal {
+    padding: 28px 20px 24px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal {
+    animation: none;
+  }
+}

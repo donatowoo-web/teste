@@ -5,6 +5,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
+import AvisoFerias from "./components/AvisoFerias";
 import GTMPageView from "./components/GTMPageView";
 import SmoothScroll from "./components/SmoothScroll";
 import { Metadata } from "next";
@@ -72,6 +73,10 @@ export default function RootLayout({
 
         {/* Banner de Cookies (RGPD) */}
         <CookieBanner />
+
+        {/* Aviso de ferias — espera pelo consentimento antes de abrir.
+            Desliga-se sozinho a 1 de setembro de 2026 (ver AvisoFerias.tsx). */}
+        <AvisoFerias />
       </body>
     </html>
   );

@@ -90,8 +90,14 @@ para reutilizar noutro período, ou ser removido numa limpeza futura.
 | `app/components/AvisoFerias.module.css` | novo |
 | `app/layout.tsx` | uma linha de import e uma de montagem, a seguir a `<CookieBanner />` |
 
-Reaproveita `app/components/Modal.tsx`, que já resolve portal, tecla Escape,
-bloqueio de scroll do body e clique no fundo.
+**Desvio ao desenho inicial:** o desenho previa reaproveitar
+`app/components/Modal.tsx`. Ao implementar verificou-se que esse componente,
+apesar do nome, é uma folha **em ecrã inteiro** (`100vw × 100dvh`,
+`background: #000`, animação de subida) construída para o formulário
+multi-passo. Usá-la para um aviso de duas linhas daria um takeover preto do ecrã
+inteiro. O `AvisoFerias` é por isso autónomo e segue o padrão visual do
+`CookieBanner` — cartão branco centrado — implementando o pouco que precisa:
+fecho por Escape, bloqueio de scroll e clique no fundo.
 
 ### Bloco de configuração
 
@@ -118,9 +124,10 @@ Sem links, sem formulário, sem imagem.
 
 ## Estilo
 
-CSS Modules, como o resto do projeto. Segue o `Modal.module.css` e a linguagem
-visual do `CookieBanner`: tipografia Poppins/Playfair já carregadas no layout.
-Legível em telemóvel — o popup não deve ultrapassar a largura do ecrã nem exigir
+CSS Modules, como o resto do projeto. Segue a linguagem visual do
+`CookieBanner`: cartão branco de 440px no máximo, cantos de 16px, fundo escuro a
+70%, tipografia Playfair no título e Poppins no resto (já carregadas no layout).
+Legível em telemóvel — o popup não pode ultrapassar a largura do ecrã nem exigir
 scroll para chegar ao botão.
 
 ---
