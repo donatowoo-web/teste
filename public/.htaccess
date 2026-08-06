@@ -1,8 +1,58 @@
 # ================================
-# REDIRECT 301 - Remover prefixo /en/
+# REDIRECTS 301 - endereços antigos + prefixo /en/
 # ================================
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # ================================
+  # Endereços antigos -> endereços atuais (301)
+  #
+  # Vem ANTES da regra de forçar-www de propósito: os alvos já são absolutos
+  # (https://www.evaplace.pt/...), por isso um endereço antigo em evaplace.pt
+  # resolve-se num ÚNICO 301 em vez de dois saltos encadeados.
+  #
+  # O `/?$` em cada padrão aceita o endereço com e sem barra final.
+  # Destinos todos confirmados no servidor em 2026-08-06.
+  # ================================
+
+  # --- Artigos: slug corrigido ---
+  RewriteRule ^iva-de-6-na-construcao-de-casas-ate-648-mil-euros-o-que-muda-e-por-que/?$ https://www.evaplace.pt/iva-de-6-na-construcao-de-casas-ate-648-mil-euros-o-que-muda-e-porque/ [R=301,L]
+  RewriteRule ^o-que-cabe-em-50m-comparacao-entre-casas-compactas-com-apartamentos-convencionais/?$ https://www.evaplace.pt/o-que-cabe-em-50m-comparacao-entre-casas-compactas-e-apartamentos-convencionais/ [R=301,L]
+
+  # --- Páginas institucionais e de serviço ---
+  # NE (noescape): o destino tem acentos já percent-encoded (construção, aço).
+  # Sem NE o Apache voltaria a escapar os '%' e partia o endereço.
+  RewriteRule ^empresa-de-construcao-credivel-como-escolher/?$ https://www.evaplace.pt/como-escolher-uma-empresa-de-constru%C3%A7%C3%A3o-em-a%C3%A7o-Leve/ [R=301,L,NE]
+  RewriteRule ^construcao-de-casas-em-madeira/?$ https://www.evaplace.pt/construcao-em-madeira/ [R=301,L]
+  RewriteRule ^wood-frame/?$ https://www.evaplace.pt/construcao-em-madeira/ [R=301,L]
+  RewriteRule ^construcao-lsf/?$ https://www.evaplace.pt/construcao-em-lsf/ [R=301,L]
+  RewriteRule ^aco-leve/?$ https://www.evaplace.pt/construcao-em-lsf/ [R=301,L]
+  RewriteRule ^sobre/?$ https://www.evaplace.pt/sobre-nos/ [R=301,L]
+  RewriteRule ^ja-tem-projeto/?$ https://www.evaplace.pt/inicie-o-seu-projeto/ [R=301,L]
+  RewriteRule ^home/?$ https://www.evaplace.pt/ [R=301,L]
+  RewriteRule ^espessura-paredes-fachada/44mm-ou-fachada-dupla-166mm/?$ https://www.evaplace.pt/ [R=301,L]
+
+  # ATENÇÃO: sem [NC] de propósito. A pasta de fotos /Casas/ (maiúscula) vive no
+  # servidor e é servida tal e qual; uma regra sem distinção de maiúsculas
+  # apanhava-a e partia todas as imagens.
+  RewriteRule ^casas/?$ https://www.evaplace.pt/casas-lsf-madeira/ [R=301,L]
+
+  # --- Projetos: slugs encurtados ---
+  RewriteRule ^projetos/casa-em-madeira-no-geres/?$ https://www.evaplace.pt/projetos/casa-geres/ [R=301,L]
+  RewriteRule ^projetos/casa-da-arvore/?$ https://www.evaplace.pt/projetos/casa-arvore/ [R=301,L]
+  RewriteRule ^projetos/casa-pacos-de-gaiolo/?$ https://www.evaplace.pt/projetos/casa-pacos-gaiolo/ [R=301,L]
+
+  # --- Produtos: modelos renomeados ---
+  RewriteRule ^produto/serra-da-estrela/?$ https://www.evaplace.pt/produto/chale-serra-da-estrela/ [R=301,L]
+  RewriteRule ^produto/casa-praga-lsf/?$ https://www.evaplace.pt/produto/casa-praga/ [R=301,L]
+  RewriteRule ^produto/san-diego/?$ https://www.evaplace.pt/produto/san-diego-v3/ [R=301,L]
+
+  # --- Recrutamento: a secção passou de /recrutamentos/ (plural) a /recrutamento/ ---
+  # A exceção e o caso da raiz têm de vir ANTES da regra geral, senão nunca disparam.
+  RewriteRule ^recrutamentos/ajudante-trolha/?$ https://www.evaplace.pt/recrutamento/ajudante-de-trolha/ [R=301,L]
+  RewriteRule ^recrutamentos/?$ https://www.evaplace.pt/recrutamento/ [R=301,L]
+  RewriteRule ^recrutamentos/(.*?)/?$ https://www.evaplace.pt/recrutamento/$1/ [R=301,L]
+  RewriteRule ^recrutamento-eva-24/?$ https://www.evaplace.pt/recrutamento/ [R=301,L]
 
   # ================================
   # Forçar www (juntar evaplace.pt -> www.evaplace.pt, mesmo site)
