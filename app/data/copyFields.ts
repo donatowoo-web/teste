@@ -33,8 +33,10 @@ export const CF: Record<string, CopyField> = {
   "sobre.card2.txt": { label: "Cartão 2 — texto", def: "Criamos espaços modernos e esteticamente marcantes, sempre com acabamentos de excelência e um isolamento superior que garante conforto e eficiência. Fabricamos as estruturas em aço leve e madeira diretamente na nossa fábrica, garantindo precisão e qualidade desde a origem.", page: "Sobre Nós", multiline: true },
   "sobre.card3.tit": { label: "Cartão 3 — título", def: "Acompanhamento completo", page: "Sobre Nós" },
   "sobre.card3.txt": { label: "Cartão 3 — texto", def: "Acompanhamos todo o processo — arquitetura, especialidades, licenciamento e obra — com uma equipa próxima e dedicada. Garantimos um serviço transparente, rigoroso e contínuo, para que tenha total confiança do início ao fim.", page: "Sobre Nós", multiline: true },
-  "sobre.card4.tit": { label: "Cartão 4 — título", def: "Construções em todo Portugal", page: "Sobre Nós" },
-  "sobre.card4.txt": { label: "Cartão 4 — texto", def: "Trabalhamos em todo o território continental, levando a mesma exigência e qualidade a qualquer região. A nossa operação está preparada para executar projetos com eficiência e consistência, independentemente da localização.", page: "Sobre Nós", multiline: true },
+  "sobre.card4.tit": { label: "Cartão 4 — título", def: "Onde construímos", page: "Sobre Nós" },
+  // Duas linhas em branco separam parágrafos — o cartão renderiza um <p> por bloco.
+  "sobre.card4.txt": { label: "Cartão 4 — texto", def: "Concentramos a operação no Norte do país. É essa proximidade que nos permite ter equipa própria em obra, controlar prazos e acompanhar cada projeto de perto, do primeiro desenho à entrega.\n\nEm aço leve (LSF) construímos no distrito do Porto, no eixo de Braga e no norte de Aveiro. Em madeira, alargamos a Viana do Castelo, Vila Real, ao interior de Braga e ao restante distrito de Aveiro.", page: "Sobre Nós", multiline: true },
+  "sobre.card4.link": { label: "Cartão 4 — texto do link", def: "Ver todos os concelhos", page: "Sobre Nós" },
 
   // ─── Serviços ───
   "servicos.s1.tit": { label: "Serviço 1 — título", def: "Construção de Casas", page: "Serviços" },
@@ -62,7 +64,7 @@ export const CF: Record<string, CopyField> = {
   "home.intro.t2": { label: "Introdução — título linha 2", def: "construção a um", page: "Início" },
   "home.intro.t3": { label: "Introdução — título linha 3", def: "novo padrão.", page: "Início" },
   "home.intro.cta": { label: "Introdução — botão", def: "Sobre nós", page: "Início" },
-  "home.intro.p1": { label: "Introdução — parágrafo", def: "Na Evaplace, criamos projetos que se distinguem pela estética contemporânea e pela funcionalidade inteligente, com a exigência e o saber-fazer que nos definem, verdadeiramente distintos em todo o Portugal.", page: "Início", multiline: true },
+  "home.intro.p1": { label: "Introdução — parágrafo", def: "Na Evaplace, criamos projetos que se distinguem pela estética contemporânea e pela funcionalidade inteligente, com a exigência e o saber-fazer que nos definem.", page: "Início", multiline: true },
 };
 
 // Lista de páginas (ordem no backoffice)

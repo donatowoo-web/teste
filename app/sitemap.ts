@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/sobre-nos",
     "/casas-lsf-madeira",
     "/construcao-em-lsf",
+    "/zonas-de-atuacao/",
     "/servicos",
     "/contactos",
     "/blog",

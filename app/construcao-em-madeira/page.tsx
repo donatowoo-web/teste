@@ -3,6 +3,7 @@ import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import styles from "./construcao-madeira.module.css";
 import FeaturesSection from "./FeaturesSection";
+import ZonasCta from "../components/ZonasCta";
 
 const BASE_URL = "https://www.evaplace.pt";
 
@@ -260,6 +261,8 @@ export default async function ConstrucaoMadeiraPage() {
           </div>
         </section>
       )}
+    <ZonasCta texto="Em madeira construímos numa área mais alargada: Porto, Braga, Viana do Castelo, Vila Real e Aveiro." />
+
     </main>
   );
 }

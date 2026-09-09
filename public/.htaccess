@@ -47,6 +47,12 @@
   RewriteRule ^produto/casa-praga-lsf/?$ https://www.evaplace.pt/produto/casa-praga/ [R=301,L]
   RewriteRule ^produto/san-diego/?$ https://www.evaplace.pt/produto/san-diego-v3/ [R=301,L]
 
+  # --- Zonas de atuação: página local despublicada (set/2026) ---
+  # A Evaplace deixou de construir em aço leve em Marco de Canaveses, por isso a
+  # landing page local saiu do ar. Tinha links internos e tráfego orgânico: vai
+  # para /zonas-de-atuacao/ em 301, nunca 404/410.
+  RewriteRule ^paginas/construcao-de-casas-em-aco-leve-em-marco-de-canaveses/?$ https://www.evaplace.pt/zonas-de-atuacao/ [R=301,L]
+
   # --- Recrutamento: a secção passou de /recrutamentos/ (plural) a /recrutamento/ ---
   # A exceção e o caso da raiz têm de vir ANTES da regra geral, senão nunca disparam.
   RewriteRule ^recrutamentos/ajudante-trolha/?$ https://www.evaplace.pt/recrutamento/ajudante-de-trolha/ [R=301,L]

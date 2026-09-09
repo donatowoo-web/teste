@@ -2,7 +2,14 @@ import FadeInOnScroll from "./FadeInOnScroll";
 import styles from "./AboutCardsSection.module.css";
 import { tc } from "../lib/copy";
 
-const cards = [
+type Card = {
+  img: string;
+  title: string;
+  text: string;
+  link?: { href: string; label: string };
+};
+
+const cards: Card[] = [
   {
     img: "/sobre-nos/projetosfeitosamedida.webp",
     title: tc("sobre.card1.tit"),
@@ -22,6 +29,7 @@ const cards = [
     img: "/sobre-nos/portugalcontinental.webp",
     title: tc("sobre.card4.tit"),
     text: tc("sobre.card4.txt"),
+    link: { href: "/zonas-de-atuacao/", label: tc("sobre.card4.link") },
   },
 ];
 
@@ -45,7 +53,17 @@ export default function AboutCardsSection() {
                   />
                   <div className={styles.content}>
                     <h3 className={styles.title}>{c.title}</h3>
-                    <p className={styles.text}>{c.text}</p>
+                    {/* Linha em branco no texto = novo parágrafo. */}
+                    {c.text.split(/\n\s*\n/).map((paragrafo, p) => (
+                      <p key={p} className={styles.text}>
+                        {paragrafo}
+                      </p>
+                    ))}
+                    {c.link && (
+                      <a className={styles.link} href={c.link.href}>
+                        {c.link.label}
+                      </a>
+                    )}
                   </div>
                 </article>
               </FadeInOnScroll>

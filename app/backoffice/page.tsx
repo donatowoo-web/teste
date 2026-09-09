@@ -731,7 +731,7 @@ const PREMADE_TEMPLATES: PreMadeTemplate[] = [
     sections: () => [
       { _key: rand(), type: "two-columns" as SectionType,
         leftContent: `<h2 style="font-size:2.5rem;font-weight:300;line-height:1.1;font-family:serif">Elevamos a construção a um novo padrão.</h2><p><a href="/sobre-nos/" style="color:#88B14B;text-transform:uppercase;letter-spacing:0.35em;font-size:1rem;text-decoration:none;border-bottom:1px solid rgba(136,177,75,0.7);padding-bottom:0.75rem;display:inline-block">Sobre nós</a></p>`,
-        rightContent: `<p>Na Evaplace, criamos projetos que se distinguem pela estética contemporânea e pela funcionalidade inteligente, com a exigência e o saber-fazer que nos definem, verdadeiramente distintos em todo o Portugal.</p><p>Trabalhamos com os sistemas construtivos mais avançados (aço leve) ou madeira, garantindo soluções práticas, inovação, no conforto e na durabilidade.</p>`,
+        rightContent: `<p>Na Evaplace, criamos projetos que se distinguem pela estética contemporânea e pela funcionalidade inteligente, com a exigência e o saber-fazer que nos definem.</p><p>Trabalhamos com os sistemas construtivos mais avançados (aço leve) ou madeira, garantindo soluções práticas, inovação, no conforto e na durabilidade.</p>`,
       },
     ],
   },

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import styles from "./construcao-lsf.module.css";
 import FAQAccordion from "./FAQAccordion";
+import ZonasCta from "../components/ZonasCta";
 import { Metadata } from "next";
 
 const BASE_URL = "https://www.evaplace.pt";
@@ -329,6 +330,8 @@ export default async function ConstrucaoLSFPage() {
           </div>
         </section>
       )}
+
+      <ZonasCta texto="Em aço leve (LSF) construímos no distrito do Porto, no eixo de Braga e no norte de Aveiro." />
 
       <FAQAccordion />
     </main>

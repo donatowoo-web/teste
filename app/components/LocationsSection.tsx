@@ -30,6 +30,7 @@ export default async function LocationsSection() {
   const pages = await client.fetch<LocationPage[]>(`
     *[
       _type == "page" &&
+      published == true &&
       defined(slug.current) &&
       slug.current match "*aco-leve*" &&
       !(_id in path("drafts.**"))
@@ -69,8 +70,9 @@ export default async function LocationsSection() {
             lineHeight: 1.6,
           }}
         >
-          Projetos à medida em várias regiões de Portugal. Veja a nossa
-          construção de casas em aço leve (LSF) perto de si.
+          Construímos em aço leve no distrito do Porto, no eixo de Braga e no
+          norte de Aveiro. Veja a nossa construção de casas em aço leve (LSF)
+          perto de si.
         </p>
 
         <div className="locGrid">

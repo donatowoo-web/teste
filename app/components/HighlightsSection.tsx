@@ -8,7 +8,7 @@ export default function HighlightsSection() {
           
           <div className={styles.item}>
             <span className={styles.icon}>◎</span>
-            <p>Construções em todo Portugal</p>
+            <p>Construções no Norte do país</p>
           </div>
 
           <div className={styles.item}>

@@ -54,6 +54,7 @@ export default function Footer() {
             <h4 className={styles.title}>Links</h4>
             <ul className={styles.list}>
               <li><a href="/casas-lsf-madeira/">Casas</a></li>
+              <li><a href="/zonas-de-atuacao/">Zonas de Atuação</a></li>
               <li><a href="/recrutamento">Recrutamento</a></li>
               <li><a href="/blog">Blog</a></li>
               <li><a href="/faq">FAQ</a></li>

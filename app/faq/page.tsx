@@ -3,7 +3,25 @@
 import { useState } from "react";
 import styles from "./faq.module.css";
 
-const FAQ_LSF = [
+type FAQEntry = { question: string; answer: React.ReactNode };
+
+const FAQ_LSF: FAQEntry[] = [
+  {
+    question: "Onde é que a Evaplace constrói?",
+    answer: (
+      <>
+        Construímos no Norte do país. Em aço leve (LSF), abrangemos o distrito do
+        Porto, o eixo de Braga e o norte de Aveiro. Em construção em madeira, a
+        área é mais alargada e inclui ainda Viana do Castelo, Vila Real, o
+        interior de Braga e o restante distrito de Aveiro. Pode consultar a lista
+        completa de concelhos na{" "}
+        <a href="/zonas-de-atuacao/" className={styles.faqLink}>
+          página de zonas de atuação
+        </a>
+        .
+      </>
+    ),
+  },
   {
     question: "O que é construção em Light Steel Frame (LSF)?",
     answer:
@@ -51,7 +69,7 @@ const FAQ_LSF = [
   },
 ];
 
-const FAQ_MADEIRA = [
+const FAQ_MADEIRA: FAQEntry[] = [
   {
     question:
       "Quais são as vantagens de construir uma casa de madeira de pinho nórdico certificado?",
@@ -104,7 +122,7 @@ function FAQItem({
   onClick,
 }: {
   question: string;
-  answer: string;
+  answer: React.ReactNode;
   isOpen: boolean;
   onClick: () => void;
 }) {
