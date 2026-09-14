@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import styles from "./pagina.module.css";
 import PageSections from "./PageSections";
+import { PAGINAS_RETIRADAS } from "../../lib/paginasRetiradas";
 
 export const dynamicParams = false;
 
@@ -13,7 +14,8 @@ type PageDoc = {
 
 export async function generateStaticParams() {
   const slugs: string[] = await client.fetch(
-    `*[_type == "page" && published == true && defined(slug.current) && !(_id in path("drafts.**"))].slug.current`
+    `*[_type == "page" && published == true && defined(slug.current) && !(slug.current in $retiradas) && !(_id in path("drafts.**"))].slug.current`,
+    { retiradas: PAGINAS_RETIRADAS }
   ).catch(() => []);
   // Always include a placeholder to satisfy Next.js static export requirement
   const params = (slugs || []).map((slug) => ({ slug }));

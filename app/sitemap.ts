@@ -3,6 +3,7 @@ import { MetadataRoute } from "next";
 export const dynamic = "force-static";
 import { client } from "@/sanity/lib/client";
 import { getCasas } from "./lib/getCasas";
+import { PAGINAS_RETIRADAS } from "./lib/paginasRetiradas";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.evaplace.pt";
@@ -72,11 +73,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Páginas de cidade (SEO local) — tipo "page" no Sanity
   const cityPages = await client.fetch<{ slug: string; updatedAt: string }[]>(`
-    *[_type == "page" && published == true && defined(slug.current) && !(_id in path("drafts.**"))] {
+    *[_type == "page" && published == true && defined(slug.current) && !(slug.current in $retiradas) && !(_id in path("drafts.**"))] {
       "slug": slug.current,
       "updatedAt": _updatedAt
     }
-  `);
+  `, { retiradas: PAGINAS_RETIRADAS });
 
   const cityUrls = cityPages.map((p) => ({
     url: `${baseUrl}/paginas/${p.slug}`,

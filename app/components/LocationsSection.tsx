@@ -1,4 +1,5 @@
 import { client } from "@/sanity/lib/client";
+import { PAGINAS_RETIRADAS } from "../lib/paginasRetiradas";
 
 type LocationPage = {
   title: string;
@@ -33,12 +34,13 @@ export default async function LocationsSection() {
       published == true &&
       defined(slug.current) &&
       slug.current match "*aco-leve*" &&
+      !(slug.current in $retiradas) &&
       !(_id in path("drafts.**"))
     ] | order(title asc){
       title,
       "slug": slug.current
     }
-  `);
+  `, { retiradas: PAGINAS_RETIRADAS });
 
   if (!pages || pages.length === 0) return null;
 
@@ -94,11 +96,19 @@ export default async function LocationsSection() {
           gap: 16px;
           grid-template-columns: 1fr;
         }
-        @media (min-width: 600px) {
+        /* A lista vem do Sanity e o número de concelhos muda. Quando a última
+           linha fica incompleta, os cartões dessa linha esticam para a
+           preencher — a grelha nunca fica com um buraco. */
+        @media (min-width: 600px) and (max-width: 959px) {
           .locGrid { grid-template-columns: repeat(2, 1fr); }
+          .locCard:nth-child(odd):last-child { grid-column: span 2; }
         }
         @media (min-width: 960px) {
-          .locGrid { grid-template-columns: repeat(3, 1fr); }
+          .locGrid { grid-template-columns: repeat(6, 1fr); }
+          .locCard { grid-column: span 2; }
+          .locCard:nth-child(3n+1):nth-last-child(2),
+          .locCard:nth-child(3n+1):nth-last-child(2) + .locCard { grid-column: span 3; }
+          .locCard:nth-child(3n+1):last-child { grid-column: span 6; }
         }
         .locCard {
           position: relative;
