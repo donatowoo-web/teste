@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./backoffice.module.css";
 import RichTextEditor from "./components/RichTextEditor";
 import { CF, COPY_PAGES } from "../data/copyFields";
-import { portableTextToHtml, htmlToPortableText, rand } from "./portableTextHtml";
+import { portableTextToHtml, htmlToPortableText, rand, insertFormCard, formCardHtml } from "./portableTextHtml";
 
 // ─── Sanity Config ───
 const PROJECT_ID = "onxd36ek";
@@ -319,11 +319,11 @@ function ContentEditor({
             </button>
             <div className={styles.toolbarSep} />
             <button className={styles.toolbarBtn} onClick={() => {
-              const formHtml = `<div data-multistep-form="true" style="text-align:center;padding:40px 20px;background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:12px;margin:32px 0"><p style="font-size:1.1rem;font-weight:600;color:#0f172a;margin:0 0 8px">Formulário de Contacto</p><p style="color:#64748b;margin:0;font-size:0.9rem">Este bloco será substituído pelo formulário interativo no site publicado.</p></div>`;
-              if (mode === "visual") {
-                exec("insertHTML", formHtml);
+              if (mode === "visual" && editorRef.current) {
+                insertFormCard(editorRef.current);
+                editorRef.current.focus();
               } else {
-                setHtmlCode(htmlCode + "\n" + formHtml);
+                setHtmlCode(htmlCode + "\n" + formCardHtml());
               }
             }} title="Inserir Formulário de Contacto">
               <span style={{ fontSize: "11px", fontWeight: 700 }}>Form</span>

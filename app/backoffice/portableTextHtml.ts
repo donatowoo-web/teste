@@ -30,6 +30,48 @@ export function formCardHtml(): string {
   );
 }
 
+function isEmptyBlock(node: Node): boolean {
+  if (node.nodeName !== "P" && node.nodeName !== "DIV") return false;
+  const el = node as Element;
+  return !(el.textContent || "").trim() && !el.querySelector("img, table, [data-multistep-form]");
+}
+
+/** Insere o cartão como bloco de topo do editor — nunca dentro de título, parágrafo ou lista. */
+export function insertFormCard(editor: HTMLElement): void {
+  const doc = editor.ownerDocument;
+  const tpl = doc.createElement("div");
+  tpl.innerHTML = formCardHtml();
+  const card = tpl.firstElementChild as HTMLElement;
+  const after = doc.createElement("p");
+  after.appendChild(doc.createElement("br"));
+
+  const sel = doc.getSelection();
+  const range = sel && sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
+
+  if (!range || !editor.contains(range.startContainer)) {
+    editor.append(card, after);
+  } else if (range.startContainer === editor) {
+    const prev = editor.childNodes[range.startOffset - 1];
+    if (prev) prev.after(card, after);
+    else editor.prepend(card, after);
+  } else {
+    let top: Node = range.startContainer;
+    while (top.parentNode && top.parentNode !== editor) top = top.parentNode;
+    if (isEmptyBlock(top)) {
+      editor.replaceChild(card, top);
+      card.after(after);
+    } else {
+      (top as ChildNode).after(card, after);
+    }
+  }
+
+  const caret = doc.createRange();
+  caret.setStart(after, 0);
+  caret.collapse(true);
+  sel?.removeAllRanges();
+  sel?.addRange(caret);
+}
+
 export function portableTextToHtml(blocks: any[]): string {
   if (!blocks || !Array.isArray(blocks)) return "<p><br></p>";
 
