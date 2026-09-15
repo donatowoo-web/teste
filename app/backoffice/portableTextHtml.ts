@@ -1,6 +1,35 @@
 // Conteúdo dos artigos: editor do backoffice (HTML) <-> Sanity (Portable Text).
 // Extraído de app/backoffice/page.tsx para poder ser testado (tests/portableTextHtml.*.test.ts).
 
+// ─── Formulário de contacto nos artigos ───
+// No Sanity fica só o marcador; o site troca-o por <MultiStepFormBlog /> (app/[slug]/page.tsx).
+export const FORM_MARKER_HTML = '<div data-multistep-form="true"></div>';
+const FORM_SELECTOR = "[data-multistep-form]";
+
+export function formMarkerBlock(): any {
+  return {
+    _type: "block",
+    _key: rand(),
+    style: "html",
+    markDefs: [],
+    children: [{ _type: "span", _key: rand(), marks: [], text: FORM_MARKER_HTML }],
+  };
+}
+
+/** Cartão do editor: não editável, com o aspeto do MultiStepFormBlog. */
+export function formCardHtml(): string {
+  return (
+    '<div data-multistep-form="true" contenteditable="false" style="max-width:600px;margin:32px auto;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:32px 32px 20px;user-select:none;cursor:default">' +
+    '<p style="text-align:center;margin:0 0 16px;font-size:1.6rem;line-height:1.2;font-weight:600;color:#0f172a">Interessado? Fale connosco!</p>' +
+    '<div style="display:flex;gap:8px;justify-content:center;margin:0 0 24px"><span style="width:32px;height:4px;border-radius:4px;background:#86a941"></span><span style="width:32px;height:4px;border-radius:4px;background:#e2e8f0"></span><span style="width:32px;height:4px;border-radius:4px;background:#e2e8f0"></span></div>' +
+    '<p style="margin:0 0 8px;font-weight:500;color:#1e293b">Possui Terreno? <span style="color:#ef4444">*</span></p>' +
+    '<p style="margin:0 0 20px;color:#334155">◯ Sim &nbsp;&nbsp; ◯ Não</p>' +
+    '<p style="margin:0 0 16px"><span style="display:block;text-align:center;background:#86a941;color:#fff;border-radius:8px;padding:12px;font-weight:500">Seguinte</span></p>' +
+    '<p style="text-align:center;margin:0;font-size:0.8rem;color:#64748b">Pré-visualização — o formulário real aparece no artigo publicado.</p>' +
+    "</div>"
+  );
+}
+
 export function portableTextToHtml(blocks: any[]): string {
   if (!blocks || !Array.isArray(blocks)) return "<p><br></p>";
 
@@ -64,7 +93,7 @@ export function portableTextToHtml(blocks: any[]): string {
     // Raw HTML blocks (style, table, etc.) — output as-is
     if (style === "html") {
       const raw = (block.children || []).map((c: any) => c.text || "").join("");
-      out.push(raw);
+      out.push(raw.includes("data-multistep-form") ? formCardHtml() : raw);
       i++;
       continue;
     }
@@ -206,6 +235,24 @@ export function htmlToPortableText(html: string): any[] {
       if (node.nodeType !== Node.ELEMENT_NODE) continue;
       const el = node as Element;
       const tag = el.tagName.toLowerCase();
+
+      // Formulário: o cartão do editor vira sempre o marcador canónico
+      if (el.matches(FORM_SELECTOR)) {
+        flushList();
+        blocks.push(formMarkerBlock());
+        continue;
+      }
+      // Cartão preso dentro de outro bloco (título, lista, div com tabela): tirar e pôr a seguir.
+      // Um div genérico não precisa: a recursão abaixo encontra o cartão na posição certa.
+      const isWrapperDiv = tag === "div" && !el.querySelector("table, style");
+      if (!isWrapperDiv && el.querySelector(FORM_SELECTOR)) {
+        const cards = Array.from(el.querySelectorAll(FORM_SELECTOR));
+        cards.forEach((c) => c.remove());
+        processNodes([el]);
+        flushList();
+        cards.forEach(() => blocks.push(formMarkerBlock()));
+        continue;
+      }
 
       // Preserve <style>, <table>, or divs containing them as raw HTML blocks
       if (
