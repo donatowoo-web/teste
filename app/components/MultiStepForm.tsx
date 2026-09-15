@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import styles from "./MultiStepForm.module.css";
+import { appendAttribution } from "../lib/attribution";
 
 type FormData = {
   terreno: "Sim" | "Não" | "";
@@ -86,6 +87,8 @@ export default function MultiStepForm() {
       formData.append("Contacto", form.contacto || "");
       formData.append("Privacidade", form.privacidade ? "on" : "");
       formData.append("Date", datePT);
+      // UTMs/gclid da página de entrada (12 campos, sempre presentes)
+      appendAttribution(formData);
 
       const res = await fetch(WEBHOOK, {
         method: "POST",

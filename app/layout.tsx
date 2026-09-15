@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
 import AvisoFerias from "./components/AvisoFerias";
 import GTMPageView from "./components/GTMPageView";
+import AttributionCapture from "./components/AttributionCapture";
 import SmoothScroll from "./components/SmoothScroll";
 import { Metadata } from "next";
 
@@ -58,6 +59,7 @@ export default function RootLayout({
       <GoogleTagManager gtmId="GTM-MXPCKV3G" />
       <body className={`${poppins.variable} ${playfair.variable}`}>
         <GTMPageView />
+        <AttributionCapture />
         <SmoothScroll />
 
         <Header />
