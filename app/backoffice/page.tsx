@@ -134,6 +134,11 @@ function slugify(text: string): string {
     .substring(0, 96);
 }
 
+// Slug escrito à mão: tira espaços, tabs e quebras coladas (um TAB no início dava 404)
+function cleanSlug(text: string): string {
+  return text.replace(/[\s\u200b\ufeff]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
 // ─── Components ───
 
 function StatusMessage({
@@ -1115,7 +1120,7 @@ export default function BackofficePage() {
       showStatus("Escolhe uma imagem de capa para o modelo", true);
       return;
     }
-    const slugVal = (casaSlug.trim() || slugify(casaNome));
+    const slugVal = (cleanSlug(casaSlug) || slugify(casaNome));
     setSavingCasa(true);
     try {
       const fields = {
@@ -1210,7 +1215,7 @@ export default function BackofficePage() {
       showStatus("Escolhe uma imagem de capa para o projeto", true);
       return;
     }
-    const slugVal = (projSlug.trim() || slugify(projTitulo));
+    const slugVal = (cleanSlug(projSlug) || slugify(projTitulo));
     setSavingProjeto(true);
     try {
       const fields = {
@@ -1420,7 +1425,7 @@ export default function BackofficePage() {
       return;
     }
 
-    const finalSlug = slug || slugify(title);
+    const finalSlug = cleanSlug(slug) || slugify(title);
 
     // Capture editor content BEFORE any state changes that trigger re-render
     const finalHtml = editorRef.current?.isContentEditable
@@ -1570,7 +1575,7 @@ export default function BackofficePage() {
       showStatus("O título é obrigatório", true);
       return;
     }
-    const finalSlug = pageSlug || slugify(pageTitle);
+    const finalSlug = cleanSlug(pageSlug) || slugify(pageTitle);
     setSaving(true);
     try {
       const doc: any = {
