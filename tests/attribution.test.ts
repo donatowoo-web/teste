@@ -8,6 +8,8 @@ import {
   buildAttributionFields,
   captureAttribution,
   appendAttribution,
+  marketingConsentGranted,
+  resetAttributionMemory,
 } from "../app/lib/attribution.ts";
 
 const q = (s: string) => new URLSearchParams(s);
@@ -16,9 +18,50 @@ const payload = () => {
   appendAttribution(p);
   return p;
 };
+const aceitarMarketing = (marketing = true) => {
+  document.cookie = `cookieConsent=${encodeURIComponent(JSON.stringify({ necessary: true, analytics: true, marketing }))}`;
+};
 
 beforeEach(() => {
   setupDom();
+  resetAttributionMemory();
+});
+
+test("consentimento: só marketing=true conta", () => {
+  assert.equal(marketingConsentGranted(""), false);
+  aceitarMarketing(false);
+  assert.equal(marketingConsentGranted(), false);
+  aceitarMarketing(true);
+  assert.equal(marketingConsentGranted(), true);
+});
+
+test("sem consentimento não grava no sessionStorage, mas o envio na mesma página leva o gclid", () => {
+  captureAttribution(q("?gclid=teste123"), "/");
+  assert.equal(sessionStorage.getItem("attr"), null);
+  assert.equal(payload().get("gclid"), "teste123");
+});
+
+test("com consentimento: entra com gclid, muda de página (recarrega) e envia → gclid mantém-se", () => {
+  aceitarMarketing();
+  captureAttribution(q("?gclid=teste123"), "/");
+  resetAttributionMemory(); // nova página = memória limpa
+  captureAttribution(q(""), "/contactos/");
+  assert.equal(payload().get("gclid"), "teste123");
+});
+
+test("aceita os cookies depois de aterrar: grava ao sair da página", async () => {
+  const { persistPendingAttribution } = await import("../app/lib/attribution.ts");
+  captureAttribution(q("?gclid=tarde"), "/");
+  assert.equal(sessionStorage.getItem("attr"), null);
+  aceitarMarketing();
+  persistPendingAttribution();
+  resetAttributionMemory();
+  assert.equal(payload().get("gclid"), "tarde");
+});
+
+test("sem consentimento não lê o que ficou no storage", () => {
+  sessionStorage.setItem("attr", JSON.stringify({ gclid: "antigo" }));
+  assert.equal(payload().get("gclid"), "");
 });
 
 test("sem parâmetros de campanha não há nada para guardar", () => {

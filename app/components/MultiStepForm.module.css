@@ -132,3 +132,160 @@
     transform: translateY(0);
   }
 }
+
+/* --- Formulário de qualificação (LeadForm) --- */
+.progress {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: -1.2rem 0 1.8rem;
+}
+
+.dot {
+  flex: 0 1 40px;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.3s;
+}
+
+.dotActive {
+  background: #86a941;
+}
+
+.intro {
+  margin: 0 0 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.labelSmall {
+  display: block;
+  margin: 1rem 0 0.4rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.option {
+  min-height: 52px;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.option:hover {
+  border-color: #86a941;
+}
+
+.option:focus-visible {
+  outline: 2px solid #86a941;
+  outline-offset: 2px;
+}
+
+.optionActive {
+  background: #86a941;
+  border-color: #86a941;
+  color: #000;
+  font-weight: 600;
+}
+
+.combo {
+  position: relative;
+}
+
+.comboList {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  background: #fff;
+  color: #111;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.comboItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.comboItemActive {
+  background: #eef4e2;
+}
+
+.comboHint {
+  color: #777;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.comboEmpty {
+  padding: 0.6rem 1rem;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.check {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.check input {
+  margin-top: 0.2rem;
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.check a {
+  color: #86a941;
+  text-decoration: underline;
+}
+
+.error {
+  margin-top: 0.4rem;
+  color: #ff6b6b;
+  font-size: 0.9rem;
+}
+
+.input[aria-invalid="true"] {
+  outline: 2px solid #ff6b6b;
+}
+
+@media (max-width: 480px) {
+  .options {
+    grid-template-columns: 1fr !important;
+  }
+  .option {
+    text-align: left;
+  }
+  .progress {
+    margin-top: -1rem;
+  }
+}

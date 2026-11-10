@@ -156,3 +156,133 @@
     font-size: 1.4rem;
   }
 }
+
+/* --- Formulário de qualificação (LeadForm) --- */
+.intro {
+  margin: 0 0 0.5rem;
+  color: #475569;
+}
+
+.labelSmall {
+  display: block;
+  margin: 1rem 0 0.4rem;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.option {
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.option:hover {
+  border-color: #86a941;
+}
+
+.option:focus-visible {
+  outline: 2px solid #86a941;
+  outline-offset: 2px;
+}
+
+.optionActive {
+  background: #86a941;
+  border-color: #86a941;
+  color: #fff;
+  font-weight: 600;
+}
+
+.combo {
+  position: relative;
+}
+
+.comboList {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+}
+
+.comboItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.comboItemActive {
+  background: #f1f7e6;
+}
+
+.comboHint {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.comboEmpty {
+  padding: 0.6rem 1rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.check {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin-top: 1.2rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.check input {
+  margin-top: 0.2rem;
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.check a {
+  color: #5f7d24;
+  text-decoration: underline;
+}
+
+.input[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+
+@media (max-width: 480px) {
+  .options {
+    grid-template-columns: 1fr !important;
+  }
+  .option {
+    text-align: left;
+  }
+}

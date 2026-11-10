@@ -77,7 +77,7 @@ export default async function ObrigadoPage() {
             <div className={styles.icon}>✓</div>
             <h1 className={styles.title}>Vamos começar o processo!</h1>
             <p className={styles.subtitle}>
-              E agora? Vamos entrar em contacto dentro de 24h.<br />
+              Recebemos o seu pedido. A equipa da Evaplace vai entrar em contacto consigo.<br />
               Até lá pode ver como funciona o método da Evaplace.
             </p>
           </FadeInOnScroll>
