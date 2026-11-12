@@ -44,7 +44,7 @@ function novoLeadId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-/** Push no dataLayer e espera que o GTM o processe (máx. 1,5 s) antes de seguir. */
+/** Push no dataLayer e espera que o GTM o processe (máx. 2 s) antes de seguir. */
 function pushEsperar(evento: Record<string, unknown>): Promise<void> {
   return new Promise((resolve) => {
     let feito = false;
@@ -56,11 +56,12 @@ function pushEsperar(evento: Record<string, unknown>): Promise<void> {
     try {
       const w = window as unknown as { dataLayer?: unknown[] };
       w.dataLayer = w.dataLayer || [];
-      w.dataLayer.push({ ...evento, eventCallback: seguir, eventTimeout: 1500 });
+      w.dataLayer.push({ ...evento, eventCallback: seguir, eventTimeout: 2000 });
     } catch {
       // sem dataLayer: segue na mesma
     }
-    setTimeout(seguir, 1800);
+    // Rede de segurança: se o GTM estiver bloqueado (adblocker), o eventTimeout nunca corre.
+    setTimeout(seguir, 2300);
   });
 }
 
