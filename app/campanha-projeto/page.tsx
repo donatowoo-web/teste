@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LEAD_CONFIG } from "../lib/leadQualificacao";
 import CampanhaForm from "./CampanhaForm";
 import CampanhaGate from "./CampanhaGate";
+import { BarraFixa, BotaoFormulario } from "./IrParaFormulario";
 import ProvaGaleria, { type FotoProva } from "./ProvaGaleria";
 import { CASAS_PROVA, FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, LOGOS, imagem } from "./config";
 import styles from "./campanha.module.css";
@@ -91,26 +92,31 @@ export default function CampanhaProjetoPage() {
       </div>
 
       <CampanhaGate fechada={fechada}>
-        <div className={styles.heroImagem}>
-          <img src={IMAGEM_TOPO} alt="Estrutura em aço leve" width={1024} height={576} fetchPriority="high" />
-        </div>
+        {/* Imagem do topo como fundo do primeiro ecrã (escurecida, para o título se ler). */}
+        <div className={styles.fundo} role="img" aria-label="Estrutura em aço leve" style={{ backgroundImage: `url(${IMAGEM_TOPO})` }} />
 
-        <section className={`${styles.seccao} ${styles.abertura}`}>
-          <h1 className={styles.h1}>Quem desenha a sua casa sabe como ela vai ser construída.</h1>
-          <div className={styles.linha} />
-          <p className={styles.texto}>
-            A Esquadro, empresa de arquitetura da Evaplace, faz o projeto de arquitetura e especialidades da sua casa.
-            A Evaplace constrói em aço leve e em madeira.
-          </p>
-          <p className={styles.texto}>
-            Até 16 de dezembro, quem fizer o projeto com a Esquadro e construir com a Evaplace tem até 100% do valor
-            do projeto descontado na obra. Se construir com outra empresa, fica com o projeto.
-          </p>
-          <a href="#candidatura" className={styles.botao}>
-            QUERO SABER MAIS
-          </a>
-        </section>
+        {/* Desktop: conteúdo à esquerda, formulário fixo à direita.
+            Telemóvel: abertura, formulário, e só depois o resto. */}
+        <div className={styles.grelha}>
+          <section className={`${styles.seccao} ${styles.abertura}`}>
+            <h1 className={styles.h1}>Quem desenha a sua casa sabe como ela vai ser construída.</h1>
+            <div className={styles.linha} />
+            <p className={styles.texto}>
+              A Esquadro, empresa de arquitetura da Evaplace, faz o projeto de arquitetura e especialidades da sua
+              casa. A Evaplace constrói em aço leve e em madeira.
+            </p>
+            <p className={styles.texto}>
+              Até 16 de dezembro, quem fizer o projeto com a Esquadro e construir com a Evaplace tem até 100% do valor
+              do projeto descontado na obra. Se construir com outra empresa, fica com o projeto.
+            </p>
+            <BotaoFormulario>QUERO SABER MAIS</BotaoFormulario>
+          </section>
 
+          <div id="candidatura" className={styles.candidatura}>
+            <CampanhaForm />
+          </div>
+
+          <div className={styles.resto}>
         <section className={styles.seccao}>
           <h2 className={styles.h2}>Como funciona o desconto</h2>
           <div className={styles.linha} />
@@ -161,9 +167,10 @@ export default function CampanhaProjetoPage() {
           <p className={styles.textoSuave}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
         </section>
 
-        <div id="candidatura" className={styles.candidatura}>
-          <CampanhaForm />
+          </div>
         </div>
+
+        <BarraFixa>QUERO SABER MAIS</BarraFixa>
       </CampanhaGate>
 
       <footer className={styles.rodape}>
