@@ -19,23 +19,21 @@ export function campanhaFechada(agoraMs: number): boolean {
 export const FECHO_TITULO = "A campanha terminou a 16 de dezembro.";
 export const FECHO_TEXTO = "Obrigado pelo interesse.";
 
-/**
- * POR CONFIRMAR: imagem larga do topo (o ficheiro da campanha não foi entregue).
- * Provisória: estrutura em aço leve da Casa Gondim, já no Sanity.
- */
-export const IMAGEM_TOPO =
-  "https://cdn.sanity.io/images/onxd36ek/production/b5e6509218427ae3de9d52ae1e723dedbd87bcb8-2048x1536.jpg";
+/** Imagem do topo: a do email da campanha (1024x576). Não é esticada além dessa largura. */
+export const IMAGEM_TOPO = "/campanha/estrutura-aco-leve.jpg";
+
+/** Logótipos Evaplace × Esquadro: a imagem única do cabeçalho do email (829x141, fundo preto). */
+export const LOGOS = "/campanha/logos-evaplace-esquadro.png";
 
 /**
- * As 3 casas da prova: a foto é a miniatura de cada projeto no Sanity.
- * "reserva" é essa mesma miniatura à data de 13/11/2026, usada só se o Sanity falhar
- * durante o build (o getProjetos cai então nos projetos locais, que não têm Gondim nem Arouca).
+ * As 3 casas da prova, com fotos dos próprios projetos no Sanity.
+ * Gondim e Arouca usam as mesmas fotos do email; Caminha usa a miniatura do projeto.
  */
 const CDN = "https://cdn.sanity.io/images/onxd36ek/production";
 export const CASAS_PROVA = [
-  { slug: "casa-gondim", nome: "Casa Gondim", reserva: `${CDN}/7462dec97ba64ce15292365e0b9f191bd806246e-1536x2048.jpg` },
-  { slug: "casa-arouca", nome: "Casa Arouca", reserva: `${CDN}/6c32134ba0f021cb7b39f08cd8a448e7e43d64b2-6000x4000.jpg` },
-  { slug: "casa-caminha", nome: "Casa Caminha", reserva: "/projetos/caminha/caminha_1.webp" },
+  { nome: "Casa Gondim", foto: `${CDN}/b5e6509218427ae3de9d52ae1e723dedbd87bcb8-2048x1536.jpg` },
+  { nome: "Casa Arouca", foto: `${CDN}/20980c47fbb6bd417affab30fcfae17c7ac90a24-6000x4000.jpg` },
+  { nome: "Casa Caminha", foto: "/projetos/caminha/caminha_1.webp" },
 ];
 
 /** Imagens do CDN do Sanity redimensionadas; as locais (/projetos/…) ficam como estão. */

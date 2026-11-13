@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import styles from "./CookieBanner.module.css";
 
@@ -92,6 +93,8 @@ export default function CookieBanner() {
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // Na landing page de campanha (sem pontos de fuga) a política abre noutro separador.
+  const linkNovoSeparador = usePathname()?.startsWith("/campanha-projeto") ?? false;
 
   useEffect(() => {
     setMounted(true);
@@ -205,7 +208,11 @@ export default function CookieBanner() {
           Este website utiliza cookies para melhorar a sua experiência. Os cookies necessários
           são essenciais para o funcionamento do site. Com o seu consentimento, também utilizamos
           cookies analíticos e de marketing.{" "}
-          <a href="/politica-de-cookies" className={styles.link}>
+          <a
+            href="/politica-de-cookies"
+            className={styles.link}
+            {...(linkNovoSeparador ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
             Saiba mais na nossa Política de Cookies
           </a>
         </p>

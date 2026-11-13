@@ -1,5 +1,7 @@
-/* Landing page «Evaplace × Esquadro». Cores do site: preto, verde-oliva #86a941,
-   verde das linhas #88b14b, verde-lima das etiquetas #b4d429. Sem azuis. */
+/* Landing page «Evaplace × Esquadro». Segue o email da campanha:
+   fundo preto, verde das etiquetas #88B131, linhas #5C9839, botões #506527,
+   texto #E6E6E6 / #BDBDBD, contornos #333333 / #262626. Sem azuis.
+   Os títulos usam a serifa do site (regra global de h1/h2/h3). */
 
 .page {
   background: #000;
@@ -15,117 +17,104 @@
 
 /* ---------- Topo ---------- */
 .topo {
-  padding: 1.75rem 1.5rem;
+  padding: 1.5rem 1.5rem 1.75rem;
 }
 
 .logos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
+  display: block;
+  width: 415px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
-.logoEvaplace {
-  height: 38px;
-  width: auto;
-}
-
-/* O logótipo da Esquadro é preto sobre transparente: invertido para o fundo preto. */
-.logoEsquadro {
-  height: 38px;
-  width: auto;
-  filter: invert(1);
-}
-
-.logosX {
-  font-size: 1.4rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1;
-}
-
+/* A imagem tem 1024 px de largura: nunca é esticada além disso (ficaria desfocada). */
 .heroImagem {
-  width: 100%;
-  aspect-ratio: 21 / 9;
-  max-height: 520px;
-  overflow: hidden;
-  background: #111;
+  max-width: 1024px;
+  margin: 0 auto;
 }
 
 .heroImagem img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 45%;
+  height: auto;
 }
 
 /* ---------- Secções ---------- */
 .seccao {
   max-width: 880px;
   margin: 0 auto;
-  padding: 4.5rem 1.5rem 0;
+  padding: 0 1.5rem 4.5rem;
 }
 
 .abertura {
-  padding-top: 4rem;
+  padding-top: 3.75rem;
 }
 
 .h1 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: clamp(2.125rem, 5vw, 3.25rem);
   line-height: 1.12;
+  color: #fff;
 }
 
 .h2 {
   margin: 0;
-  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
-  line-height: 1.15;
+  font-size: clamp(1.75rem, 3.6vw, 2.25rem);
+  line-height: 1.2;
+  color: #fff;
 }
 
+/* Linha fina verde a toda a largura da coluna, como no email. */
 .linha {
-  width: 72px;
   height: 1px;
-  background: #88b14b;
-  margin: 1.5rem 0 2rem;
+  background: #5c9839;
+  margin: 1.25rem 0 1.5rem;
 }
 
 .texto {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.9rem;
   font-size: 1.0625rem;
   line-height: 1.75;
-  color: rgba(255, 255, 255, 0.85);
+  color: #e6e6e6;
+}
+
+.textoSuave {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #bdbdbd;
 }
 
 .etiqueta {
-  margin: 0;
-  font-size: 0.8rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: #b4d429;
+  color: #88b131;
 }
 
 .botao {
   display: inline-block;
-  margin-top: 1rem;
-  padding: 1rem 2.5rem;
-  background: #86a941;
-  color: #000;
-  font-size: 0.95rem;
+  margin-top: 1.25rem;
+  padding: 1rem 2rem;
+  background: #506527;
+  color: #fff;
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 1.5px;
   text-decoration: none;
   text-align: center;
   transition: background 0.2s ease;
 }
 
 .botao:hover {
-  background: #9ec35e;
+  background: #5f7830;
 }
 
 .botao:focus-visible {
-  outline: 2px solid #b4d429;
+  outline: 2px solid #88b131;
   outline-offset: 3px;
 }
 
@@ -138,94 +127,88 @@
 
 .passos li {
   display: flex;
-  gap: 1.25rem;
   align-items: baseline;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 0 0.9rem;
   font-size: 1.0625rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  color: #e6e6e6;
+}
+
+.passos li:last-child {
+  padding-bottom: 0;
 }
 
 .passoNumero {
   flex: none;
-  width: 2.2rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  color: #b4d429;
+  width: 3.5rem;
+  font-family: var(--font-title);
+  font-size: 1.75rem;
+  line-height: 1.2;
+  color: #88b131;
 }
 
 .blocos {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-top: 2.5rem;
+  gap: 1rem;
+  margin-top: 1.75rem;
 }
 
 .bloco {
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  padding: 2rem 1.5rem;
+  border: 1px solid #333;
+  padding: 2rem 1rem;
   text-align: center;
 }
 
 .blocoVerde {
-  border-color: #88b14b;
+  border-color: #5c9839;
 }
 
 .blocoValor {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-family: var(--font-title);
-  font-size: clamp(2.8rem, 7vw, 4rem);
+  font-size: clamp(3.25rem, 7vw, 4rem);
   line-height: 1;
-}
-
-.blocoVerde .blocoValor {
-  color: #b4d429;
+  color: #fff;
 }
 
 .blocoTexto {
-  margin: 0;
-  font-size: 0.98rem;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.8);
+  color: #bdbdbd;
 }
 
 /* ---------- Condições ---------- */
-.condicoes {
-  list-style: none;
-  margin: 0 0 2rem;
-  padding: 0;
+.linha + .condicao {
+  margin-top: -1rem;
 }
 
-.condicoes li {
-  position: relative;
-  padding: 0.5rem 0 0.5rem 1.6rem;
+.condicao {
+  margin: 0;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid #262626;
   font-size: 1.0625rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  color: #e6e6e6;
 }
 
-.condicoes li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1.25rem;
-  width: 0.8rem;
-  height: 1px;
-  background: #88b14b;
+.concelhos {
+  margin-top: 1.75rem;
 }
 
+/* Como o «VER TODAS AS CASAS» do email: etiqueta verde sublinhada. */
 .concelhosBtn {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1.75rem;
-  border: 1px solid #88b14b;
-  color: #fff;
+  padding: 0.5rem 0 0.35rem;
+  border-bottom: 1px solid #88b131;
+  color: #88b131;
   font-family: var(--font-sans);
-  font-size: 0.85rem;
-  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 3px;
   text-transform: uppercase;
   cursor: pointer;
   list-style: none;
@@ -238,9 +221,9 @@
 
 .concelhosBtn::after {
   content: "+";
-  font-size: 1.1rem;
+  font-size: 1rem;
+  letter-spacing: 0;
   line-height: 1;
-  color: #b4d429;
 }
 
 .concelhos[open] .concelhosBtn::after {
@@ -248,12 +231,13 @@
 }
 
 .concelhosBtn:hover {
-  background: rgba(136, 177, 75, 0.12);
+  color: #a3cc4a;
+  border-color: #a3cc4a;
 }
 
 .concelhosBtn:focus-visible {
-  outline: 2px solid #b4d429;
-  outline-offset: 3px;
+  outline: 2px solid #88b131;
+  outline-offset: 4px;
 }
 
 .concelhosLista {
@@ -266,46 +250,44 @@
 .sistemaTitulo {
   margin: 0 0 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(136, 177, 75, 0.5);
+  border-bottom: 1px solid #262626;
   font-size: 1.4rem;
+  color: #fff;
 }
 
 .distrito {
   margin: 0 0 1rem;
   font-size: 0.95rem;
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.8);
+  color: #bdbdbd;
 }
 
 .distritoNome {
   display: block;
-  margin-bottom: 0.15rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  margin-bottom: 0.2rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: #b4d429;
+  color: #88b131;
 }
 
 /* ---------- Prova ---------- */
-.prova {
-  max-width: 1100px;
-  text-align: center;
-}
-
 .provaNumero {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-family: var(--font-title);
-  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-size: clamp(3rem, 8vw, 4.25rem);
   line-height: 1;
+  color: #fff;
 }
 
 .fotos {
   list-style: none;
-  margin: 2.5rem 0 2.5rem;
+  margin: 1.5rem 0 1.75rem;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  gap: 0.75rem;
 }
 
 .fotoBtn {
@@ -320,7 +302,7 @@
 }
 
 .fotoBtn:focus-visible {
-  outline: 2px solid #b4d429;
+  outline: 2px solid #88b131;
   outline-offset: 3px;
 }
 
@@ -337,9 +319,9 @@
 }
 
 .fotoNome {
-  margin: 0.75rem 0 0;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.9);
+  margin: 0.6rem 0 0;
+  font-size: 0.875rem;
+  color: #e6e6e6;
 }
 
 .lightbox {
@@ -375,7 +357,7 @@
   margin-top: 0.75rem;
   font-family: var(--font-sans);
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: #e6e6e6;
 }
 
 .lightboxFechar {
@@ -384,33 +366,38 @@
   right: 0.75rem;
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #333;
   background: transparent;
   color: #fff;
   font-size: 1.1rem;
   cursor: pointer;
 }
 
-/* ---------- Formulário (caixa do «Vamos Falar!») ---------- */
+/* ---------- Formulário (caixa com contorno, como no email e no «Vamos Falar!») ---------- */
 .candidatura {
   scroll-margin-top: 1rem;
 }
 
 .formWrapper {
   background: transparent;
-  padding: 5rem 1.5rem 5rem;
+  padding: 0 1.5rem 4.5rem;
 }
 
-.formBox {
+/* Classe repetida: ganha às regras de MultiStepForm.module.css seja qual for a ordem dos ficheiros. */
+.formBox.formBox {
   max-width: 880px;
-  animation: none !important;
+  box-sizing: border-box;
+  background: #000;
+  border-color: #333;
+  animation: none;
 }
 
 .formTitle {
   text-align: center;
-  margin: 0 0 1rem;
-  font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+  margin: 0 0 0.9rem;
+  font-size: clamp(1.75rem, 3.6vw, 2.35rem);
   line-height: 1.15;
+  color: #fff;
 }
 
 .formSubtitle {
@@ -418,48 +405,53 @@
   margin: 0 0 2.5rem;
   font-size: 1.0625rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
+  color: #bdbdbd;
 }
 
-.formProgress {
-  margin-top: -0.9rem !important;
+.formProgress.formProgress {
+  margin-top: -0.9rem;
 }
 
-.formInput {
+.formInput.formInput {
   box-sizing: border-box;
 }
 
-.formBtn {
+.formBtn.formBtn {
+  background: #506527;
+  color: #fff;
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .formNote {
   margin: 1.25rem 0 0;
   text-align: center;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-size: 0.6875rem;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: #b4d429;
+  color: #88b131;
 }
 
 /* ---------- Agradecimento (campanha fechada) ---------- */
 .fecho {
   max-width: 880px;
   margin: 0 auto;
-  padding: 5rem 1.5rem 6rem;
+  padding: 3.75rem 1.5rem 6rem;
   min-height: 45vh;
 }
 
 /* ---------- Rodapé mínimo ---------- */
 .rodape {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 2rem 1.5rem 2.5rem;
+  max-width: 880px;
+  margin: 0 auto;
+  border-top: 1px solid #262626;
+  padding: 1.5rem 1.5rem 2rem;
   text-align: center;
-  font-size: 0.82rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: #bdbdbd;
 }
 
 .rodape p {
@@ -467,7 +459,7 @@
 }
 
 .rodapeLinks {
-  margin-top: 0.6rem !important;
+  margin-top: 0.4rem !important;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -476,51 +468,39 @@
 }
 
 .rodapeLinks a {
-  color: rgba(255, 255, 255, 0.8);
+  color: #8f8f8f;
   text-decoration: underline;
   text-underline-offset: 3px;
   padding: 0.35rem 0;
 }
 
 .rodapeLinks a:hover {
-  color: #b4d429;
+  color: #88b131;
 }
 
 /* ---------- Telemóvel ---------- */
 @media (max-width: 640px) {
   .topo {
-    padding: 1.25rem 1rem;
-  }
-
-  .logos {
-    gap: 0.9rem;
-  }
-
-  .logoEvaplace,
-  .logoEsquadro {
-    height: 26px;
-  }
-
-  .logosX {
-    font-size: 1.1rem;
-  }
-
-  .heroImagem {
-    aspect-ratio: 4 / 3;
+    padding: 1rem 1.5rem 1.25rem;
   }
 
   .seccao {
-    padding: 3.25rem 1.25rem 0;
+    padding: 0 1.5rem 3rem;
   }
 
   .abertura {
-    padding-top: 2.5rem;
+    padding-top: 2.75rem;
+  }
+
+  .texto,
+  .textoSuave,
+  .passos li,
+  .condicao {
+    font-size: 1rem;
   }
 
   .botao {
     display: block;
-    width: 100%;
-    box-sizing: border-box;
   }
 
   .blocos,
@@ -532,21 +512,16 @@
     gap: 1.75rem;
   }
 
-  .concelhosBtn {
-    display: flex;
-    justify-content: space-between;
-  }
-
   .fotos {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
+    gap: 1.25rem;
   }
 
   .formWrapper {
-    padding: 3.5rem 1rem 3.5rem;
+    padding: 0 1rem 3rem;
   }
 
   .fecho {
-    padding: 3rem 1.25rem 4rem;
+    padding: 2.75rem 1.5rem 4rem;
   }
 }

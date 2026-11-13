@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { getProjetos } from "../lib/getProjetos";
 import { LEAD_CONFIG } from "../lib/leadQualificacao";
 import CampanhaForm from "./CampanhaForm";
 import CampanhaGate from "./CampanhaGate";
 import ProvaGaleria, { type FotoProva } from "./ProvaGaleria";
-import { CASAS_PROVA, FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, imagem } from "./config";
+import { CASAS_PROVA, FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, LOGOS, imagem } from "./config";
 import styles from "./campanha.module.css";
 
 // Landing page da campanha «Evaplace × Esquadro». Sem pontos de fuga: o menu, o rodapé do
@@ -52,29 +51,22 @@ function ListaConcelhos({ titulo, grupos }: { titulo: string; grupos: Grupo[] })
 
 function Logos() {
   return (
-    <div className={styles.logos}>
-      <img src="/header/logo.webp" alt="Evaplace Casas" width={160} height={40} className={styles.logoEvaplace} />
-      <span className={styles.logosX} aria-hidden="true">
-        ×
-      </span>
-      <img
-        src="/logo-esquadro.png"
-        alt="Esquadro Arquitetura & Engenharia"
-        width={1573}
-        height={378}
-        className={styles.logoEsquadro}
-      />
-    </div>
+    <img
+      src={LOGOS}
+      alt="Evaplace Casas × Esquadro Arquitetura & Engenharia"
+      width={829}
+      height={141}
+      className={styles.logos}
+    />
   );
 }
 
-export default async function CampanhaProjetoPage() {
-  const projetos = await getProjetos();
-  const fotos: FotoProva[] = CASAS_PROVA.map(({ slug, nome, reserva }) => {
-    const p = projetos.find((x) => x.slug === slug);
-    const url = p?.thumbnail || p?.imagens[0] || reserva;
-    return { nome, pequena: imagem(url, 900), grande: imagem(url, 2000) };
-  });
+export default function CampanhaProjetoPage() {
+  const fotos: FotoProva[] = CASAS_PROVA.map(({ nome, foto }) => ({
+    nome,
+    pequena: imagem(foto, 900),
+    grande: imagem(foto, 2000),
+  }));
   const { acoLeve, madeira } = gruposDeConcelhos();
 
   const fechada = (
@@ -100,13 +92,7 @@ export default async function CampanhaProjetoPage() {
 
       <CampanhaGate fechada={fechada}>
         <div className={styles.heroImagem}>
-          <img
-            src={imagem(IMAGEM_TOPO, 1600)}
-            srcSet={`${imagem(IMAGEM_TOPO, 800)} 800w, ${imagem(IMAGEM_TOPO, 1600)} 1600w, ${imagem(IMAGEM_TOPO, 2048)} 2048w`}
-            sizes="100vw"
-            alt="Estrutura de uma casa em aço leve"
-            fetchPriority="high"
-          />
+          <img src={IMAGEM_TOPO} alt="Estrutura em aço leve" width={1024} height={576} fetchPriority="high" />
         </div>
 
         <section className={`${styles.seccao} ${styles.abertura}`}>
@@ -157,10 +143,8 @@ export default async function CampanhaProjetoPage() {
         <section className={styles.seccao}>
           <h2 className={styles.h2}>Condições para usufruir da campanha</h2>
           <div className={styles.linha} />
-          <ul className={styles.condicoes}>
-            <li>Possuir terreno na zona onde construímos</li>
-            <li>Adjudicar a empreitada à Evaplace</li>
-          </ul>
+          <p className={styles.condicao}>Possuir terreno na zona onde construímos</p>
+          <p className={styles.condicao}>Adjudicar a empreitada à Evaplace</p>
           <details className={styles.concelhos}>
             <summary className={styles.concelhosBtn}>Ver concelhos</summary>
             <div className={styles.concelhosLista}>
@@ -170,11 +154,11 @@ export default async function CampanhaProjetoPage() {
           </details>
         </section>
 
-        <section className={`${styles.seccao} ${styles.prova}`}>
+        <section className={styles.seccao}>
           <p className={styles.provaNumero}>+10</p>
           <p className={styles.etiqueta}>CASAS ENTREGUES PELA EVAPLACE</p>
           <ProvaGaleria fotos={fotos} />
-          <p className={styles.texto}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
+          <p className={styles.textoSuave}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
         </section>
 
         <div id="candidatura" className={styles.candidatura}>
