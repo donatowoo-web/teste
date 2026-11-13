@@ -3,8 +3,7 @@ import CampanhaForm from "./CampanhaForm";
 import CampanhaGate from "./CampanhaGate";
 import Candidatura from "./Candidatura";
 import { BarraFixa, BotaoFormulario } from "./IrParaFormulario";
-import ProvaGaleria, { type FotoProva } from "./ProvaGaleria";
-import { CASAS_PROVA, FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, LOGOS, imagem } from "./config";
+import { FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, LOGOS } from "./config";
 import styles from "./campanha.module.css";
 
 // Landing page da campanha «Evaplace × Esquadro». Sem pontos de fuga nem links: o menu, o rodapé do
@@ -41,12 +40,6 @@ function Logos({ pretos = false }: { pretos?: boolean }) {
 }
 
 export default function CampanhaProjetoPage() {
-  const fotos: FotoProva[] = CASAS_PROVA.map(({ nome, foto }) => ({
-    nome,
-    pequena: imagem(foto, 900),
-    grande: imagem(foto, 2000),
-  }));
-
   const fechada = (
     <section className={styles.fecho}>
       <div className={styles.fechoLogos}>
@@ -155,17 +148,6 @@ export default function CampanhaProjetoPage() {
                 de Aveiro.
               </span>
             </p>
-          </div>
-        </section>
-
-        <section className={`${styles.faixa} ${styles.faixaPreta}`}>
-          <div className={styles.dentro}>
-            <div className={styles.provaTopo}>
-              <p className={styles.provaNumero}>+10</p>
-              <p className={styles.etiqueta}>CASAS ENTREGUES PELA EVAPLACE</p>
-            </div>
-            <ProvaGaleria fotos={fotos} />
-            <p className={styles.textoSuave}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
           </div>
         </section>
 
