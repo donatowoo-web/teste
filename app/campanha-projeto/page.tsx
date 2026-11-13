@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false, address: false, email: false },
 };
 
+function Visto() {
+  return (
+    <svg className={styles.visto} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function Logos({ pretos = false }: { pretos?: boolean }) {
   return (
     <img
@@ -123,11 +131,25 @@ export default function CampanhaProjetoPage() {
         <section className={styles.seccao}>
           <h2 className={styles.h2}>Condições para usufruir da campanha</h2>
           <div className={styles.linha} />
-          <p className={styles.condicao}>Possuir terreno na zona onde construímos</p>
-          <p className={styles.condicao}>Adjudicar a empreitada à Evaplace</p>
+          <ul className={styles.condicoes}>
+            <li className={styles.condicao}>
+              <Visto />
+              <span>Possuir terreno na zona onde construímos</span>
+            </li>
+            <li className={styles.condicao}>
+              <Visto />
+              <span>Adjudicar a empreitada à Evaplace</span>
+            </li>
+          </ul>
+          {/* O texto das zonas é um só; os nomes dos sistemas só levam destaque. */}
           <p className={styles.zonas}>
-            Aço leve: distrito do Porto, eixo de Braga e norte de Aveiro. Madeira: também Viana do Castelo, Vila
-            Real, interior de Braga e restante distrito de Aveiro.
+            <span className={styles.zona}>
+              <strong>Aço leve:</strong> distrito do Porto, eixo de Braga e norte de Aveiro.
+            </span>{" "}
+            <span className={styles.zona}>
+              <strong>Madeira:</strong> também Viana do Castelo, Vila Real, interior de Braga e restante distrito de
+              Aveiro.
+            </span>
           </p>
         </section>
 
