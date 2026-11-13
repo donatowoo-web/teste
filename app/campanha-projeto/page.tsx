@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { LEAD_CONFIG } from "../lib/leadQualificacao";
 import CampanhaForm from "./CampanhaForm";
 import CampanhaGate from "./CampanhaGate";
 import { BarraFixa, BotaoFormulario } from "./IrParaFormulario";
@@ -7,48 +6,18 @@ import ProvaGaleria, { type FotoProva } from "./ProvaGaleria";
 import { CASAS_PROVA, FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, LOGOS, imagem } from "./config";
 import styles from "./campanha.module.css";
 
-// Landing page da campanha «Evaplace × Esquadro». Sem pontos de fuga: o menu, o rodapé do
+// Landing page da campanha «Evaplace × Esquadro». Sem pontos de fuga nem links: o menu, o rodapé do
 // site e os botões flutuantes são escondidos nesta rota (ver "LP DE CAMPANHA" em globals.css).
 // Fora do menu e do sitemap; noindex porque tem prazo.
 
 export const metadata: Metadata = {
   title: "Evaplace × Esquadro | Projeto descontado na obra",
   description:
-    "Até 16 de dezembro, quem fizer o projeto com a Esquadro e construir com a Evaplace tem até 100% do valor do projeto descontado na obra.",
+    "Se construir com a Evaplace, oferecemos até 100% do projeto de arquitetura e especialidades. Candidaturas até 16 de dezembro.",
   robots: { index: false, follow: false },
   // O rodapé tem os telefones em texto, sem link: impede o iOS de os transformar em links.
   formatDetection: { telephone: false, address: false, email: false },
 };
-
-type Grupo = { distrito: string; concelhos: string[] };
-
-const ordenar = (nomes: string[]) => [...nomes].sort((a, b) => a.localeCompare(b, "pt"));
-
-/** Aço leve = zona 1. Madeira = zona 1 + zona 2 (igual a /zonas-de-atuacao/). */
-function gruposDeConcelhos(): { acoLeve: Grupo[]; madeira: Grupo[] } {
-  const { zona_1, zona_2 } = LEAD_CONFIG.concelhos;
-  const acoLeve = Object.entries(zona_1).map(([distrito, c]) => ({ distrito, concelhos: ordenar(c) }));
-  const distritos = [...new Set([...Object.keys(zona_1), ...Object.keys(zona_2)])];
-  const madeira = distritos.map((distrito) => ({
-    distrito,
-    concelhos: ordenar([...(zona_1[distrito] ?? []), ...(zona_2[distrito] ?? [])]),
-  }));
-  return { acoLeve, madeira };
-}
-
-function ListaConcelhos({ titulo, grupos }: { titulo: string; grupos: Grupo[] }) {
-  return (
-    <div className={styles.sistema}>
-      <h3 className={styles.sistemaTitulo}>{titulo}</h3>
-      {grupos.map((g) => (
-        <p key={g.distrito} className={styles.distrito}>
-          <span className={styles.distritoNome}>{g.distrito}</span>
-          {g.concelhos.join(", ")}
-        </p>
-      ))}
-    </div>
-  );
-}
 
 function Logos() {
   return (
@@ -68,7 +37,6 @@ export default function CampanhaProjetoPage() {
     pequena: imagem(foto, 900),
     grande: imagem(foto, 2000),
   }));
-  const { acoLeve, madeira } = gruposDeConcelhos();
 
   const fechada = (
     <section className={styles.fecho}>
@@ -92,24 +60,26 @@ export default function CampanhaProjetoPage() {
       </div>
 
       <CampanhaGate fechada={fechada}>
-        {/* Imagem do topo como fundo do primeiro ecrã (escurecida, para o título se ler). */}
+        {/* Imagem do topo como fundo do primeiro ecrã, mais escura do lado do texto. */}
         <div className={styles.fundo} role="img" aria-label="Estrutura em aço leve" style={{ backgroundImage: `url(${IMAGEM_TOPO})` }} />
 
-        {/* Desktop: conteúdo à esquerda, formulário fixo à direita.
-            Telemóvel: abertura, formulário, e só depois o resto. */}
+        {/* Desktop: oferta à esquerda, formulário fixo à direita.
+            Telemóvel: oferta, formulário, e só depois o resto. */}
         <div className={styles.grelha}>
           <section className={`${styles.seccao} ${styles.abertura}`}>
-            <h1 className={styles.h1}>Quem desenha a sua casa sabe como ela vai ser construída.</h1>
+            <h1 className={styles.h1}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h1>
             <div className={styles.linha} />
-            <p className={styles.texto}>
-              A Esquadro, empresa de arquitetura da Evaplace, faz o projeto de arquitetura e especialidades da sua
-              casa. A Evaplace constrói em aço leve e em madeira.
-            </p>
-            <p className={styles.texto}>
-              Até 16 de dezembro, quem fizer o projeto com a Esquadro e construir com a Evaplace tem até 100% do valor
-              do projeto descontado na obra. Se construir com outra empresa, fica com o projeto.
-            </p>
-            <BotaoFormulario>QUERO SABER MAIS</BotaoFormulario>
+            <p className={styles.texto}>Projeto de arquitetura e especialidades. Candidaturas até 16 de dezembro.</p>
+            <div className={styles.oferta}>
+              <div className={`${styles.ofertaItem} ${styles.ofertaVerde}`}>
+                <p className={styles.ofertaValor}>100%</p>
+                <p className={styles.ofertaTexto}>em casas com mais de 100 m²</p>
+              </div>
+              <div className={styles.ofertaItem}>
+                <p className={styles.ofertaValor}>50%</p>
+                <p className={styles.ofertaTexto}>em casas até 100 m²</p>
+              </div>
+            </div>
           </section>
 
           <div id="candidatura" className={styles.candidatura}>
@@ -117,6 +87,16 @@ export default function CampanhaProjetoPage() {
           </div>
 
           <div className={styles.resto}>
+        <section className={styles.seccao}>
+          <h2 className={styles.h2}>Projeto e construção na mesma equipa</h2>
+          <div className={styles.linha} />
+          <p className={styles.texto}>
+            A Evaplace junta-se à Esquadro Arquitetura numa campanha de Black Friday que inclui o projeto de
+            arquitetura e os projetos de especialidades da sua casa.
+          </p>
+          <p className={styles.texto}>Se construir com outra empresa, o projeto fica consigo.</p>
+        </section>
+
         <section className={styles.seccao}>
           <h2 className={styles.h2}>Como funciona o desconto</h2>
           <div className={styles.linha} />
@@ -151,13 +131,10 @@ export default function CampanhaProjetoPage() {
           <div className={styles.linha} />
           <p className={styles.condicao}>Possuir terreno na zona onde construímos</p>
           <p className={styles.condicao}>Adjudicar a empreitada à Evaplace</p>
-          <details className={styles.concelhos}>
-            <summary className={styles.concelhosBtn}>Ver concelhos</summary>
-            <div className={styles.concelhosLista}>
-              <ListaConcelhos titulo="Aço leve" grupos={acoLeve} />
-              <ListaConcelhos titulo="Madeira" grupos={madeira} />
-            </div>
-          </details>
+          <p className={styles.zonas}>
+            Aço leve: distrito do Porto, eixo de Braga e norte de Aveiro. Madeira: também Viana do Castelo, Vila
+            Real, interior de Braga e restante distrito de Aveiro.
+          </p>
         </section>
 
         <section className={styles.seccao}>
@@ -167,23 +144,21 @@ export default function CampanhaProjetoPage() {
           <p className={styles.textoSuave}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
         </section>
 
+        {/* Fecho da página: repete a oferta e leva ao formulário. */}
+        <section className={styles.chamada} data-chamada>
+          <h2 className={styles.chamadaTitulo}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h2>
+          <BotaoFormulario>CANDIDATAR-ME</BotaoFormulario>
+          <p className={styles.chamadaPrazo}>CANDIDATURAS ATÉ 16 DE DEZEMBRO</p>
+        </section>
+
           </div>
         </div>
 
-        <BarraFixa>QUERO SABER MAIS</BarraFixa>
+        <BarraFixa>CANDIDATAR-ME</BarraFixa>
       </CampanhaGate>
 
       <footer className={styles.rodape}>
         <p>Evaplace Casas · Rua Rio 15, 4475-493 Nogueira, Maia · 229 610 296 · 963 770 939</p>
-        <p className={styles.rodapeLinks}>
-          <a href="/politica-de-privacidade/" target="_blank" rel="noopener noreferrer">
-            Política de Privacidade
-          </a>
-          <span aria-hidden="true">·</span>
-          <a href="https://www.livroreclamacoes.pt/inicio/" target="_blank" rel="noopener noreferrer">
-            Livro de Reclamações
-          </a>
-        </p>
       </footer>
     </div>
   );

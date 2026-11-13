@@ -236,17 +236,15 @@ export default function LeadForm({
   formId,
   titulo,
   progresso = true,
-  subtitulo,
   campanha = "",
   textoEnviar = T.enviar,
   notaEnvio,
 }: {
   styles: Styles;
   formId: string;
-  titulo: string;
+  /** Sem título, a caixa começa logo na primeira pergunta (landing pages de campanha). */
+  titulo?: string;
   progresso?: boolean;
-  /** Texto por baixo do título (landing pages de campanha). */
-  subtitulo?: string;
   /** Vai no campo "campanha" do envio; vazio no resto do site. */
   campanha?: string;
   /** Texto do botão do último passo. */
@@ -347,8 +345,7 @@ export default function LeadForm({
   return (
     <section className={s.wrapper}>
       <div className={s.box} ref={boxRef}>
-        <h2 className={s.title}>{titulo}</h2>
-        {subtitulo && <p className={s.subtitle}>{subtitulo}</p>}
+        {titulo && <h2 className={s.title}>{titulo}</h2>}
 
         {progresso && !enviado && (
           <div

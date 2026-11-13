@@ -1,6 +1,6 @@
 /* Landing page «Evaplace × Esquadro» — página de conversão.
-   Desktop (>= 1024 px): conteúdo à esquerda, formulário fixo à direita.
-   Telemóvel: abertura, formulário, resto; barra fixa no fundo com o botão.
+   Desktop (>= 1024 px): oferta à esquerda, formulário fixo à direita.
+   Telemóvel: oferta, formulário, resto; barra fixa no fundo com o botão.
    Cores do email: verde #88B131, linhas #5C9839, verde-escuro #506527,
    texto #E6E6E6 / #BDBDBD, contornos #333333 / #262626. Sem azuis.
    Os títulos usam a serifa do site (regra global de h1/h2/h3). */
@@ -37,7 +37,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0.74) 50%, #000 100%);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, #000 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 45%, rgba(0, 0, 0, 0.45) 100%);
 }
 
 /* ---------- Topo ---------- */
@@ -69,7 +71,38 @@
 .abertura {
   grid-column: 1;
   grid-row: 1;
-  padding-top: 3rem;
+  padding-top: 2.5rem;
+}
+
+/* Os dois números da oferta: o 100% a verde, o 50% a branco. */
+.oferta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3.5rem;
+  margin-top: 1.75rem;
+}
+
+.ofertaItem {
+  min-width: 0;
+}
+
+.ofertaValor {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(4.5rem, 7.5vw, 6.75rem);
+  line-height: 0.95;
+  color: #fff;
+}
+
+.ofertaVerde .ofertaValor {
+  color: #88b131;
+}
+
+.ofertaTexto {
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #e6e6e6;
 }
 
 .candidatura {
@@ -129,7 +162,7 @@
 
 .botao {
   display: inline-block;
-  margin-top: 1.25rem;
+  margin-top: 1.75rem;
   padding: 1.15rem 2.75rem;
   background: #88b131;
   color: #000;
@@ -240,83 +273,11 @@
   color: #e6e6e6;
 }
 
-.concelhos {
-  margin-top: 1.75rem;
-}
-
-.concelhosBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.85rem 1.5rem;
-  border: 1px solid #88b131;
-  color: #88b131;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.concelhosBtn::-webkit-details-marker {
-  display: none;
-}
-
-.concelhosBtn::after {
-  content: "+";
-  font-size: 1.1rem;
-  letter-spacing: 0;
-  line-height: 1;
-}
-
-.concelhos[open] .concelhosBtn::after {
-  content: "−";
-}
-
-.concelhosBtn:hover {
-  background: #88b131;
-  color: #000;
-}
-
-.concelhosBtn:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-
-.concelhosLista {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
-  margin-top: 2rem;
-}
-
-.sistemaTitulo {
-  margin: 0 0 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #262626;
-  font-size: 1.5rem;
-  color: #fff;
-}
-
-.distrito {
-  margin: 0 0 1rem;
-  font-size: 0.95rem;
+.zonas {
+  margin: 1.5rem 0 0;
+  font-size: 1rem;
   line-height: 1.65;
   color: #bdbdbd;
-}
-
-.distritoNome {
-  display: block;
-  margin-bottom: 0.2rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #88b131;
 }
 
 /* ---------- Prova ---------- */
@@ -466,25 +427,9 @@
   padding: 1.15rem 1.75rem 1.15rem;
 }
 
-.formTitle {
-  text-align: center;
-  margin: 0 0 0.5rem;
-  font-size: 1.55rem;
-  line-height: 1.15;
-  color: #fff;
-}
-
-.formSubtitle {
-  text-align: center;
-  margin: 0 0 1.35rem;
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: #bdbdbd;
-}
-
 /* Classe repetida: ganha às regras de MultiStepForm.module.css seja qual for a ordem dos ficheiros. */
 .formProgress.formProgress {
-  margin: -0.5rem 0 0.9rem;
+  margin: 0.25rem 0 0.9rem;
 }
 
 .formLabel.formLabel {
@@ -569,6 +514,30 @@
   color: #88b131;
 }
 
+/* ---------- Caixa de fecho da página ---------- */
+.chamada {
+  margin-bottom: 5rem;
+  padding: 2.75rem 2rem;
+  border: 1px solid #88b131;
+  text-align: center;
+}
+
+.chamadaTitulo {
+  margin: 0;
+  font-size: clamp(1.75rem, 2.8vw, 2.4rem);
+  line-height: 1.15;
+  color: #fff;
+}
+
+.chamadaPrazo {
+  margin: 1.25rem 0 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #88b131;
+}
+
 /* ---------- Barra fixa (só telemóvel) ---------- */
 .barra {
   display: none;
@@ -602,26 +571,6 @@
   margin: 0;
 }
 
-.rodapeLinks {
-  margin-top: 0.4rem !important;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.25rem 0.75rem;
-}
-
-.rodapeLinks a {
-  color: #8f8f8f;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: 0.35rem 0;
-}
-
-.rodapeLinks a:hover {
-  color: #88b131;
-}
-
 /* ---------- Portátil estreito ---------- */
 @media (max-width: 1180px) {
   .grelha {
@@ -629,8 +578,8 @@
     column-gap: 2.5rem;
   }
 
-  .concelhosLista {
-    gap: 1.75rem;
+  .oferta {
+    column-gap: 2.5rem;
   }
 }
 
@@ -665,9 +614,9 @@
     padding-bottom: 2rem;
   }
 
-  /* A barra fixa faz de botão da abertura. */
-  .botao {
-    display: none;
+  /* Telemóvel: o texto ocupa a largura toda, por isso o fundo escurece por igual. */
+  .fundo::after {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.74) 0%, rgba(0, 0, 0, 0.8) 55%, #000 100%);
   }
 
   .candidatura {
@@ -736,8 +685,7 @@
     font-size: 2rem;
   }
 
-  .blocos,
-  .concelhosLista {
+  .blocos {
     grid-template-columns: 1fr;
   }
 
@@ -749,9 +697,31 @@
     font-size: 7rem;
   }
 
-  .concelhosBtn {
-    display: flex;
-    justify-content: space-between;
+  /* Lado a lado também no telemóvel: o formulário aparece logo no primeiro ecrã. */
+  .oferta {
+    flex-wrap: nowrap;
+    gap: 1.25rem;
+  }
+
+  .ofertaItem {
+    flex: 1 1 0;
+  }
+
+  .ofertaValor {
+    font-size: clamp(3.25rem, 17vw, 4.25rem);
+  }
+
+  .ofertaTexto {
+    font-size: 0.9rem;
+  }
+
+  .chamada {
+    margin-bottom: 4rem;
+    padding: 2.25rem 1.25rem;
+  }
+
+  .botao {
+    display: block;
   }
 
   .fotos {

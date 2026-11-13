@@ -13,8 +13,6 @@ const estilos = {
   ...base,
   wrapper: styles.formWrapper,
   box: styles.formBox,
-  title: styles.formTitle,
-  subtitle: styles.formSubtitle,
   progress: `${base.progress} ${styles.formProgress}`,
   label: `${base.label} ${styles.formLabel}`,
   intro: `${base.intro} ${styles.formIntro}`,
@@ -67,8 +65,6 @@ export default function CampanhaForm() {
         <LeadForm
           styles={estilos}
           formId="lead_geral"
-          titulo="Faça o projeto com quem vai construir a sua casa."
-          subtitulo="Se construir com a Evaplace, recupera até 100% do valor do projeto."
           campanha={CAMPANHA_ID}
           textoEnviar="CANDIDATAR-ME"
           notaEnvio={PRAZO}

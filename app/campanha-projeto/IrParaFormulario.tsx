@@ -16,7 +16,7 @@ function irParaFormulario(e: React.MouseEvent) {
   }
 }
 
-/** Botão «QUERO SABER MAIS» da abertura: leva ao formulário (âncora na própria página). */
+/** Botão «CANDIDATAR-ME» da caixa de fecho: leva ao formulário (âncora na própria página). */
 export function BotaoFormulario({ children }: { children: ReactNode }) {
   return (
     <a href={`#${ALVO}`} className={styles.botao} onClick={irParaFormulario}>
@@ -27,20 +27,31 @@ export function BotaoFormulario({ children }: { children: ReactNode }) {
 
 /**
  * Telemóvel: barra fixa no fundo com o mesmo botão. Esconde-se quando o formulário está
- * no ecrã (para não tapar o «Seguinte») e fica por baixo do aviso de cookies (z-index).
+ * no ecrã (para não tapar o «Seguinte») ou quando a caixa de fecho, que tem o mesmo botão,
+ * está à vista. Fica por baixo do aviso de cookies (z-index).
  */
 export function BarraFixa({ children }: { children: ReactNode }) {
   const [formVisivel, setFormVisivel] = useState(false);
 
   useEffect(() => {
-    const alvo = document.getElementById(ALVO);
-    if (!alvo || typeof IntersectionObserver === "undefined") return;
-    // Só conta como «à vista» quando o formulário entra nos 65% de cima do ecrã: enquanto
-    // apenas espreita no fundo, a barra continua lá; quando o «Seguinte» aparece, já saiu.
-    const obs = new IntersectionObserver(([entrada]) => setFormVisivel(entrada.isIntersecting), {
-      rootMargin: "0px 0px -35% 0px",
-    });
-    obs.observe(alvo);
+    const alvos = [document.getElementById(ALVO), document.querySelector("[data-chamada]")].filter(
+      (el): el is HTMLElement => el instanceof HTMLElement,
+    );
+    if (!alvos.length || typeof IntersectionObserver === "undefined") return;
+    // Só conta como «à vista» quando já há 160 px acima do fundo do ecrã: enquanto apenas
+    // espreita, a barra continua lá; quando o «Seguinte» aparece, a barra já saiu.
+    const aVista = new Set<Element>();
+    const obs = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (e.isIntersecting) aVista.add(e.target);
+          else aVista.delete(e.target);
+        }
+        setFormVisivel(aVista.size > 0);
+      },
+      { rootMargin: "0px 0px -160px 0px" },
+    );
+    alvos.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
