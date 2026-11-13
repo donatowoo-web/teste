@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { EVENTO_ABRIR } from "./Candidatura";
 import styles from "./campanha.module.css";
 
 const ALVO = "candidatura";
@@ -16,10 +17,14 @@ function irParaFormulario(e: React.MouseEvent) {
   }
 }
 
-/** Botão «CANDIDATAR-ME» da caixa de fecho: leva ao formulário (âncora na própria página). */
+/** Botão «CANDIDATAR-ME» da caixa de fecho: abre o formulário em popup, sem sair do sítio. */
 export function BotaoFormulario({ children }: { children: ReactNode }) {
+  const abrirPopup = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.dispatchEvent(new Event(EVENTO_ABRIR));
+  };
   return (
-    <a href={`#${ALVO}`} className={styles.botao} onClick={irParaFormulario}>
+    <a href={`#${ALVO}`} className={styles.botao} onClick={abrirPopup}>
       {children}
     </a>
   );

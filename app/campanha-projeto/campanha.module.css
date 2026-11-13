@@ -72,6 +72,17 @@
   width: 460px;
 }
 
+.heroLogo {
+  display: block;
+  width: 170px;
+  height: auto;
+  margin: 0.75rem auto 0;
+}
+
+.heroLogo + .selo {
+  margin-top: 1.5rem;
+}
+
 .selo {
   display: inline-block;
   margin: 2.5rem 0 0;
@@ -110,6 +121,53 @@
   margin: -8.5rem auto 0;
   padding: 0 1.5rem;
   scroll-margin-top: 1.5rem;
+}
+
+/* Formulário em popup (botão da caixa de fecho): a mesma caixa, ao centro do ecrã. */
+.candidaturaAberta {
+  z-index: 1000;
+}
+
+.popupFundo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.popup {
+  /* Ocupa o ecrã todo e rola por si: a lista de concelhos abre para baixo sem ficar cortada. */
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12vh 1rem 55vh;
+}
+
+.popupCaixa {
+  position: relative;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* espaço para o × não ficar por cima da barra de progresso */
+.popup .formBox {
+  padding-top: 3.25rem;
+}
+
+.popupFechar {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 2;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #111;
+  cursor: pointer;
 }
 
 /* ---------- Secções ---------- */

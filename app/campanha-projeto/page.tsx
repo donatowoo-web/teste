@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import CampanhaForm from "./CampanhaForm";
 import CampanhaGate from "./CampanhaGate";
+import Candidatura from "./Candidatura";
 import { BarraFixa, BotaoFormulario } from "./IrParaFormulario";
 import ProvaGaleria, { type FotoProva } from "./ProvaGaleria";
 import { CASAS_PROVA, FECHO_TEXTO, FECHO_TITULO, FECHO_UTC_MS, IMAGEM_TOPO, LOGOS, imagem } from "./config";
@@ -71,6 +72,8 @@ export default function CampanhaProjetoPage() {
             fica por cima do fim da imagem. */}
         <section className={styles.hero} style={{ backgroundImage: `url(${IMAGEM_TOPO})` }}>
           <div className={styles.heroConteudo}>
+            {/* Logótipo da Evaplace (o do cabeçalho do site), sem link. */}
+            <img src="/header/logo.webp" alt="Evaplace Casas" width={160} height={40} className={styles.heroLogo} />
             <p className={styles.selo}>BLACK FRIDAY</p>
             <h1 className={styles.heroTitulo}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h1>
             <p className={styles.heroTexto}>
@@ -79,9 +82,9 @@ export default function CampanhaProjetoPage() {
           </div>
         </section>
 
-        <div id="candidatura" className={styles.candidatura}>
+        <Candidatura>
           <CampanhaForm />
-        </div>
+        </Candidatura>
 
         {/* Por baixo do início a página vai em faixas a toda a largura, de cores alternadas. */}
         <section className={`${styles.faixa} ${styles.faixaEquipa}`}>
