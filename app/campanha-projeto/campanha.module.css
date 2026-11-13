@@ -1,0 +1,552 @@
+/* Landing page «Evaplace × Esquadro». Cores do site: preto, verde-oliva #86a941,
+   verde das linhas #88b14b, verde-lima das etiquetas #b4d429. Sem azuis. */
+
+.page {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Depois do fecho, antes de o React trocar o conteúdo (atributo posto pelo script da página). */
+:global(html[data-campanha-fechada]) .page [data-campanha-aberta] {
+  display: none;
+}
+
+/* ---------- Topo ---------- */
+.topo {
+  padding: 1.75rem 1.5rem;
+}
+
+.logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.logoEvaplace {
+  height: 38px;
+  width: auto;
+}
+
+/* O logótipo da Esquadro é preto sobre transparente: invertido para o fundo preto. */
+.logoEsquadro {
+  height: 38px;
+  width: auto;
+  filter: invert(1);
+}
+
+.logosX {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+}
+
+.heroImagem {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  max-height: 520px;
+  overflow: hidden;
+  background: #111;
+}
+
+.heroImagem img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+}
+
+/* ---------- Secções ---------- */
+.seccao {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 0;
+}
+
+.abertura {
+  padding-top: 4rem;
+}
+
+.h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.12;
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.linha {
+  width: 72px;
+  height: 1px;
+  background: #88b14b;
+  margin: 1.5rem 0 2rem;
+}
+
+.texto {
+  margin: 0 0 1.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.etiqueta {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b4d429;
+}
+
+.botao {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 1rem 2.5rem;
+  background: #86a941;
+  color: #000;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.botao:hover {
+  background: #9ec35e;
+}
+
+.botao:focus-visible {
+  outline: 2px solid #b4d429;
+  outline-offset: 3px;
+}
+
+/* ---------- Como funciona ---------- */
+.passos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.passos li {
+  display: flex;
+  gap: 1.25rem;
+  align-items: baseline;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.passoNumero {
+  flex: none;
+  width: 2.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #b4d429;
+}
+
+.blocos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.bloco {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.blocoVerde {
+  border-color: #88b14b;
+}
+
+.blocoValor {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-title);
+  font-size: clamp(2.8rem, 7vw, 4rem);
+  line-height: 1;
+}
+
+.blocoVerde .blocoValor {
+  color: #b4d429;
+}
+
+.blocoTexto {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ---------- Condições ---------- */
+.condicoes {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.condicoes li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.6rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.condicoes li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.25rem;
+  width: 0.8rem;
+  height: 1px;
+  background: #88b14b;
+}
+
+.concelhosBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.75rem;
+  border: 1px solid #88b14b;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.concelhosBtn::-webkit-details-marker {
+  display: none;
+}
+
+.concelhosBtn::after {
+  content: "+";
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #b4d429;
+}
+
+.concelhos[open] .concelhosBtn::after {
+  content: "−";
+}
+
+.concelhosBtn:hover {
+  background: rgba(136, 177, 75, 0.12);
+}
+
+.concelhosBtn:focus-visible {
+  outline: 2px solid #b4d429;
+  outline-offset: 3px;
+}
+
+.concelhosLista {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+.sistemaTitulo {
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(136, 177, 75, 0.5);
+  font-size: 1.4rem;
+}
+
+.distrito {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.distritoNome {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #b4d429;
+}
+
+/* ---------- Prova ---------- */
+.prova {
+  max-width: 1100px;
+  text-align: center;
+}
+
+.provaNumero {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-title);
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  line-height: 1;
+}
+
+.fotos {
+  list-style: none;
+  margin: 2.5rem 0 2.5rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.fotoBtn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #111;
+  cursor: zoom-in;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.fotoBtn:focus-visible {
+  outline: 2px solid #b4d429;
+  outline-offset: 3px;
+}
+
+.fotoImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.fotoBtn:hover .fotoImg {
+  transform: scale(1.03);
+}
+
+.fotoNome {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.94);
+  cursor: zoom-out;
+}
+
+.lightboxFigura {
+  margin: 0;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: default;
+}
+
+.lightboxImg {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100dvh - 8rem);
+  object-fit: contain;
+}
+
+.lightboxNome {
+  margin-top: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.lightboxFechar {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* ---------- Formulário (caixa do «Vamos Falar!») ---------- */
+.candidatura {
+  scroll-margin-top: 1rem;
+}
+
+.formWrapper {
+  background: transparent;
+  padding: 5rem 1.5rem 5rem;
+}
+
+.formBox {
+  max-width: 880px;
+  animation: none !important;
+}
+
+.formTitle {
+  text-align: center;
+  margin: 0 0 1rem;
+  font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.formSubtitle {
+  text-align: center;
+  margin: 0 0 2.5rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.formProgress {
+  margin-top: -0.9rem !important;
+}
+
+.formInput {
+  box-sizing: border-box;
+}
+
+.formBtn {
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.formNote {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b4d429;
+}
+
+/* ---------- Agradecimento (campanha fechada) ---------- */
+.fecho {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem 6rem;
+  min-height: 45vh;
+}
+
+/* ---------- Rodapé mínimo ---------- */
+.rodape {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2rem 1.5rem 2.5rem;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rodape p {
+  margin: 0;
+}
+
+.rodapeLinks {
+  margin-top: 0.6rem !important;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+}
+
+.rodapeLinks a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.35rem 0;
+}
+
+.rodapeLinks a:hover {
+  color: #b4d429;
+}
+
+/* ---------- Telemóvel ---------- */
+@media (max-width: 640px) {
+  .topo {
+    padding: 1.25rem 1rem;
+  }
+
+  .logos {
+    gap: 0.9rem;
+  }
+
+  .logoEvaplace,
+  .logoEsquadro {
+    height: 26px;
+  }
+
+  .logosX {
+    font-size: 1.1rem;
+  }
+
+  .heroImagem {
+    aspect-ratio: 4 / 3;
+  }
+
+  .seccao {
+    padding: 3.25rem 1.25rem 0;
+  }
+
+  .abertura {
+    padding-top: 2.5rem;
+  }
+
+  .botao {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .blocos,
+  .concelhosLista {
+    grid-template-columns: 1fr;
+  }
+
+  .concelhosLista {
+    gap: 1.75rem;
+  }
+
+  .concelhosBtn {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .fotos {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .formWrapper {
+    padding: 3.5rem 1rem 3.5rem;
+  }
+
+  .fecho {
+    padding: 3rem 1.25rem 4rem;
+  }
+}

@@ -300,3 +300,25 @@ body.hide-shell footer {
   display: none !important;
 }
 
+
+/* ===========================
+   LP DE CAMPANHA (/campanha-projeto/) — sem pontos de fuga
+   Esconde o menu, o botão fixo «Desenvolver Projeto», o overlay do menu,
+   o rodapé do site e o botão do WhatsApp. A página marca-se com
+   data-lp-campanha; a classe no body é o reforço para browsers sem :has().
+=========================== */
+body:has([data-lp-campanha]) > header,
+body:has([data-lp-campanha]) > button,
+body:has([data-lp-campanha]) > .menu-overlay,
+body:has([data-lp-campanha]) > a[href^="https://wa.me"],
+body:has([data-lp-campanha]) #smooth-content > footer {
+  display: none !important;
+}
+
+body.lp-campanha > header,
+body.lp-campanha > button,
+body.lp-campanha > .menu-overlay,
+body.lp-campanha > a[href^="https://wa.me"],
+body.lp-campanha #smooth-content > footer {
+  display: none !important;
+}

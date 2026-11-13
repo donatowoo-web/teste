@@ -173,6 +173,22 @@ test("dataLayer sem dados pessoais e payload com chaves antigas + novas", () => 
   assert.equal(p.get("lead_status"), "qualificada");
   assert.equal(p.get("orcamento_label"), "139.000 a 162.000 €");
   assert.equal(p.get("page_url"), "https://www.evaplace.pt/contactos/");
+  // Fora das landing pages de campanha o campo existe e vai vazio
+  assert.equal(p.get("campanha"), "");
+});
+
+test("payloadDaLead leva a campanha quando a página a indica", () => {
+  const p = payloadDaLead({
+    respostas: preencher([["concelho", "Maia"]]),
+    concelhoOutro: "",
+    contactos: { nome: "Ana", telefone: "912345678", email: "ana@x.pt", rgpd: true },
+    formId: "lead_geral",
+    leadId: "id-2",
+    pageUrl: "https://www.evaplace.pt/campanha-projeto/",
+    agora: new Date(2026, 10, 13),
+    campanha: "black-friday-esquadro",
+  });
+  assert.equal(p.get("campanha"), "black-friday-esquadro");
 });
 
 test("Outro concelho escrito pela pessoa vai no payload", () => {

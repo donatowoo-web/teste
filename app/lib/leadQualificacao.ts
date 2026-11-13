@@ -325,8 +325,10 @@ export function payloadDaLead(args: {
   leadId: string;
   pageUrl: string;
   agora: Date;
+  /** Identificador da campanha (só nas landing pages de campanha); vazio no resto do site. */
+  campanha?: string;
 }): URLSearchParams {
-  const { respostas: r, concelhoOutro, contactos: c, formId, leadId, pageUrl, agora } = args;
+  const { respostas: r, concelhoOutro, contactos: c, formId, leadId, pageUrl, agora, campanha = "" } = args;
   const pad2 = (n: number) => String(n).padStart(2, "0");
   const datePT = `${pad2(agora.getDate())}/${pad2(agora.getMonth() + 1)}/${agora.getFullYear()}`;
   const outro = r.concelho === OUTRO_CONCELHO ? concelhoOutro.trim() : "";
@@ -362,5 +364,6 @@ export function payloadDaLead(args: {
   p.append("orcamento_intervalo", r.orcamento);
   p.append("orcamento_label", intervaloEscolhido(r)?.label ?? "");
   p.append("page_url", pageUrl);
+  p.append("campanha", campanha);
   return p;
 }

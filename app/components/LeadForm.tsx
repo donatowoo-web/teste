@@ -236,11 +236,23 @@ export default function LeadForm({
   formId,
   titulo,
   progresso = true,
+  subtitulo,
+  campanha = "",
+  textoEnviar = T.enviar,
+  notaEnvio,
 }: {
   styles: Styles;
   formId: string;
   titulo: string;
   progresso?: boolean;
+  /** Texto por baixo do título (landing pages de campanha). */
+  subtitulo?: string;
+  /** Vai no campo "campanha" do envio; vazio no resto do site. */
+  campanha?: string;
+  /** Texto do botão do último passo. */
+  textoEnviar?: string;
+  /** Linha por baixo do botão do último passo. */
+  notaEnvio?: string;
 }) {
   const uid = useId();
   const [r, setR] = useState<Respostas>(RESPOSTAS_VAZIAS);
@@ -308,6 +320,7 @@ export default function LeadForm({
         leadId,
         pageUrl: window.location.href,
         agora: new Date(),
+        campanha,
       });
       appendAttribution(body);
       const res = await fetch(WEBHOOK, {
@@ -335,6 +348,7 @@ export default function LeadForm({
     <section className={s.wrapper}>
       <div className={s.box} ref={boxRef}>
         <h2 className={s.title}>{titulo}</h2>
+        {subtitulo && <p className={s.subtitle}>{subtitulo}</p>}
 
         {progresso && !enviado && (
           <div
@@ -553,9 +567,10 @@ export default function LeadForm({
                     {T.anterior}
                   </button>
                   <button type="submit" className={s.btnNext} disabled={!contactosValidos(c) || loading}>
-                    {loading ? T.aEnviar : T.enviar}
+                    {loading ? T.aEnviar : textoEnviar}
                   </button>
                 </div>
+                {notaEnvio && <p className={s.note}>{notaEnvio}</p>}
               </form>
             )}
 
