@@ -131,8 +131,14 @@ function ConcelhoPicker({
   ];
 
   useEffect(() => {
-    const el = listaRef.current?.children[ativo] as HTMLElement | undefined;
-    el?.scrollIntoView({ block: "nearest" });
+    // Mantém a opção ativa à vista mexendo só na lista (scrollIntoView também rolava a página).
+    const lista = listaRef.current;
+    const el = lista?.children[ativo] as HTMLElement | undefined;
+    if (!lista || !el) return;
+    const topo = el.offsetTop;
+    const fundo = topo + el.offsetHeight;
+    if (topo < lista.scrollTop) lista.scrollTop = topo;
+    else if (fundo > lista.scrollTop + lista.clientHeight) lista.scrollTop = fundo - lista.clientHeight;
   }, [ativo]);
 
   function escolher(nome: string) {
@@ -189,7 +195,7 @@ function ConcelhoPicker({
         }}
       />
       {aberto && (
-        <ul id={`${id}-lista`} role="listbox" ref={listaRef} className={s.comboList}>
+        <ul id={`${id}-lista`} role="listbox" ref={listaRef} className={s.comboList} data-lenis-prevent>
           {resultados.length === 0 && texto.trim() && (
             <li className={s.comboEmpty} role="presentation">
               {T.concelhoSemResultados}
