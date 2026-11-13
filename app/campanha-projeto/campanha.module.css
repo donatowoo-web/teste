@@ -374,21 +374,21 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 1rem 2rem;
+  gap: 0.5rem 1.25rem;
 }
 
 .provaNumero {
   margin: 0;
   font-family: var(--font-sans);
   font-weight: 600;
-  letter-spacing: -0.06em;
-  font-size: clamp(6rem, 13vw, 10rem);
-  line-height: 0.82;
+  letter-spacing: -0.03em;
+  font-size: clamp(2.75rem, 5vw, 4rem);
+  line-height: 0.9;
   color: #88b131;
 }
 
 .etiqueta {
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.3rem;
   font-size: clamp(0.9rem, 1.4vw, 1.125rem);
   font-weight: 600;
   letter-spacing: 3px;
