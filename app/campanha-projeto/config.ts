@@ -19,8 +19,8 @@ export function campanhaFechada(agoraMs: number): boolean {
 export const FECHO_TITULO = "A campanha terminou a 16 de dezembro.";
 export const FECHO_TEXTO = "Obrigado pelo interesse.";
 
-/** Imagem do topo: a do email da campanha (1024x576). Não é esticada além dessa largura. */
-export const IMAGEM_TOPO = "/campanha/estrutura-aco-leve.jpg";
+/** Imagem do topo: interior de cozinha (2000 px de largura), escurecida por trás do título. */
+export const IMAGEM_TOPO = "/campanha/cozinha.webp";
 
 /** Logótipos Evaplace × Esquadro: a imagem única do cabeçalho do email (829x141, fundo preto). */
 export const LOGOS = "/campanha/logos-evaplace-esquadro.png";

@@ -1,19 +1,16 @@
 /* Landing page «Evaplace × Esquadro» — página de conversão.
-   Desktop (>= 1024 px): oferta à esquerda, formulário fixo à direita.
-   Telemóvel: oferta, formulário, resto; barra fixa no fundo com o botão.
-   Cores do email: verde #88B131, linhas #5C9839, verde-escuro #506527,
-   texto #E6E6E6 / #BDBDBD, contornos #333333 / #262626. Sem azuis.
-   Os títulos usam a serifa do site (regra global de h1/h2/h3). */
+   Início: imagem escurecida com a oferta ao centro e a caixa clara do formulário por cima
+   do fim da imagem. O resto da página segue numa coluna ao centro.
+   Telemóvel: igual, com barra fixa no fundo com o botão.
+   Verdes #88B131 / #5C9839 / #506527, texto #E6E6E6 / #BDBDBD, contornos #333 / #262626.
+   Sem azuis. Os títulos das secções usam a serifa do site (regra global de h1/h2/h3). */
 
 .page {
   position: relative;
   background: #000;
   color: #fff;
   min-height: 100vh;
-  /* clip (e não hidden) para o formulário poder ficar sticky */
   overflow-x: clip;
-  /* contexto próprio: o fundo fica atrás de tudo e os logótipos misturam-se com ele */
-  isolation: isolate;
 }
 
 /* Depois do fecho, antes de o React trocar o conteúdo (atributo posto pelo script da página). */
@@ -21,104 +18,86 @@
   display: none;
 }
 
-/* ---------- Fundo do primeiro ecrã ---------- */
-.fundo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 720px;
+/* ---------- Início ---------- */
+.hero {
+  position: relative;
+  /* contexto próprio: a sobreposição fica atrás do texto e os logótipos misturam-se com ela */
+  isolation: isolate;
+  background-color: #1a1410;
   background-size: cover;
-  background-position: center 35%;
-  z-index: -1;
+  background-position: center 45%;
+  /* espaço em baixo para a caixa do formulário entrar por cima da imagem */
+  padding: 1.5rem 1.5rem 11.5rem;
+  text-align: center;
 }
 
-.fundo::after {
+.hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, #000 100%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 45%, rgba(0, 0, 0, 0.45) 100%);
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.58);
 }
 
-/* ---------- Topo ---------- */
-.topo {
-  max-width: 1240px;
+.heroConteudo {
+  max-width: 860px;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem 0;
 }
 
 .logos {
   display: block;
-  width: 330px;
+  width: 240px;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
   /* a imagem tem fundo preto: sobre a fotografia fica só o branco dos logótipos */
   mix-blend-mode: screen;
 }
 
-/* ---------- Grelha ---------- */
-.grelha {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
-  column-gap: 4rem;
+.selo {
+  display: inline-block;
+  margin: 2.25rem 0 0;
+  padding: 0.2rem 1rem;
+  background: #000;
+  color: #88b131;
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
 }
 
-.abertura {
-  grid-column: 1;
-  grid-row: 1;
-  padding-top: 2.5rem;
-}
-
-/* Os dois números da oferta: o 100% a verde, o 50% a branco. */
-.oferta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem 3.5rem;
-  margin-top: 1.75rem;
-}
-
-.ofertaItem {
-  min-width: 0;
-}
-
-.ofertaValor {
-  margin: 0;
-  font-family: var(--font-title);
-  font-size: clamp(4.5rem, 7.5vw, 6.75rem);
-  line-height: 0.95;
+/* Classe repetida + !important: ganha à regra global que põe a serifa em todos os h1. */
+.heroTitulo.heroTitulo {
+  margin: 0.9rem 0 0;
+  font-family: var(--font-sans) !important;
+  font-size: clamp(2.1rem, 4.3vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
   color: #fff;
 }
 
-.ofertaVerde .ofertaValor {
-  color: #88b131;
-}
-
-.ofertaTexto {
-  margin: 0.6rem 0 0;
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #e6e6e6;
+.heroTexto {
+  margin: 1rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  letter-spacing: -0.03em;
+  color: #fff;
 }
 
 .candidatura {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  align-self: start;
-  position: sticky;
-  top: 1rem;
-  /* sobe para a altura dos logótipos: o cartão começa a 1rem do topo, como quando está fixo */
-  margin-top: -4rem;
-  scroll-margin-top: 1rem;
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  margin: -8.5rem auto 5rem;
+  padding: 0 1.5rem;
+  scroll-margin-top: 1.5rem;
 }
 
 .resto {
-  grid-column: 1;
-  grid-row: 2;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 /* ---------- Secções ---------- */
@@ -392,31 +371,13 @@
 }
 
 /* ---------- Formulário ---------- */
-/* Cartão com presença: fundo próprio, contorno verde, faixa do prazo no topo. */
+/* Caixa clara por cima da imagem. As classes repetidas (.x.x) ganham às regras de
+   MultiStepForm.module.css seja qual for a ordem dos ficheiros. */
 .cartao {
-  background: #0e120a;
-  border: 1px solid #88b131;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
-}
-
-/* Só quando um passo não cabe na altura do ecrã (classe posta por CampanhaForm). */
-.cartaoScroll {
-  max-height: calc(100vh - 2rem);
-  max-height: calc(100dvh - 2rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
-.prazo {
-  margin: 0;
-  padding: 0.7rem 1rem;
-  background: #88b131;
-  color: #000;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-align: center;
-  text-transform: uppercase;
+  background: #f6f6f6;
+  border-radius: 10px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  color: #111;
 }
 
 .formWrapper {
@@ -424,67 +385,134 @@
 }
 
 .formBox {
-  padding: 1.15rem 1.75rem 1.15rem;
+  padding: 2rem 2.5rem 2.25rem;
 }
 
-/* Classe repetida: ganha às regras de MultiStepForm.module.css seja qual for a ordem dos ficheiros. */
 .formProgress.formProgress {
-  margin: 0.25rem 0 0.9rem;
+  gap: 10px;
+  margin: 0 0 1.75rem;
 }
 
+.formDot.formDot {
+  flex: 0 1 68px;
+  height: 8px;
+  border-radius: 0;
+  background: #a3a3a3;
+}
+
+.formDotActive.formDotActive {
+  background: #88b131;
+}
+
+/* A pergunta de cada passo: grande, ao centro. */
 .formLabel.formLabel {
-  margin: 0.55rem 0 0.3rem;
+  margin: 0 0 1.1rem;
+  text-align: center;
+  font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  color: #111;
+}
+
+/* Sem asterisco nas perguntas (todas são obrigatórias); fica só nos campos dos contactos. */
+.formLabel .formReq {
+  display: none;
+}
+
+/* Passo dos contactos: etiquetas normais por cima de cada campo. */
+.cartao form .formLabel.formLabel {
+  margin: 0.9rem 0 0.35rem;
+  text-align: left;
   font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #222;
+}
+
+.cartao form .formLabel .formReq {
+  display: inline;
+  color: #c62828;
+}
+
+.formLabelSmall.formLabelSmall {
+  color: #444;
 }
 
 .formIntro.formIntro {
-  margin: 0;
-  font-size: 0.9rem;
+  margin: 0 0 0.25rem;
+  text-align: center;
+  font-size: 1rem;
   line-height: 1.45;
+  color: #333;
 }
 
 .formInput.formInput {
   box-sizing: border-box;
-  padding: 0.62rem 0.9rem;
+  padding: 1.05rem 1.1rem;
+  background: #fff;
+  border: 1px solid #b9b9b9;
+  border-radius: 10px;
+  color: #111;
+}
+
+.formInput.formInput:focus-visible {
+  outline: 2px solid #5c9839;
+  outline-offset: 1px;
 }
 
 .formError.formError {
-  margin: 0.2rem 0 0;
-  font-size: 0.78rem;
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
   line-height: 1.3;
+  color: #c62828;
 }
 
 .formOptions.formOptions {
-  gap: 0.5rem;
-  margin-top: 0.4rem;
+  gap: 0.6rem;
+  margin-top: 0;
 }
 
 .formOption.formOption {
-  min-height: 46px;
-  padding: 0.55rem 0.75rem;
-  font-size: 0.95rem;
+  background: #fff;
+  border: 1px solid #b9b9b9;
+  border-radius: 10px;
+  color: #111;
+}
+
+.formOption.formOption:hover {
+  border-color: #5c9839;
+}
+
+.formOption.formOption[aria-checked="true"] {
+  background: #88b131;
+  border-color: #88b131;
+  color: #000;
 }
 
 .formCheck.formCheck {
-  margin-top: 0.7rem;
-  font-size: 0.82rem;
-  line-height: 1.35;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #333;
 }
 
-/* Os botões ficam sempre à vista, mesmo que o cartão tenha de fazer scroll interno. */
+.formCheck.formCheck a {
+  color: #506527;
+}
+
 .formActions.formActions {
-  position: sticky;
-  bottom: 0;
-  margin-top: 0.85rem;
-  padding: 0.85rem 0 0.15rem;
-  background: #0e120a;
+  margin-top: 1.25rem;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .formBtn.formBtn {
-  padding: 0.95rem 0.75rem;
+  padding: 1.05rem 0.75rem;
+  border-radius: 10px;
   background: #88b131;
   color: #000;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -501,17 +529,21 @@
 
 .formBtnGhost.formBtnGhost {
   font-size: 0.9rem;
-  color: #bdbdbd;
+  color: #555;
+}
+
+.formSuccess.formSuccess {
+  color: #506527;
 }
 
 .formNote {
-  margin: 0.75rem 0 0;
+  margin: 0.9rem 0 0;
   text-align: center;
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #88b131;
+  color: #506527;
 }
 
 /* ---------- Caixa de fecho da página ---------- */
@@ -545,18 +577,22 @@
 
 /* ---------- Agradecimento (campanha fechada) ---------- */
 .fecho {
-  position: relative;
-  z-index: 1;
   max-width: 880px;
   margin: 0 auto;
-  padding: 4rem 1.5rem 6rem;
+  padding: 1.5rem 1.5rem 6rem;
   min-height: 45vh;
+}
+
+.fechoLogos {
+  margin-bottom: 3.5rem;
+}
+
+.fechoLogos .logos {
+  margin: 0;
 }
 
 /* ---------- Rodapé mínimo ---------- */
 .rodape {
-  position: relative;
-  z-index: 1;
   max-width: 1192px;
   margin: 0 auto;
   border-top: 1px solid #262626;
@@ -571,69 +607,15 @@
   margin: 0;
 }
 
-/* ---------- Portátil estreito ---------- */
-@media (max-width: 1180px) {
-  .grelha {
-    grid-template-columns: minmax(0, 1fr) 400px;
-    column-gap: 2.5rem;
-  }
-
-  .oferta {
-    column-gap: 2.5rem;
-  }
-}
-
-/* ---------- Telemóvel e tablet: uma coluna ---------- */
+/* ---------- Telemóvel e tablet ---------- */
 @media (max-width: 1023px) {
   .page {
     /* espaço para a barra fixa não tapar o rodapé */
     padding-bottom: 6rem;
   }
 
-  .fundo {
-    height: 600px;
-  }
-
-  .topo {
-    padding: 1.1rem 1.25rem 0;
-  }
-
-  .logos {
-    width: 270px;
-    margin: 0 auto;
-  }
-
-  .grelha {
-    display: block;
-    max-width: 720px;
-    padding: 0 1.25rem;
-  }
-
-  .abertura {
-    padding-top: 2.25rem;
-    padding-bottom: 2rem;
-  }
-
-  /* Telemóvel: o texto ocupa a largura toda, por isso o fundo escurece por igual. */
-  .fundo::after {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.74) 0%, rgba(0, 0, 0, 0.8) 55%, #000 100%);
-  }
-
-  .candidatura {
-    position: static;
-    margin: 0 0 4rem;
-  }
-
-  .formActions.formActions {
-    position: static;
-  }
-
   .seccao {
     padding-bottom: 4rem;
-  }
-
-  .abertura.abertura {
-    padding-bottom: 2rem;
   }
 
   .barra {
@@ -669,6 +651,44 @@
 }
 
 @media (max-width: 640px) {
+  .hero {
+    padding: 1.1rem 1.25rem 8.5rem;
+  }
+
+  .logos {
+    width: 200px;
+  }
+
+  .selo {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .heroTitulo.heroTitulo {
+    font-size: clamp(1.8rem, 8.4vw, 2.2rem);
+  }
+
+  .heroTexto {
+    font-size: 0.95rem;
+  }
+
+  .candidatura {
+    margin: -6.5rem auto 4rem;
+    padding: 0 1rem;
+  }
+
+  .resto {
+    padding: 0 1.25rem;
+  }
+
+  .formBox {
+    padding: 1.5rem 1.25rem 1.6rem;
+  }
+
+  .formDot.formDot {
+    height: 6px;
+  }
+
   .h1 {
     font-size: clamp(2.35rem, 10.5vw, 3rem);
   }
@@ -697,24 +717,6 @@
     font-size: 7rem;
   }
 
-  /* Lado a lado também no telemóvel: o formulário aparece logo no primeiro ecrã. */
-  .oferta {
-    flex-wrap: nowrap;
-    gap: 1.25rem;
-  }
-
-  .ofertaItem {
-    flex: 1 1 0;
-  }
-
-  .ofertaValor {
-    font-size: clamp(3.25rem, 17vw, 4.25rem);
-  }
-
-  .ofertaTexto {
-    font-size: 0.9rem;
-  }
-
   .chamada {
     margin-bottom: 4rem;
     padding: 2.25rem 1.25rem;
@@ -729,16 +731,7 @@
     gap: 1.25rem;
   }
 
-  .formBox {
-    padding: 1.4rem 1.25rem;
-  }
-
-  .prazo {
-    font-size: 0.66rem;
-    letter-spacing: 2px;
-  }
-
   .fecho {
-    padding: 2.75rem 1.25rem 4rem;
+    padding: 1.1rem 1.25rem 4rem;
   }
 }

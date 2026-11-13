@@ -40,6 +40,9 @@ export default function CampanhaProjetoPage() {
 
   const fechada = (
     <section className={styles.fecho}>
+      <div className={styles.fechoLogos}>
+        <Logos />
+      </div>
       <h1 className={styles.h1}>{FECHO_TITULO}</h1>
       <div className={styles.linha} />
       <p className={styles.texto}>{FECHO_TEXTO}</p>
@@ -55,36 +58,23 @@ export default function CampanhaProjetoPage() {
         }}
       />
 
-      <div className={styles.topo}>
-        <Logos />
-      </div>
-
       <CampanhaGate fechada={fechada}>
-        {/* Imagem do topo como fundo do primeiro ecrã, mais escura do lado do texto. */}
-        <div className={styles.fundo} role="img" aria-label="Estrutura em aço leve" style={{ backgroundImage: `url(${IMAGEM_TOPO})` }} />
-
-        {/* Desktop: oferta à esquerda, formulário fixo à direita.
-            Telemóvel: oferta, formulário, e só depois o resto. */}
-        <div className={styles.grelha}>
-          <section className={`${styles.seccao} ${styles.abertura}`}>
-            <h1 className={styles.h1}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h1>
-            <div className={styles.linha} />
-            <p className={styles.texto}>Projeto de arquitetura e especialidades. Candidaturas até 16 de dezembro.</p>
-            <div className={styles.oferta}>
-              <div className={`${styles.ofertaItem} ${styles.ofertaVerde}`}>
-                <p className={styles.ofertaValor}>100%</p>
-                <p className={styles.ofertaTexto}>em casas com mais de 100 m²</p>
-              </div>
-              <div className={styles.ofertaItem}>
-                <p className={styles.ofertaValor}>50%</p>
-                <p className={styles.ofertaTexto}>em casas até 100 m²</p>
-              </div>
-            </div>
-          </section>
-
-          <div id="candidatura" className={styles.candidatura}>
-            <CampanhaForm />
+        {/* Início: imagem escurecida com a oferta ao centro; a caixa do formulário
+            fica por cima do fim da imagem. */}
+        <section className={styles.hero} style={{ backgroundImage: `url(${IMAGEM_TOPO})` }}>
+          <div className={styles.heroConteudo}>
+            <Logos />
+            <p className={styles.selo}>BLACK FRIDAY</p>
+            <h1 className={styles.heroTitulo}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h1>
+            <p className={styles.heroTexto}>
+              Projeto de arquitetura e especialidades. Candidaturas até 16 de dezembro.
+            </p>
           </div>
+        </section>
+
+        <div id="candidatura" className={styles.candidatura}>
+          <CampanhaForm />
+        </div>
 
           <div className={styles.resto}>
         <section className={styles.seccao}>
@@ -152,7 +142,6 @@ export default function CampanhaProjetoPage() {
         </section>
 
           </div>
-        </div>
 
         <BarraFixa>CANDIDATAR-ME</BarraFixa>
       </CampanhaGate>
