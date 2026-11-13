@@ -2,13 +2,14 @@
    Início: imagem escurecida com a oferta ao centro e a caixa clara do formulário por cima
    do fim da imagem. O resto da página segue numa coluna ao centro.
    Telemóvel: igual, com barra fixa no fundo com o botão.
-   Verdes #88B131 / #5C9839 / #506527, texto #E6E6E6 / #BDBDBD, contornos #333 / #262626.
-   Sem azuis. Os títulos das secções usam a serifa do site (regra global de h1/h2/h3). */
+   Por baixo da imagem a página é branca, com texto escuro. Verdes #88B131 / #5C9839 / #506527.
+   Sem azuis e sem serifas: os títulos levam a fonte sem serifa com !important, para ganhar
+   à regra global que põe a serifa em todos os h1/h2/h3. */
 
 .page {
   position: relative;
-  background: #000;
-  color: #fff;
+  background: #fff;
+  color: #111;
   min-height: 100vh;
   overflow-x: clip;
 }
@@ -110,13 +111,19 @@
   font-size: clamp(2.5rem, 4.4vw, 4rem);
   line-height: 1.08;
   color: #fff;
+  font-family: var(--font-sans) !important;
+  font-weight: 600;
+  letter-spacing: -0.04em;
 }
 
 .h2 {
   margin: 0;
-  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
   line-height: 1.15;
-  color: #fff;
+  color: #111;
+  font-family: var(--font-sans) !important;
+  font-weight: 600;
+  letter-spacing: -0.04em;
 }
 
 .linha {
@@ -129,14 +136,14 @@
   margin: 0 0 1rem;
   font-size: 1.125rem;
   line-height: 1.7;
-  color: #e6e6e6;
+  color: #222;
 }
 
 .textoSuave {
   margin: 0;
   font-size: 1.125rem;
   line-height: 1.6;
-  color: #bdbdbd;
+  color: #444;
 }
 
 .botao {
@@ -159,7 +166,7 @@
 }
 
 .botao:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid #111;
   outline-offset: 3px;
 }
 
@@ -176,7 +183,7 @@
   padding: 0 0 1rem;
   font-size: 1.125rem;
   line-height: 1.6;
-  color: #e6e6e6;
+  color: #222;
 }
 
 .passos li:last-child {
@@ -186,10 +193,12 @@
 .passoNumero {
   flex: none;
   width: 4.25rem;
-  font-family: var(--font-title);
-  font-size: 2.25rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-size: 2rem;
   line-height: 1.1;
-  color: #88b131;
+  color: #5c9839;
 }
 
 .blocos {
@@ -203,39 +212,41 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid #333;
+  border: 1px solid #cfcfcf;
   padding: 2rem 1.25rem;
   text-align: center;
 }
 
 /* O 100% é o destaque: maior, a verde, com contorno e fundo verdes. */
 .blocoVerde {
-  border: 2px solid #88b131;
-  background: rgba(136, 177, 49, 0.1);
+  border: 2px solid #5c9839;
+  background: rgba(136, 177, 49, 0.12);
 }
 
 .blocoValor {
   margin: 0;
-  font-family: var(--font-title);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.05em;
   font-size: clamp(3.75rem, 6vw, 5rem);
   line-height: 1;
-  color: #fff;
+  color: #111;
 }
 
 .blocoVerde .blocoValor {
   font-size: clamp(5.5rem, 10vw, 8.5rem);
-  color: #88b131;
+  color: #5c9839;
 }
 
 .blocoTexto {
   margin: 0.9rem 0 0;
   font-size: 1rem;
   line-height: 1.5;
-  color: #bdbdbd;
+  color: #444;
 }
 
 .blocoVerde .blocoTexto {
-  color: #e6e6e6;
+  color: #222;
 }
 
 /* ---------- Condições ---------- */
@@ -246,26 +257,28 @@
 .condicao {
   margin: 0;
   padding: 1rem 0;
-  border-bottom: 1px solid #262626;
+  border-bottom: 1px solid #e2e2e2;
   font-size: 1.125rem;
   line-height: 1.6;
-  color: #e6e6e6;
+  color: #222;
 }
 
 .zonas {
   margin: 1.5rem 0 0;
   font-size: 1rem;
   line-height: 1.65;
-  color: #bdbdbd;
+  color: #555;
 }
 
 /* ---------- Prova ---------- */
 .provaNumero {
   margin: 0;
-  font-family: var(--font-title);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.06em;
   font-size: clamp(6rem, 13vw, 10rem);
   line-height: 0.9;
-  color: #88b131;
+  color: #5c9839;
 }
 
 .etiqueta {
@@ -274,7 +287,7 @@
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #fff;
+  color: #111;
 }
 
 .fotos {
@@ -291,14 +304,14 @@
   width: 100%;
   padding: 0;
   border: 0;
-  background: #111;
+  background: #eee;
   cursor: zoom-in;
   overflow: hidden;
   aspect-ratio: 4 / 3;
 }
 
 .fotoBtn:focus-visible {
-  outline: 2px solid #88b131;
+  outline: 2px solid #5c9839;
   outline-offset: 3px;
 }
 
@@ -318,7 +331,7 @@
   margin: 0.6rem 0 0;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #e6e6e6;
+  color: #222;
 }
 
 .lightbox {
@@ -376,7 +389,7 @@
 .cartao {
   background: #f6f6f6;
   border-radius: 10px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
   color: #111;
 }
 
@@ -550,7 +563,7 @@
 .chamada {
   margin-bottom: 5rem;
   padding: 2.75rem 2rem;
-  border: 1px solid #88b131;
+  border: 1px solid #5c9839;
   text-align: center;
 }
 
@@ -558,16 +571,19 @@
   margin: 0;
   font-size: clamp(1.75rem, 2.8vw, 2.4rem);
   line-height: 1.15;
-  color: #fff;
+  color: #111;
+  font-family: var(--font-sans) !important;
+  font-weight: 600;
+  letter-spacing: -0.04em;
 }
 
 .chamadaPrazo {
   margin: 1.25rem 0 0;
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #88b131;
+  color: #506527;
 }
 
 /* ---------- Barra fixa (só telemóvel) ---------- */
@@ -581,6 +597,13 @@
   margin: 0 auto;
   padding: 1.5rem 1.5rem 6rem;
   min-height: 45vh;
+  background: #000;
+  box-shadow: 0 0 0 100vmax #000;
+  clip-path: inset(0 -100vmax);
+}
+
+.fecho .texto {
+  color: #e6e6e6;
 }
 
 .fechoLogos {
@@ -595,12 +618,12 @@
 .rodape {
   max-width: 1192px;
   margin: 0 auto;
-  border-top: 1px solid #262626;
+  border-top: 1px solid #e2e2e2;
   padding: 1.5rem 1.5rem 2rem;
   text-align: center;
   font-size: 0.75rem;
   line-height: 1.8;
-  color: #bdbdbd;
+  color: #555;
 }
 
 .rodape p {
