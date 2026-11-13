@@ -19,14 +19,14 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false, address: false, email: false },
 };
 
-function Logos() {
+function Logos({ pretos = false }: { pretos?: boolean }) {
   return (
     <img
       src={LOGOS}
       alt="Evaplace Casas × Esquadro Arquitetura & Engenharia"
       width={829}
       height={141}
-      className={styles.logos}
+      className={pretos ? `${styles.logos} ${styles.logosPretos}` : styles.logos}
     />
   );
 }
@@ -63,7 +63,6 @@ export default function CampanhaProjetoPage() {
             fica por cima do fim da imagem. */}
         <section className={styles.hero} style={{ backgroundImage: `url(${IMAGEM_TOPO})` }}>
           <div className={styles.heroConteudo}>
-            <Logos />
             <p className={styles.selo}>BLACK FRIDAY</p>
             <h1 className={styles.heroTitulo}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h1>
             <p className={styles.heroTexto}>
@@ -74,6 +73,11 @@ export default function CampanhaProjetoPage() {
 
         <div id="candidatura" className={styles.candidatura}>
           <CampanhaForm />
+        </div>
+
+        {/* Logótipos a preto, por baixo do formulário (a mesma imagem, invertida em CSS). */}
+        <div className={styles.parceria}>
+          <Logos pretos />
         </div>
 
           <div className={styles.resto}>
