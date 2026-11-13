@@ -83,91 +83,97 @@ export default function CampanhaProjetoPage() {
           <CampanhaForm />
         </div>
 
-        {/* Logótipos a preto, por baixo do formulário (a mesma imagem, invertida em CSS). */}
-        <div className={styles.parceria}>
-          <Logos pretos />
-        </div>
-
-          <div className={styles.resto}>
-        <section className={styles.seccao}>
-          <h2 className={styles.h2}>Projeto e construção na mesma equipa</h2>
-          <div className={styles.linha} />
-          <p className={styles.texto}>
-            A Evaplace junta-se à Esquadro Arquitetura numa campanha de Black Friday que inclui o projeto de
-            arquitetura e os projetos de especialidades da sua casa.
-          </p>
-          <p className={styles.texto}>Se construir com outra empresa, o projeto fica consigo.</p>
+        {/* Por baixo do início a página vai em faixas a toda a largura, de cores alternadas. */}
+        <section className={`${styles.faixa} ${styles.faixaEquipa}`}>
+          <div className={`${styles.dentro} ${styles.dentroEstreito}`}>
+            {/* Logótipos a preto (a mesma imagem, invertida em CSS). */}
+            <div className={styles.parceria}>
+              <Logos pretos />
+            </div>
+            <h2 className={styles.h2}>Projeto e construção na mesma equipa</h2>
+            <p className={styles.textoGrande}>
+              A Evaplace junta-se à Esquadro Arquitetura numa campanha de Black Friday que inclui o projeto de
+              arquitetura e os projetos de especialidades da sua casa.
+            </p>
+            <p className={styles.destaque}>Se construir com outra empresa, o projeto fica consigo.</p>
+          </div>
         </section>
 
-        <section className={styles.seccao}>
-          <h2 className={styles.h2}>Como funciona o desconto</h2>
-          <div className={styles.linha} />
-          <ol className={styles.passos}>
-            <li>
-              <span className={styles.passoNumero}>01</span>
-              <span>Paga o projeto à Esquadro.</span>
-            </li>
-            <li>
-              <span className={styles.passoNumero}>02</span>
-              <span>Adjudica a construção à Evaplace.</span>
-            </li>
-            <li>
-              <span className={styles.passoNumero}>03</span>
-              <span>O valor do projeto é descontado na construção. A condição fica no contrato.</span>
-            </li>
-          </ol>
-          <div className={styles.blocos}>
-            <div className={styles.bloco}>
-              <p className={styles.blocoValor}>50%</p>
-              <p className={styles.blocoTexto}>do valor do projeto em casas até 100 m²</p>
-            </div>
-            <div className={`${styles.bloco} ${styles.blocoVerde}`}>
-              <p className={styles.blocoValor}>100%</p>
-              <p className={styles.blocoTexto}>do valor do projeto em casas com mais de 100 m²</p>
+        <section className={`${styles.faixa} ${styles.faixaCinza}`}>
+          <div className={styles.dentro}>
+            <h2 className={styles.h2}>Como funciona o desconto</h2>
+            <ol className={styles.passos}>
+              <li>
+                <span className={styles.passoNumero}>01</span>
+                <span>Paga o projeto à Esquadro.</span>
+              </li>
+              <li>
+                <span className={styles.passoNumero}>02</span>
+                <span>Adjudica a construção à Evaplace.</span>
+              </li>
+              <li>
+                <span className={styles.passoNumero}>03</span>
+                <span>O valor do projeto é descontado na construção. A condição fica no contrato.</span>
+              </li>
+            </ol>
+            <div className={styles.blocos}>
+              <div className={styles.bloco}>
+                <p className={styles.blocoValor}>50%</p>
+                <p className={styles.blocoTexto}>do valor do projeto em casas até 100 m²</p>
+              </div>
+              <div className={`${styles.bloco} ${styles.blocoVerde}`}>
+                <p className={styles.blocoValor}>100%</p>
+                <p className={styles.blocoTexto}>do valor do projeto em casas com mais de 100 m²</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className={styles.seccao}>
-          <h2 className={styles.h2}>Condições para usufruir da campanha</h2>
-          <div className={styles.linha} />
-          <ul className={styles.condicoes}>
-            <li className={styles.condicao}>
-              <Visto />
-              <span>Possuir terreno na zona onde construímos</span>
-            </li>
-            <li className={styles.condicao}>
-              <Visto />
-              <span>Adjudicar a empreitada à Evaplace</span>
-            </li>
-          </ul>
-          {/* O texto das zonas é um só; os nomes dos sistemas só levam destaque. */}
-          <p className={styles.zonas}>
-            <span className={styles.zona}>
-              <strong>Aço leve:</strong> distrito do Porto, eixo de Braga e norte de Aveiro.
-            </span>{" "}
-            <span className={styles.zona}>
-              <strong>Madeira:</strong> também Viana do Castelo, Vila Real, interior de Braga e restante distrito de
-              Aveiro.
-            </span>
-          </p>
+        <section className={styles.faixa}>
+          <div className={styles.dentro}>
+            <h2 className={styles.h2}>Condições para usufruir da campanha</h2>
+            <ul className={styles.condicoes}>
+              <li className={styles.condicao}>
+                <Visto />
+                <span>Possuir terreno na zona onde construímos</span>
+              </li>
+              <li className={styles.condicao}>
+                <Visto />
+                <span>Adjudicar a empreitada à Evaplace</span>
+              </li>
+            </ul>
+            {/* O texto das zonas é um só; os nomes dos sistemas só levam destaque. */}
+            <p className={styles.zonas}>
+              <span className={styles.zona}>
+                <strong>Aço leve:</strong> distrito do Porto, eixo de Braga e norte de Aveiro.
+              </span>{" "}
+              <span className={styles.zona}>
+                <strong>Madeira:</strong> também Viana do Castelo, Vila Real, interior de Braga e restante distrito
+                de Aveiro.
+              </span>
+            </p>
+          </div>
         </section>
 
-        <section className={styles.seccao}>
-          <p className={styles.provaNumero}>+10</p>
-          <p className={styles.etiqueta}>CASAS ENTREGUES PELA EVAPLACE</p>
-          <ProvaGaleria fotos={fotos} />
-          <p className={styles.textoSuave}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
+        <section className={`${styles.faixa} ${styles.faixaPreta}`}>
+          <div className={styles.dentro}>
+            <div className={styles.provaTopo}>
+              <p className={styles.provaNumero}>+10</p>
+              <p className={styles.etiqueta}>CASAS ENTREGUES PELA EVAPLACE</p>
+            </div>
+            <ProvaGaleria fotos={fotos} />
+            <p className={styles.textoSuave}>Antes de decidir, pode visitar uma casa Evaplace em fim de obra.</p>
+          </div>
         </section>
 
         {/* Fecho da página: repete a oferta e leva ao formulário. */}
-        <section className={styles.chamada} data-chamada>
-          <h2 className={styles.chamadaTitulo}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h2>
-          <BotaoFormulario>CANDIDATAR-ME</BotaoFormulario>
-          <p className={styles.chamadaPrazo}>CANDIDATURAS ATÉ 16 DE DEZEMBRO</p>
-        </section>
-
+        <section className={`${styles.faixa} ${styles.faixaCinza}`}>
+          <div className={`${styles.dentro} ${styles.chamada}`} data-chamada>
+            <h2 className={styles.chamadaTitulo}>Se construir com a Evaplace, oferecemos até 100% do projeto.</h2>
+            <BotaoFormulario>CANDIDATAR-ME</BotaoFormulario>
+            <p className={styles.chamadaPrazo}>CANDIDATURAS ATÉ 16 DE DEZEMBRO</p>
           </div>
+        </section>
 
         <BarraFixa>CANDIDATAR-ME</BarraFixa>
       </CampanhaGate>
